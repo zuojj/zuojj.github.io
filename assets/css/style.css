@@ -8328,7 +8328,8 @@ blockquote {
       display: block;
       width: 30px;
       height: 30px;
-      border-radius: 15px; }
+      border-radius: 15px;
+      background-color: #f1faf1; }
   #header .header-right-icon {
     position: absolute;
     top: 12.5px;
