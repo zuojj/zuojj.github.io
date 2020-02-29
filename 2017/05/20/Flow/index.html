@@ -15,16 +15,14 @@
         <link rel="icon" href="https://zuojj.gitlab.io/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"},"articleBody":"Flow是Facebook出品的一个JavaScript代码的静态类型检查工具，它做了很多处理，使您的代码更快，更智能，更自信，更好的适应性。现在已经在前端比较流行的React 、Vue 等框架中得到使用。今天煦涵就和大家一起来学习Flow以及在实际项目中的使用。\nFlow 安装这里我们选择使用 yarn，当前你也可以使用 npm, 如果你对 yarn不是很了解，建议你阅读 煦涵说Yarn。首先我们先初始化一个 flow 项目，安装完编译器，然后再安装 flow 。\n12345mkdir flow-projectcd flow-projectyarn inityarn add --dev babel-cli babel-preset-flow babel-preset-es2015\n项目根目录下创建 .babelrc 文件，并增加如下内容：\n123&#123;    \"presets\": [\"flow\", \"es2015\"]&#125;\n\n安装 Flow:\n1yarn add --dev flow-bin\n\n运行 flow：需要在根目录下新建一个 .flowconfig 文件，不然会报找不到该文件错误。\n1yarn run flow\n1234567yarn run v0.16.1$ &quot;&#x2F;flow-proj&#x2F;node_modules&#x2F;.bin&#x2F;flow&quot; Launching Flow server for &#x2F;flow-projSpawned flow server (pid&#x3D;17242)Logs will go to &#x2F;private&#x2F;tmp&#x2F;flow&#x2F;zSvue-workspacezSflow-proj.logNo errors!✨  Done in 2.48s.\n\nFlow 使用我们先在根目录下新建src目录，并新建一个index.js文件。同时在 package.json 文件中增加下面scripts内容，以方便我们后期的命令行编译。index.js\n1234// @flow[1,2,3,4].map((item:number, index) =&gt; &#123;    return item * item;&#125;);\npackage.json\n123\"scripts\": &#123;    \"build\": \"yarn run flow &amp;&amp; babel src -d lib\"&#125;\n运行 yarn run build， 没有报错， 会在生成lib文件目录，index.js的 flow type 注释会被 remove 掉，同时进行了箭头函数到ES5的转换。如果我修改上面index.js的代码：\n1234// @flow['1',2,3,4].map((item:number, index) =&gt; &#123;    return item * item;&#125;);\n运行 yarn run build，会报如下类型检测错误：\n1234567891011121314yarn run v0.16.1$ &quot;&#x2F;flow-proj&#x2F;node_modules&#x2F;.bin&#x2F;flow&quot; src&#x2F;index.js:3  3: [&#39;1&#39;,2,3,4].map((item:number, index) &#x3D;&gt; &#123;      ^^^ string. This type is incompatible with the expected param type of  3: [&#39;1&#39;,2,3,4].map((item:number, index) &#x3D;&gt; &#123;                           ^^^^^^ numberFound 1 errorerror Command failed with exit code 2.info Visit https:&#x2F;&#x2F;yarnpkg.com&#x2F;en&#x2F;docs&#x2F;cli&#x2F;run for documentation about this command.error Command failed with exit code 1.info Visit https:&#x2F;&#x2F;yarnpkg.com&#x2F;en&#x2F;docs&#x2F;cli&#x2F;run for documentation about this command.\n\n更多类型坚持实例不再一一列举，官网有很多介绍type的例子。\nFlow 配置文件上面提到没有配置文件，会报错，.flowconfig 文件由以下5个部分组成：\n\n[include] –包含的文件或者目录\n[ignore]  –忽略的文件或者目录，支持正则匹配\n[libs]    –第三方库支持，项目根目录下的flow-typed目录作为库目录\n[options] –默认键值对配置，某些选项可以使用命令行方式重载\n[version] –期望使用的Flow版本\n\n流行编辑器插件支持\nVisual Studio Code: Flow-Language-Support \nSublime Text:Flow 和 SublimeLinter-flow更多请参考：https://flow.org/en/docs/editors/\n\n","dateCreated":"2017-05-20T13:33:45+08:00","dateModified":"2020-02-29T14:01:32+08:00","datePublished":"2017-05-20T13:33:45+08:00","description":"","headline":"Flow","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.gitlab.io/2017/05/20/Flow/"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4","logo":{"@type":"ImageObject","url":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"}},"url":"https://zuojj.gitlab.io/2017/05/20/Flow/","keywords":"js"}</script>
-    <meta name="description" content="Flow是Facebook出品的一个JavaScript代码的静态类型检查工具，它做了很多处理，使您的代码更快，更智能，更自信，更好的适应性。现在已经在前端比较流行的React 、Vue 等框架中得到使用。今天煦涵就和大家一起来学习Flow以及在实际项目中的使用。 Flow 安装这里我们选择使用 yarn，当前你也可以使用 npm, 如果你对 yarn不是很了解，建议你阅读 煦涵说Yarn。首先我">
-<meta property="og:type" content="blog">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"},"articleBody":"\n\n\nFlow是Facebook出品的一个JavaScript代码的静态类型检查工具，它做了很多处理，使您的代码更快，更智能，更自信，更好的适应性。现在已经在前端比较流行的React 、Vue 等框架中得到使用。今天煦涵就和大家一起来学习Flow以及在实际项目中的使用。\nFlow 安装这里我们选择使用 yarn，当前你也可以使用 npm, 如果你对 yarn不是很了解，建议你阅读 煦涵说Yarn。首先我们先初始化一个 flow 项目，安装完编译器，然后再安装 flow 。\n12345mkdir flow-projectcd flow-projectyarn inityarn add --dev babel-cli babel-preset-flow babel-preset-es2015\n项目根目录下创建 .babelrc 文件，并增加如下内容：\n123&#123;    \"presets\": [\"flow\", \"es2015\"]&#125;\n\n安装 Flow:\n1yarn add --dev flow-bin\n\n运行 flow：需要在根目录下新建一个 .flowconfig 文件，不然会报找不到该文件错误。\n1yarn run flow\n1234567yarn run v0.16.1$ &quot;&#x2F;flow-proj&#x2F;node_modules&#x2F;.bin&#x2F;flow&quot; Launching Flow server for &#x2F;flow-projSpawned flow server (pid&#x3D;17242)Logs will go to &#x2F;private&#x2F;tmp&#x2F;flow&#x2F;zSvue-workspacezSflow-proj.logNo errors!✨  Done in 2.48s.\n\nFlow 使用我们先在根目录下新建src目录，并新建一个index.js文件。同时在 package.json 文件中增加下面scripts内容，以方便我们后期的命令行编译。index.js\n1234// @flow[1,2,3,4].map((item:number, index) =&gt; &#123;    return item * item;&#125;);\npackage.json\n123\"scripts\": &#123;    \"build\": \"yarn run flow &amp;&amp; babel src -d lib\"&#125;\n运行 yarn run build， 没有报错， 会在生成lib文件目录，index.js的 flow type 注释会被 remove 掉，同时进行了箭头函数到ES5的转换。如果我修改上面index.js的代码：\n1234// @flow['1',2,3,4].map((item:number, index) =&gt; &#123;    return item * item;&#125;);\n运行 yarn run build，会报如下类型检测错误：\n1234567891011121314yarn run v0.16.1$ &quot;&#x2F;flow-proj&#x2F;node_modules&#x2F;.bin&#x2F;flow&quot; src&#x2F;index.js:3  3: [&#39;1&#39;,2,3,4].map((item:number, index) &#x3D;&gt; &#123;      ^^^ string. This type is incompatible with the expected param type of  3: [&#39;1&#39;,2,3,4].map((item:number, index) &#x3D;&gt; &#123;                           ^^^^^^ numberFound 1 errorerror Command failed with exit code 2.info Visit https:&#x2F;&#x2F;yarnpkg.com&#x2F;en&#x2F;docs&#x2F;cli&#x2F;run for documentation about this command.error Command failed with exit code 1.info Visit https:&#x2F;&#x2F;yarnpkg.com&#x2F;en&#x2F;docs&#x2F;cli&#x2F;run for documentation about this command.\n\n更多类型坚持实例不再一一列举，官网有很多介绍type的例子。\nFlow 配置文件上面提到没有配置文件，会报错，.flowconfig 文件由以下5个部分组成：\n\n[include] –包含的文件或者目录\n[ignore]  –忽略的文件或者目录，支持正则匹配\n[libs]    –第三方库支持，项目根目录下的flow-typed目录作为库目录\n[options] –默认键值对配置，某些选项可以使用命令行方式重载\n[version] –期望使用的Flow版本\n\n流行编辑器插件支持\nVisual Studio Code: Flow-Language-Support \nSublime Text:Flow 和 SublimeLinter-flow更多请参考：https://flow.org/en/docs/editors/\n","dateCreated":"2017-05-20T13:33:45+08:00","dateModified":"2020-02-29T16:59:18+08:00","datePublished":"2017-05-20T13:33:45+08:00","description":"","headline":"Flow","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.gitlab.io/2017/05/20/Flow/"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4","logo":{"@type":"ImageObject","url":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"}},"url":"https://zuojj.gitlab.io/2017/05/20/Flow/","keywords":"js"}</script>
+    <meta property="og:type" content="blog">
 <meta property="og:title" content="Flow">
 <meta property="og:url" content="https://zuojj.gitlab.io/2017/05/20/Flow/index.html">
 <meta property="og:site_name" content="煦涵驛">
-<meta property="og:description" content="Flow是Facebook出品的一个JavaScript代码的静态类型检查工具，它做了很多处理，使您的代码更快，更智能，更自信，更好的适应性。现在已经在前端比较流行的React 、Vue 等框架中得到使用。今天煦涵就和大家一起来学习Flow以及在实际项目中的使用。 Flow 安装这里我们选择使用 yarn，当前你也可以使用 npm, 如果你对 yarn不是很了解，建议你阅读 煦涵说Yarn。首先我">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-05-20T05:33:45.000Z">
-<meta property="article:modified_time" content="2020-02-29T06:01:32.018Z">
+<meta property="article:modified_time" content="2020-02-29T08:59:18.670Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
@@ -41,7 +39,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-n2lvfzsmwt2hvavjmplmv122pj2aihmergs7judkqfrhxgekspfyz63ftv4u.min.css">
+<link rel="stylesheet" href="/assets/css/style-gw9ypk0apdnn5atzfvbshy31nrapwhphhz20snhvjel8wr1fyuq1ognftm2e.min.css">
 
     <!--STYLES END-->
     
@@ -64,7 +62,7 @@
         
     
 
-<header id="header" data-behavior="2">
+<header id="header" data-behavior="5">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
         <a
@@ -97,7 +95,7 @@
         
     
 
-<nav id="sidebar" data-behavior="2">
+<nav id="sidebar" data-behavior="5">
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
@@ -229,7 +227,7 @@
 </nav>
 
             
-            <div id="main" data-behavior="2"
+            <div id="main" data-behavior="5"
                  class="
                         hasCoverMetaIn
                         ">
@@ -265,7 +263,10 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p><a href="https://flow.org" target="_blank" rel="noopener">Flow</a>是Facebook出品的一个JavaScript代码的静态类型检查工具，它做了很多处理，使您的代码更快，更智能，更自信，更好的适应性。现在已经在前端比较流行的React 、Vue 等框架中得到使用。今天煦涵就和大家一起来学习Flow以及在实际项目中的使用。</p>
+            <!-- excerpt -->
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Flow-安装"><span class="toc-text">Flow 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flow-使用"><span class="toc-text">Flow 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flow-配置文件"><span class="toc-text">Flow 配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流行编辑器插件支持"><span class="toc-text">流行编辑器插件支持</span></a></li></ol>
+
+<p><a href="https://flow.org" target="_blank" rel="noopener">Flow</a>是Facebook出品的一个JavaScript代码的静态类型检查工具，它做了很多处理，使您的代码更快，更智能，更自信，更好的适应性。现在已经在前端比较流行的React 、Vue 等框架中得到使用。今天煦涵就和大家一起来学习Flow以及在实际项目中的使用。</p>
 <h2 id="Flow-安装"><a href="#Flow-安装" class="headerlink" title="Flow 安装"></a>Flow 安装</h2><p>这里我们选择使用 <code>yarn</code>，当前你也可以使用 <code>npm</code>, 如果你对 <code>yarn</code>不是很了解，建议你阅读 <strong>煦涵说Yarn</strong>。首先我们先初始化一个 <code>flow</code> 项目，安装完编译器，然后再安装 <code>flow</code> 。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir flow-project</span><br><span class="line">cd flow-project</span><br><span class="line">yarn init</span><br><span class="line"></span><br><span class="line">yarn add --dev babel-cli babel-preset-flow babel-preset-es2015</span><br></pre></td></tr></table></figure>
 <p>项目根目录下创建 <code>.babelrc</code> 文件，并增加如下内容：</p>
@@ -300,7 +301,6 @@
 <li>Visual Studio Code: Flow-Language-Support </li>
 <li>Sublime Text:Flow 和 SublimeLinter-flow<br>更多请参考：<a href="https://flow.org/en/docs/editors/" target="_blank" rel="noopener">https://flow.org/en/docs/editors/</a></li>
 </ul>
-
             
 
 
@@ -404,7 +404,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -430,7 +430,7 @@
 
             </div>
             
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="2">
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
                     <div class="post-actions-wrap">
     <nav>
         <ul class="post-actions post-action-nav">
@@ -519,7 +519,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -530,7 +530,7 @@
 
                 </div>
                 
-    <div id="share-options-bar" class="share-options-bar" data-behavior="2">
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
         <i id="btn-close-shareoptions" class="fa fa-times"></i>
         <ul class="share-options">
             
@@ -619,10 +619,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ogaxrurcpmycz7m6zn50p8mo6tatzjf3bim6ghv4axcaiqa908v5le39rcgp.min.js"></script>
+<script src="/assets/js/script-k4fsncomirfxos2wvgiknsa2ot2cgmimzltzvchznz5ffzquntbtntfzpwxb.min.js"></script>
 
 <!--SCRIPTS END-->
 

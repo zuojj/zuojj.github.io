@@ -15,16 +15,14 @@
         <link rel="icon" href="https://zuojj.gitlab.io/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"},"articleBody":"Babel，下一代javascript编译器，当前版本 v2.4.0 ，它可以处理ES6的所有新语法，并内置了React JSX扩展及Flow类型注解支持，如果对Flow不是很了解可以查看FED实验室微信公众号文章煦涵说Flow。\nBabel与JavaScript技术委员会（TC39）始终保持着高度一致，能够在ECMAScript新特性标准化之前为开发者提供现实可用的转码编译实现，以在ECMAScript规范最后定稿前获得来自世界各地开发者更多的反馈，从而间接推动了javascript的发展以及开发者在项目中尝试使用新技术。因此建议大家开始使用 \b\bBabel。\nBabel 配置文件 .babelrc学习和使用Babel的第一步，配置 .babelrc 文件，该文件存放到项目根目录下，用来设置 Babel 的转码规则和插件。基本格式如下：\n1234&#123;  \"presets\": [],  \"plugins\": []&#125;\n\npresets的规则集如下：\n123456789101112131415161718192021222324252627282930# replaces es2015, es2016, es2017, latest$ yarn add babel-preset-env --dev# es2015$ yarn add babel-preset-es2015 --dev# es2016$ yarn add babel-preset-es2016 --dev# es2017 $ yarn add babel-preset-es2017 --dev# react$ yarn add babel-preset-react --dev# flow$ yarn add babel-preset-flow --dev# The TC39 categorizes proposals into the following stages:# # Stage 0 - Strawman: just an idea, possible Babel plugin.# Stage 1 - Proposal: this is worth working on.# Stage 2 - Draft: initial spec.# Stage 3 - Candidate: complete spec and initial browser implementations.# Stage 4 - Finished: will be added to the next yearly release.# For more information, be sure to check out the current TC39 proposals and its process document.# # The TC39 stage process is also explained in detail across a few posts by Yehuda Katz (@wycatz) over at thefeedbackloop.xyz: # Stage 0 and 1, Stage 2, Stage 3, and Stage 4 coming soon.$ yarn add babel-preset-stage-x --dev\nplugins插件集合很多。\n新建一个配置文件 .babelrc，并增加如下代码，以供我们下面调试使用:\n12345678# 新建配置文件.babelrc，并添加如下内容# &#123;#   \"presets\": [\"es2015\"],#   \"plugins\": []# &#125;$ touch .babelrc# 安装 babel-preset-es2015$ yarn add babel-preset-es2015 --dev\n\n安装和使用 Babel\nps: 本文将使用Yarn来安装依赖相关npm包，如果不了解Yarn的欢迎阅读公众号专栏煦涵说Yarn。\n\n命令行方式运行 babel-clibabel-cli 的 CLI 是一种在命令行下使用 Babel 编译文件的简单方法。\n全局安装12# 全局安装$ yarn global add babel-cli\n\n新建一个source.js文件，内容如下：\n1234567var arr = [1, 2, 3, 4];arr = arr.map((item, index) =&gt; &#123;    return item * index;&#125;);console.log(arr);\n123456789101112# 输出结果到控制台$ babel source.js# 输出结果到文件$ babel source.js --out-file dist.jsor $ babel source.js -o dist.js# 输出结果到目录$ babel /src --out-dir /distor $ babel /src -d /dist\n\n项目内安装(局部安装)12345# 初始化一个项目package.json$ mkdir first-babel-proj$ cd first-babel-proj$ yarn init $ yarn add babel-cli --dev\n修改package.json，添加如下文本\n123456789101112&#123;  \"name\": \"babel-proj\",  \"version\": \"1.0.0\",  \"main\": \"index.js\",  \"license\": \"MIT\",  \"devDependencies\": &#123;    \"babel-cli\": \"^6.24.1\"  &#125;,+  \"scripts\": &#123;+   \"build\": \"babel src -d dist\"+  &#125;&#125;\n运行\n1$ yarn run build\n\nrequire方式运行 babel-register\nps: 这种方法并不适合正式产品环境使用。 在部署到生成环境之前预先编译会更好。 不过用在构建脚本或是其他本地运行的脚本中是非常合适的。\n\n1$ yarn add babel-register --dev\n新建compile.js文件\n12require('babel-register');require('./src/source.js');\n运行\n1node compile.js\n运行结果\n1$ [0, 2, 6, 12]\n\n编程方式运行 babel-core1$ yarn add babel-core --dev\n字符串形式的 JavaScript 代码可以直接使用 babel.transform 来编译。\n12babel.transform(\"code();\", options);// =&gt; &#123; code, map, ast &#125;\n\n如果是文件的话，可以使用异步 api：\n123babel.transformFile(\"filename.js\", options, function(err, result) &#123;  result; // =&gt; &#123; code, map, ast &#125;&#125;);\n\n或者是同步 api：\n12babel.transformFileSync(\"filename.js\", options);// =&gt; &#123; code, map, ast &#125;\n\n要是已经有一个 Babel AST（抽象语法树）了就可以直接从 AST 进行转换。\n12babel.transformFromAst(ast, code, options);// =&gt; &#123; code, map, ast &#125;\n\n更多选项 options.\nBabel 与 Webpack使用 babel-loader 插件\n1$ yarn add bable-loader --dev\nwebpack.config.js 配置文件增加如下规则：\n1234&#123;    test: /\\.js$/,    loader: 'babel-loader'&#125;\n\nBabel 低版本浏览器兼容\n煦涵说webpack-IE低版本兼容指南，或者FED实验室公众号文章\nReact - IE低版本兼容\n\n","dateCreated":"2017-06-13T12:56:01+08:00","dateModified":"2020-02-29T14:01:27+08:00","datePublished":"2017-06-13T12:56:01+08:00","description":"","headline":"Babel","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.gitlab.io/2017/06/13/Babel/"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4","logo":{"@type":"ImageObject","url":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"}},"url":"https://zuojj.gitlab.io/2017/06/13/Babel/","keywords":"js"}</script>
-    <meta name="description" content="Babel，下一代javascript编译器，当前版本 v2.4.0 ，它可以处理ES6的所有新语法，并内置了React JSX扩展及Flow类型注解支持，如果对Flow不是很了解可以查看FED实验室微信公众号文章煦涵说Flow。 Babel与JavaScript技术委员会（TC39）始终保持着高度一致，能够在ECMAScript新特性标准化之前为开发者提供现实可用的转码编译实现，以在ECMASc">
-<meta property="og:type" content="blog">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"},"articleBody":"\n\n\nBabel，下一代javascript编译器，当前版本 v2.4.0 ，它可以处理ES6的所有新语法，并内置了React JSX扩展及Flow类型注解支持，如果对Flow不是很了解可以查看FED实验室微信公众号文章煦涵说Flow。\nBabel与JavaScript技术委员会（TC39）始终保持着高度一致，能够在ECMAScript新特性标准化之前为开发者提供现实可用的转码编译实现，以在ECMAScript规范最后定稿前获得来自世界各地开发者更多的反馈，从而间接推动了javascript的发展以及开发者在项目中尝试使用新技术。因此建议大家开始使用 \b\bBabel。\nBabel 配置文件 .babelrc学习和使用Babel的第一步，配置 .babelrc 文件，该文件存放到项目根目录下，用来设置 Babel 的转码规则和插件。基本格式如下：\n1234&#123;  \"presets\": [],  \"plugins\": []&#125;\n\npresets的规则集如下：\n123456789101112131415161718192021222324252627282930# replaces es2015, es2016, es2017, latest$ yarn add babel-preset-env --dev# es2015$ yarn add babel-preset-es2015 --dev# es2016$ yarn add babel-preset-es2016 --dev# es2017 $ yarn add babel-preset-es2017 --dev# react$ yarn add babel-preset-react --dev# flow$ yarn add babel-preset-flow --dev# The TC39 categorizes proposals into the following stages:# # Stage 0 - Strawman: just an idea, possible Babel plugin.# Stage 1 - Proposal: this is worth working on.# Stage 2 - Draft: initial spec.# Stage 3 - Candidate: complete spec and initial browser implementations.# Stage 4 - Finished: will be added to the next yearly release.# For more information, be sure to check out the current TC39 proposals and its process document.# # The TC39 stage process is also explained in detail across a few posts by Yehuda Katz (@wycatz) over at thefeedbackloop.xyz: # Stage 0 and 1, Stage 2, Stage 3, and Stage 4 coming soon.$ yarn add babel-preset-stage-x --dev\nplugins插件集合很多。\n新建一个配置文件 .babelrc，并增加如下代码，以供我们下面调试使用:\n12345678# 新建配置文件.babelrc，并添加如下内容# &#123;#   \"presets\": [\"es2015\"],#   \"plugins\": []# &#125;$ touch .babelrc# 安装 babel-preset-es2015$ yarn add babel-preset-es2015 --dev\n\n安装和使用 Babel\nps: 本文将使用Yarn来安装依赖相关npm包，如果不了解Yarn的欢迎阅读公众号专栏煦涵说Yarn。\n\n命令行方式运行 babel-clibabel-cli 的 CLI 是一种在命令行下使用 Babel 编译文件的简单方法。\n全局安装12# 全局安装$ yarn global add babel-cli\n\n新建一个source.js文件，内容如下：\n1234567var arr = [1, 2, 3, 4];arr = arr.map((item, index) =&gt; &#123;    return item * index;&#125;);console.log(arr);\n123456789101112# 输出结果到控制台$ babel source.js# 输出结果到文件$ babel source.js --out-file dist.jsor $ babel source.js -o dist.js# 输出结果到目录$ babel /src --out-dir /distor $ babel /src -d /dist\n\n项目内安装(局部安装)12345# 初始化一个项目package.json$ mkdir first-babel-proj$ cd first-babel-proj$ yarn init $ yarn add babel-cli --dev\n修改package.json，添加如下文本\n123456789101112&#123;  \"name\": \"babel-proj\",  \"version\": \"1.0.0\",  \"main\": \"index.js\",  \"license\": \"MIT\",  \"devDependencies\": &#123;    \"babel-cli\": \"^6.24.1\"  &#125;,+  \"scripts\": &#123;+   \"build\": \"babel src -d dist\"+  &#125;&#125;\n运行\n1$ yarn run build\n\nrequire方式运行 babel-register\nps: 这种方法并不适合正式产品环境使用。 在部署到生成环境之前预先编译会更好。 不过用在构建脚本或是其他本地运行的脚本中是非常合适的。\n\n1$ yarn add babel-register --dev\n新建compile.js文件\n12require('babel-register');require('./src/source.js');\n运行\n1node compile.js\n运行结果\n1$ [0, 2, 6, 12]\n\n编程方式运行 babel-core1$ yarn add babel-core --dev\n字符串形式的 JavaScript 代码可以直接使用 babel.transform 来编译。\n12babel.transform(\"code();\", options);// =&gt; &#123; code, map, ast &#125;\n\n如果是文件的话，可以使用异步 api：\n123babel.transformFile(\"filename.js\", options, function(err, result) &#123;  result; // =&gt; &#123; code, map, ast &#125;&#125;);\n\n或者是同步 api：\n12babel.transformFileSync(\"filename.js\", options);// =&gt; &#123; code, map, ast &#125;\n\n要是已经有一个 Babel AST（抽象语法树）了就可以直接从 AST 进行转换。\n12babel.transformFromAst(ast, code, options);// =&gt; &#123; code, map, ast &#125;\n\n更多选项 options.\nBabel 与 Webpack使用 babel-loader 插件\n1$ yarn add bable-loader --dev\nwebpack.config.js 配置文件增加如下规则：\n1234&#123;    test: /\\.js$/,    loader: 'babel-loader'&#125;\n\nBabel 低版本浏览器兼容\n煦涵说webpack-IE低版本兼容指南，或者FED实验室公众号文章\nReact - IE低版本兼容\n","dateCreated":"2017-06-13T12:56:01+08:00","dateModified":"2020-02-29T16:59:22+08:00","datePublished":"2017-06-13T12:56:01+08:00","description":"","headline":"Babel","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.gitlab.io/2017/06/13/Babel/"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4","logo":{"@type":"ImageObject","url":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"}},"url":"https://zuojj.gitlab.io/2017/06/13/Babel/","keywords":"js"}</script>
+    <meta property="og:type" content="blog">
 <meta property="og:title" content="Babel">
 <meta property="og:url" content="https://zuojj.gitlab.io/2017/06/13/Babel/index.html">
 <meta property="og:site_name" content="煦涵驛">
-<meta property="og:description" content="Babel，下一代javascript编译器，当前版本 v2.4.0 ，它可以处理ES6的所有新语法，并内置了React JSX扩展及Flow类型注解支持，如果对Flow不是很了解可以查看FED实验室微信公众号文章煦涵说Flow。 Babel与JavaScript技术委员会（TC39）始终保持着高度一致，能够在ECMAScript新特性标准化之前为开发者提供现实可用的转码编译实现，以在ECMASc">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-06-13T04:56:01.000Z">
-<meta property="article:modified_time" content="2020-02-29T06:01:27.293Z">
+<meta property="article:modified_time" content="2020-02-29T08:59:22.194Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
@@ -41,7 +39,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-n2lvfzsmwt2hvavjmplmv122pj2aihmergs7judkqfrhxgekspfyz63ftv4u.min.css">
+<link rel="stylesheet" href="/assets/css/style-gw9ypk0apdnn5atzfvbshy31nrapwhphhz20snhvjel8wr1fyuq1ognftm2e.min.css">
 
     <!--STYLES END-->
     
@@ -64,7 +62,7 @@
         
     
 
-<header id="header" data-behavior="2">
+<header id="header" data-behavior="5">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
         <a
@@ -97,7 +95,7 @@
         
     
 
-<nav id="sidebar" data-behavior="2">
+<nav id="sidebar" data-behavior="5">
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
@@ -229,7 +227,7 @@
 </nav>
 
             
-            <div id="main" data-behavior="2"
+            <div id="main" data-behavior="5"
                  class="
                         hasCoverMetaIn
                         ">
@@ -265,7 +263,10 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p><a href="http://babeljs.io/" target="_blank" rel="noopener">Babel</a>，下一代javascript编译器，当前版本 <code>v2.4.0</code> ，它可以处理ES6的所有新语法，并内置了React JSX扩展及Flow类型注解支持，如果对Flow不是很了解可以查看FED实验室微信公众号文章<a href="https://segmentfault.com/a/1190000009639356" target="_blank" rel="noopener">煦涵说Flow</a>。</p>
+            <!-- excerpt -->
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Babel-配置文件-babelrc"><span class="toc-text">Babel 配置文件 .babelrc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装和使用-Babel"><span class="toc-text">安装和使用 Babel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行方式运行-babel-cli"><span class="toc-text">命令行方式运行 babel-cli</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#全局安装"><span class="toc-text">全局安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#项目内安装-局部安装"><span class="toc-text">项目内安装(局部安装)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#require方式运行-babel-register"><span class="toc-text">require方式运行 babel-register</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编程方式运行-babel-core"><span class="toc-text">编程方式运行 babel-core</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Babel-与-Webpack"><span class="toc-text">Babel 与 Webpack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Babel-低版本浏览器兼容"><span class="toc-text">Babel 低版本浏览器兼容</span></a></li></ol>
+
+<p><a href="http://babeljs.io/" target="_blank" rel="noopener">Babel</a>，下一代javascript编译器，当前版本 <code>v2.4.0</code> ，它可以处理ES6的所有新语法，并内置了React JSX扩展及Flow类型注解支持，如果对Flow不是很了解可以查看FED实验室微信公众号文章<a href="https://segmentfault.com/a/1190000009639356" target="_blank" rel="noopener">煦涵说Flow</a>。</p>
 <p>Babel与JavaScript技术委员会（TC39）始终保持着高度一致，能够在ECMAScript新特性标准化之前为开发者提供现实可用的转码编译实现，以在ECMAScript规范最后定稿前获得来自世界各地开发者更多的反馈，从而间接推动了javascript的发展以及开发者在项目中尝试使用新技术。因此建议大家开始使用 Babel。</p>
 <h2 id="Babel-配置文件-babelrc"><a href="#Babel-配置文件-babelrc" class="headerlink" title="Babel 配置文件 .babelrc"></a>Babel 配置文件 <code>.babelrc</code></h2><p>学习和使用Babel的<strong>第一步</strong>，配置 <code>.babelrc</code> 文件，该文件存放到项目根目录下，用来设置 Babel 的转码规则和插件。基本格式如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"presets"</span>: [],</span><br><span class="line">  <span class="string">"plugins"</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -326,7 +327,6 @@
 <li><a href="https://segmentfault.com/a/1190000009613296" target="_blank" rel="noopener">煦涵说webpack-IE低版本兼容指南</a>，或者FED实验室公众号文章</li>
 <li><a href="https://github.com/xcatliu/react-ie8" target="_blank" rel="noopener">React - IE低版本兼容</a></li>
 </ul>
-
             
 
 
@@ -430,7 +430,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -456,7 +456,7 @@
 
             </div>
             
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="2">
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
                     <div class="post-actions-wrap">
     <nav>
         <ul class="post-actions post-action-nav">
@@ -545,7 +545,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -556,7 +556,7 @@
 
                 </div>
                 
-    <div id="share-options-bar" class="share-options-bar" data-behavior="2">
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
         <i id="btn-close-shareoptions" class="fa fa-times"></i>
         <ul class="share-options">
             
@@ -645,10 +645,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ogaxrurcpmycz7m6zn50p8mo6tatzjf3bim6ghv4axcaiqa908v5le39rcgp.min.js"></script>
+<script src="/assets/js/script-k4fsncomirfxos2wvgiknsa2ot2cgmimzltzvchznz5ffzquntbtntfzpwxb.min.js"></script>
 
 <!--SCRIPTS END-->
 

@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-n2lvfzsmwt2hvavjmplmv122pj2aihmergs7judkqfrhxgekspfyz63ftv4u.min.css">
+<link rel="stylesheet" href="/assets/css/style-gw9ypk0apdnn5atzfvbshy31nrapwhphhz20snhvjel8wr1fyuq1ognftm2e.min.css">
 
     <!--STYLES END-->
     
@@ -235,7 +235,7 @@
     <section class="postShorten-group main-content-wrap">
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -267,57 +267,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <p>自2015年12月W3C发布<a href="https://www.w3.org/TR/css-variables/" target="_blank" rel="noopener">自定义属性级联变量</a>推荐性规范已经有一段时间了，今天本文首先会对自定义属性使用做一个基本的介绍，后面将主要讲述在我们日常组件开发中CSS自定义的应用。浏览器兼容性参见<a href="http://caniuse.com/#search=custom%20proper" target="_blank" rel="noopener">CSS Variables (Custom Properties)</a></p>
-<h2 id="属性定义"><a href="#属性定义" class="headerlink" title="属性定义"></a>属性定义</h2><p>基本语法：–<custom-property-name>: <cutome-propery-value>，以“–”开头（为了和Sass/Less等预处理器变量进行区分），自定义属性名对大小写敏感，<code>--foo</code> 和 <code>--FOO</code> 会映射到不同的值。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">    <span class="attribute">--btn-color</span>: <span class="number">#fff</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.btn</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="built_in">var</span>(--btn-color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用自定义属性"><a href="#使用自定义属性" class="headerlink" title="使用自定义属性"></a>使用自定义属性</h2><p>基本语法：<css-property-name>: var(<custom-property-name>[,<declaration-value>]);此处括号的意思是如果<custom-property-name>没有指定值，则使用<declaration-value>值。这个扩展非常有用，比如我们做多皮肤主题时，可以使用此语法设置默认皮肤。</p>
-<h3 id="CSS-自定义属性遵循-CSS-级联及继承规则"><a href="#CSS-自定义属性遵循-CSS-级联及继承规则" class="headerlink" title="CSS 自定义属性遵循 CSS 级联及继承规则"></a>CSS 自定义属性遵循 CSS 级联及继承规则</h3><ul>
-<li>定义全局变量</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">    <span class="attribute">--global-variables</span>: <span class="string">'global-value'</span>;</span><br><span class="line">    <span class="attribute">--bg-color</span>: <span class="number">#f0f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>定义组件局部变量</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.header</span> &#123;</span><br><span class="line">    <span class="attribute">--bg-color</span>: <span class="number">#f00</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">20px</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="built_in">var</span>(--bg-color);</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main</span> &#123;</span><br><span class="line">    <span class="comment">/* use global variable --bg-color: #f0f */</span></span><br><span class="line">    <span class="attribute">background-color</span>: <span class="built_in">var</span>(--bg-color);</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.footer</span> &#123;</span><br><span class="line">    <span class="attribute">--bg-color</span>: <span class="number">#00f</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">20px</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="built_in">var</span>(--bg-color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="循环依赖"><a href="#循环依赖" class="headerlink" title="循环依赖"></a>循环依赖</h3><ul>
-<li>示例一：</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">  <span class="attribute">--a</span>: <span class="built_in">calc</span>(var(--b) + <span class="number">20px</span>);</span><br><span class="line">  <span class="attribute">--b</span>: <span class="built_in">calc</span>(var(--a) - <span class="number">20px</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* box的 width 和 height 仍为初始值，自定义属性无效 */</span></span><br><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="built_in">var</span>(--a);</span><br><span class="line">    <span class="attribute">height</span>: <span class="built_in">var</span>(--b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>示例二：</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-pseudo">:root</span> &#123;</span></span><br><span class="line">        --font-size: 40px;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.parent</span> &#123;</span></span><br><span class="line">        font-size: var(--font-size);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.son</span> &#123;</span></span><br><span class="line">        --son: calc(var(--font-size) * 2);</span><br><span class="line"><span class="css">        <span class="comment">/* font-size: 80px */</span></span></span><br><span class="line">        font-size: var(--son);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.grandson</span> &#123;</span></span><br><span class="line">        --font-size: calc(var(--son) * 2);</span><br><span class="line"><span class="css">        <span class="comment">/* font-size: 160px */</span></span></span><br><span class="line">        font-size: var(--font-size);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"parent"</span>&gt;</span></span><br><span class="line">    parent </span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"son"</span>&gt;</span></span><br><span class="line">        on </span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"grandson"</span>&gt;</span>grandson<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="多皮肤主题中的应用"><a href="#多皮肤主题中的应用" class="headerlink" title="多皮肤主题中的应用"></a>多皮肤主题中的应用</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-pseudo">:root</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">--default-color</span>: <span class="selector-id">#000</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    body &#123;</span><br><span class="line">        margin: 0;</span><br><span class="line"><span class="css">        <span class="selector-tag">color</span>: <span class="selector-id">#fff</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.header</span> &#123;</span></span><br><span class="line">        text-align: center;</span><br><span class="line">        background-color: var(--default-color);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.main</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#fff</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.footer</span> &#123;</span></span><br><span class="line">        position: fixed;</span><br><span class="line">        left: 0;</span><br><span class="line">        bottom: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line"><span class="css">        <span class="selector-tag">background</span>: <span class="selector-tag">linear-gradient</span>(<span class="selector-tag">to</span> <span class="selector-tag">bottom</span>, <span class="selector-id">#ccc</span>, <span class="selector-tag">var</span>(<span class="selector-tag">--default-color</span>));</span></span><br><span class="line">    &#125;</span><br><span class="line">    select &#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 24px;</span><br><span class="line">        font-size: 14px;</span><br><span class="line">        line-height: 24px;</span><br><span class="line"><span class="css">        <span class="selector-tag">color</span>: <span class="selector-id">#333</span>;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#ccc</span>;</span></span><br><span class="line">        background-color: none;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">class</span>=<span class="string">"header"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"theme-select"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"#000"</span> <span class="attr">selected</span>&gt;</span>Black<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"#f00"</span>&gt;</span>Red<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"#00f"</span>&gt;</span>Blue<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">"main"</span>&gt;</span></span><br><span class="line">    Main</span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span> <span class="attr">class</span>=<span class="string">"footer"</span>&gt;</span></span><br><span class="line">    Footer</span><br><span class="line"><span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">/* change theme */</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.querySelector(<span class="string">'#theme-select'</span>).addEventListener(<span class="string">'change'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">document</span>.documentElement.style.setProperty(<span class="string">"--default-color"</span>, <span class="keyword">this</span>.value);</span></span><br><span class="line"><span class="actionscript">    &#125;, <span class="literal">false</span>);</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="组件化开发中的应用"><a href="#组件化开发中的应用" class="headerlink" title="组件化开发中的应用"></a>组件化开发中的应用</h3><p>开发一个 Button 组件，并使用 CSS 自定义属性。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.btn-groups</span> &#123;</span></span><br><span class="line">        display: flex;</span><br><span class="line">        flex-wrap: wrap;</span><br><span class="line">        padding: 10px 5px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#eee</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">--btnColor</span>: <span class="selector-id">#5eb5ff</span>;</span></span><br><span class="line">        border: 1px solid var(--btnColor);</span><br><span class="line">        color: var(--btnColor);</span><br><span class="line">        background-color: white;</span><br><span class="line">        padding: 10px 25px;</span><br><span class="line">        text-decoration: none;</span><br><span class="line">        font-family: "Output Sans";</span><br><span class="line">        font-weight: 600;</span><br><span class="line">        border-radius: 3px;</span><br><span class="line">        margin: 5px;</span><br><span class="line"><span class="css">        <span class="selector-tag">transition</span>: <span class="selector-tag">all</span> <span class="selector-class">.3s</span> <span class="selector-tag">ease</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn-red</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">--btnColor</span>: <span class="selector-id">#ff6969</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn-green</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">--btnColor</span>: <span class="selector-id">#7ae07a</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn-gray</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">--btnColor</span>: <span class="selector-id">#555</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn-purple</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">--btnColor</span>: <span class="selector-id">#ef34ef</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn</span><span class="selector-pseudo">:hover</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">color</span>: <span class="selector-id">#fff</span>;</span></span><br><span class="line">        background-color: var(--btnColor);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="css">    <span class="selector-class">.btn</span><span class="selector-pseudo">:active</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">opacity</span>: <span class="selector-class">.6</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"btn-groups"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'javascript:void(0)'</span> <span class="attr">class</span>=<span class="string">'btn'</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'javascript:void(0)'</span> <span class="attr">class</span>=<span class="string">'btn btn-red'</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'javascript:void(0)'</span> <span class="attr">class</span>=<span class="string">'btn btn-green'</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'javascript:void(0)'</span> <span class="attr">class</span>=<span class="string">'btn btn-gray'</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'javascript:void(0)'</span> <span class="attr">class</span>=<span class="string">'btn btn-purple'</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="浏览器检测"><a href="#浏览器检测" class="headerlink" title="浏览器检测"></a>浏览器检测</h2><p>1.CSS @supports 检测</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@supports</span> ( (<span class="attribute">--a:</span> <span class="number">0</span>)) &#123;</span><br><span class="line">  <span class="comment">/* supported */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@supports</span> ( <span class="keyword">not</span> (<span class="attribute">--a:</span> <span class="number">0</span>)) &#123;</span><br><span class="line">  <span class="comment">/* not supported */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2.javascript检测</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isSupported = <span class="built_in">window</span>.CSS &amp;&amp;</span><br><span class="line">    <span class="built_in">window</span>.CSS.supports &amp;&amp; <span class="built_in">window</span>.CSS.supports(<span class="string">'--a'</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (isSupported) &#123;</span><br><span class="line">  <span class="comment">/* supported */</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="comment">/* not supported */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面内容，我们了解了CSS自定义属性的定义、语法、检测、应用、示例及与javascript交互，同时我们也了解到 CSS 自定义属性的优点。如果你还没有使用过 CSS 自定义属性，动手get起来吧。</p>
-
+                <div class="postShorten-excerpt">
+                    <a id="more"></a>
                     
+                        <a
+                            href="/2017/09/02/%E5%BD%93%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91%E9%81%87%E4%B8%8A%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E7%BA%A7%E8%81%94%E5%8F%98%E9%87%8F/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": 当组件化开发遇上自定义属性级联变量"
+                        >
+                            阅读全文
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2017/09/02/%E5%BD%93%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91%E9%81%87%E4%B8%8A%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E7%BA%A7%E8%81%94%E5%8F%98%E9%87%8F/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -326,7 +286,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -358,83 +318,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <p>当我们在前端开发中使用自定义字体时，会遇到字体加载慢影响用户体验的情况，今天本篇文章来介绍 <code>font-display</code> 属性，该属性定义了浏览器加载和显示自定义字体文件的方式。开始介绍 <code>font-display</code> 属性前，我们来看看浏览器渲染字体有哪些差异：</p>
-<table>
-<thead>
-<tr>
-<th>Browser</th>
-<th>Timeout</th>
-<th>Fallback</th>
-<th>Swap</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Chrome 35+</td>
-<td>3 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Opera</td>
-<td>3 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Firefox</td>
-<td>3 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>IE</td>
-<td>0 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Safari</td>
-<td>No timeout</td>
-<td>N/A</td>
-<td>N/A</td>
-</tr>
-</tbody></table>
-<p>Chrome、Opera、Firefox 浏览器超时时间为 3 秒，超时后将使用后备字体渲染。如果字体下载成功，将替换后备字体，重新渲染文本。在 IE 浏览器会立即渲染文本，如果字体未下载完成，使用后备字体立即渲染，如果字体下载成功，使用后备字体重新渲染。Safari浏览器没有超时行为，不知道后备字体和字体替换。</p>
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">'YourWebFont'</span>,</span><br><span class="line">    src: <span class="built_in">url</span>(<span class="string">'https://fonts.gstatic.com/s/baloobhai/v1/xxxx.woff2'</span>) <span class="built_in">format</span>(<span class="string">'woff2'</span>)</span><br><span class="line">         <span class="built_in">url</span>(<span class="string">'https://fonts.gstatic.com/s/baloobhai/v1/xxxx.woff'</span>) <span class="built_in">format</span>(<span class="string">'woff'</span>);</span><br><span class="line">    <span class="attribute">font-display</span>: swap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="为什么用-font-display"><a href="#为什么用-font-display" class="headerlink" title="为什么用 font-display"></a>为什么用 font-display</h2><ul>
-<li>决定是否使用后备字体显示字体或者字体下载过程中将其隐藏</li>
-<li>控制字体加载后你想要做什么，即继续显示后备字体或者用自定义字体替换。当然，你也可以在每个元素上进行设置</li>
-<li>可以为每一个字体指定下载超时值，甚至可以应用到某个指定元素</li>
-<li>有效的提升用户体验，以免文字加载太慢影响用户使用和操作。</li>
-</ul>
-<h2 id="font-display-可取值"><a href="#font-display-可取值" class="headerlink" title="font-display 可取值"></a>font-display 可取值</h2><ul>
-<li>auto: 默认值，指定浏览器使用默认方式加载字体，现在大多数浏览器使用默认策略和 block 相似。</li>
-<li>block: 指定浏览器要隐藏的文本，直到字体完全下载完成。 更准确地说，浏览器用无形占位符绘制文本，然后在字体加载完后立即与自定义字体交换。 这也被称为 “Flash of Invisible Text” 或者 “FOIT”。</li>
-<li>swap: 指定浏览器使用后备字体渲染文本，直到字体文件下载完成。这也被称为 “flash of unstyled text” 或者 “FOUT”</li>
-<li>fallback: 该状态是 auto 和 swap 的一个中间状态，浏览器隐藏文本大约 100ms, 如果字体没有下载完成，则使用后备文本字体渲染，知道自定义字体下载完成。</li>
-<li>optinal: 与 fallback 类似，如果字体能够为页面效果增色不少，但并非特别重要时，使用 optional 正好。使用 optional 时，将由浏览器来决定是否开始下载字体。可以不下载，也可以给予字体较低的优先级，一切取决于浏览器是否认为对用户最有利。当<strong>用户处于弱网络</strong>下，这是非常有用的，下载字体可能并不是对资源最好的利用。</li>
-</ul>
-<h2 id="浏览器支持"><a href="#浏览器支持" class="headerlink" title="浏览器支持"></a>浏览器支持</h2><p>Chrome 60+, Opera 47+ 已经支持 <code>font-display</code> 属性</p>
-<h2 id="不支持-font-display-使用-Font-Loading-API"><a href="#不支持-font-display-使用-Font-Loading-API" class="headerlink" title="不支持 font-display 使用 Font Loading API"></a>不支持 font-display 使用 Font Loading API</h2><p><a href="https://drafts.csswg.org/css-font-loading/" target="_blank" rel="noopener">W3C Font Loading API Draft</a></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> html = <span class="built_in">document</span>.documentElement;</span><br><span class="line"><span class="keyword">if</span>(<span class="string">"fontDisplay"</span> <span class="keyword">in</span> <span class="built_in">document</span>.body.style === <span class="literal">false</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">'fonts'</span> <span class="keyword">in</span> <span class="built_in">document</span>) &#123;</span><br><span class="line">        <span class="built_in">document</span>.fonts.load(<span class="string">'1em Open Sans Regular'</span>);</span><br><span class="line">        <span class="built_in">document</span>.fonts.ready.then(<span class="function"><span class="keyword">function</span>(<span class="params">fontFaceSet</span>) </span>&#123;</span><br><span class="line">            html.className += <span class="string">' fonts-loaded'</span>;</span><br><span class="line">        &#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            html.className += <span class="string">' fonts-failed'</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+                <div class="postShorten-excerpt">
+                    <a id="more"></a>
                     
+                        <a
+                            href="/2017/08/13/font-display/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": font-display"
+                        >
+                            阅读全文
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2017/08/13/font-display/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -443,7 +337,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -475,56 +369,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <p>在 [CSS1.0]规范中，当容器中的内容超过容器的边界时，会导致溢出内容与其他的内容重叠，被认为是开发者的错误。[CSS2.1]中引入了  <code>overflow</code> 属性，用来控制溢出内容的显示方式，是隐藏、裁剪还是自动处理。<a href="https://www.w3.org/TR/css-overflow-3/" target="_blank" rel="noopener">CSS Overflow Module Level 3</a>引入了溢出隐藏的标准，更全面的定义了溢出的处理方式。overflow 有两种类型，一种是 <code>text-shadow</code>、<code>box-shadow</code>、<code>boder-images</code>、<code>text-decoration</code> 形成的 <strong>ink overflow</strong>，另一种就是我们常说的<strong>scrollable overflow</strong>。本篇内容将从定义到实践应用来深入 <code>overflow</code> 属性。</p>
-<h2 id="适用元素"><a href="#适用元素" class="headerlink" title="适用元素"></a>适用元素</h2><ul>
-<li>block containers [CSS2.1]</li>
-<li>flex containers  [CSS3-FLEXBOX]</li>
-<li>grid containers  [CSS3-GRID-LAYOUT]</li>
-</ul>
-<h2 id="可取值"><a href="#可取值" class="headerlink" title="可取值"></a>可取值</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>: visible | hidden | clip | scroll | auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="visible"><a href="#visible" class="headerlink" title="visible"></a>visible</h3><p>默认值，内容超出容器边界，会产生溢出，和其他内容重叠，该容器不是一个scroll container，运行实例：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.container</span> &#123;</span></span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#f0f</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span> <span class="attr">id</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    至少有十年我不曾流泪</span><br><span class="line">    至少有十首歌给我安慰</span><br><span class="line">    可现在我会莫名的心碎</span><br><span class="line">    当我想你的时候</span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="hidden"><a href="#hidden" class="headerlink" title="hidden"></a>hidden</h3><p>该属性内容超出容器边界，不会溢出，但是可以使用 <code>javascript</code> 脚本控制滚动，该容器仍然是一个 scroll container，查看下面示例：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.container</span> &#123;</span></span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#f0f</span>;</span></span><br><span class="line">        overflow: hidden;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span> <span class="attr">id</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    至少有十年我不曾流泪</span><br><span class="line">    至少有十首歌给我安慰</span><br><span class="line">    可现在我会莫名的心碎</span><br><span class="line">    当我想你的时候</span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    (<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> container = <span class="built_in">document</span>.querySelector(<span class="string">'#container'</span>);</span></span><br><span class="line">        container.scrollTop = 80;</span><br><span class="line">    &#125;)();</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="clip"><a href="#clip" class="headerlink" title="clip"></a>clip</h3><p>该属性和 <code>overflow: hidden</code> 很相似，它可以按 clip 区域进行裁切，但是和hidden 属性不同的是该属性禁止通过 <code>javascript</code> 脚本滚动，该容器不是一个 scrooll container，这个属性现在浏览器还没有支持。</p>
-<h3 id="scroll"><a href="#scroll" class="headerlink" title="scroll"></a>scroll</h3><p>该属性会默认产生滚动条，内容不会溢出容器；用户可以操作滚动条进行滚动，也可以通过脚本滚动。但是在打印（print）模式时，可能会打印溢出的内容。</p>
-<h3 id="auto"><a href="#auto" class="headerlink" title="auto"></a>auto</h3><p>该属性会随容器内容溢出情况，自动判断是否出现滚动条；</p>
-<blockquote>
-<p>PS：如果该块级容器的 overflow 属性值不是 visible，会默认为它的内容创建一个新的 ”块级格式化上下文“（BFC）。</p>
-</blockquote>
-<h2 id="overflow-应用场景"><a href="#overflow-应用场景" class="headerlink" title="overflow 应用场景"></a>overflow 应用场景</h2><ol>
-<li><p>常见容器溢出处理，并可以通过设置水平（overflow-x）和垂直（overflow-y）方向上的个性化处理</p>
-</li>
-<li><p>两栏布局，在此布局中经常使用 overflow 来触发 BFC</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.container</span> &#123;</span></span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#f0f</span>;</span></span><br><span class="line">        overflow: hidden;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.fr</span> &#123;</span></span><br><span class="line">        float: right;</span><br><span class="line">        width: 50px;</span><br><span class="line">        height: 50px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#f00</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span> <span class="attr">id</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"fr"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line">        至少有十年我不曾流泪</span><br><span class="line">        至少有十首歌给我安慰</span><br><span class="line">        可现在我会莫名的心碎</span><br><span class="line">        当我想你的时候</span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>上面实例是我们最常见的文字环绕，如果我们增加如下 css，结果会变成两栏布局：</p>
-</li>
-</ol>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>清除浮动<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.container</span> &#123;</span></span><br><span class="line">        width: 100px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#f0f</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.fl</span> &#123;</span></span><br><span class="line">        float: left;</span><br><span class="line">        width: 40px;</span><br><span class="line">        height: 50px;</span><br><span class="line">        overflow: hidden;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.fr</span> &#123;</span></span><br><span class="line">        float: right;</span><br><span class="line">        width: 50px;</span><br><span class="line">        height: 50px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background-color</span>: <span class="selector-id">#f00</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span> <span class="attr">id</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"fr"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"fl"</span>&gt;</span></span><br><span class="line">        至少有十年我不曾流泪</span><br><span class="line">        至少有十首歌给我安慰</span><br><span class="line">        可现在我会莫名的心碎</span><br><span class="line">        当我想你的时候</span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-预览上面代码，你会发现 container 容器的高度为0，当你给 container 设置 <code>overflow: hidden</code> 时，会创建一个新的 块级格式化上下文，新的块级上下文可以包裹浮动流，从而不会引起容器高度塌陷，也就是说包含块会把浮动元素的高度也计算在内，所以不用清除浮动来撑起高度。关于清除浮动原理及BFC会在后面的文章中讲到，请持续关注。</li>
-</ol>
-<p>感谢您的阅读</p>
-
+                <div class="postShorten-excerpt">
+                    <a id="more"></a>
                     
+                        <a
+                            href="/2017/07/23/overflow/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": overflow"
+                        >
+                            阅读全文
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2017/07/23/overflow/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -533,7 +388,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -565,57 +420,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <p>在日常前端开发需求中经常会有限制文本行数的需求，尤其在列表、图文混排等需求中，当需求是单行文本溢出时，我们可以选择使用 <code>text-overflow</code> 属性，当有多行文本需求时，我们可能首先想到使用 <code>javascript</code> 来处理，本文将和大家一起来认识一个新的 CSS 属性 <code>line-clamp</code>，这个属性现在是非标准属性，旨在解决多行文本截断问题，使用该属性时，有很多需要注意的地方，下面将一一道来。</p>
-<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>1.ellipsis支持</p>
-<p>这个功能在我们处理多行文本时，是的确有益的，我们可以根据我们的需求来设置任意的行数，来适应我们的需求，并显示省略号溢出提示。</p>
-<p>2.友好的向后兼容</p>
-<p>我们可以使用 CSS 条件判断 <code>@support(line-clamp: number) {}</code> 来做向后兼容处理，比如如下代码：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.line-clamp</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">3.6em</span>;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">line-height</span>: <span class="number">1.2em</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">3px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.line-clamp</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">"..."</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">1.2em</span>;</span><br><span class="line">    <span class="attribute">line-height</span>: <span class="number">1.2em</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">3px</span>;</span><br><span class="line">    <span class="attribute">text-align</span>: right;</span><br><span class="line">    <span class="attribute">background</span>: <span class="built_in">linear-gradient</span>(to right, rgba(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0</span>), <span class="built_in">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">1</span>) <span class="number">50%</span>);</span><br><span class="line">&#125;</span><br><span class="line">@supports(-webkit-line-clamp: 3) &#123;</span><br><span class="line">    <span class="selector-class">.line-clamp</span> &#123;</span><br><span class="line">        <span class="attribute">display</span>: -webkit-box;</span><br><span class="line">        <span class="attribute">-webkit-line-clamp</span>: <span class="number">3</span>;</span><br><span class="line">        <span class="attribute">-webkit-box-orient</span>: vertical;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.line-clamp</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">        <span class="attribute">display</span>: none;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="缺点及注意事项"><a href="#缺点及注意事项" class="headerlink" title="缺点及注意事项"></a>缺点及注意事项</h2><p>1.浏览器支持</p>
-<p>IE、Microsoft Edge、Firefox、Opera Mini 不支持 <code>-webkit-line-clamp</code> ，Webkit 内核的浏览器需要使用 <code>-webkit</code> 前缀。详细请参考<a href="http://caniuse.com/#search=line-clamp" target="_blank" rel="noopener">CanIUse:line-clamp: http://caniuse.com/#search=line-clamp</a></p>
-<p>2.属性依赖</p>
-<p>需要依赖 <code>overflow: hidden</code>、<code>display: -webkit-box</code>、<code>-webkit-box-orient: vertical</code>，如下：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.line-clamp</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: -webkit-box;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">-webkit-box-orient</span>: vertical;</span><br><span class="line">    <span class="attribute">-webkit-line-clamp</span>: <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3.不支持 direction</p>
-<p>当设置文本方向为 <code>direction: rtl</code> 时不起作用，<code>-webkit-line-clamp</code> 会被忽略。</p>
-<p>4.奇怪的断点处理</p>
-<p><code>-webkit-line-clamp</code> 文本断行情况，并不是和之前[煦涵说CSS：文本断行]一文中的 <strong>软性断行机会点</strong> 情况一致， 它常常在某个词的中间断行，比如 “I am a fashion man” 经过设置 <code>line-clamp</code> 后，情况可能是 “I am a fash…”，这样的坏处时，可能会引起文本的歧义，特别是在文章标题等重要内容处理需求时。</p>
-<p>5.省略号不可用其他字符替代</p>
-<p>该属性不像 <code>text-overflow</code> 在 Firefox 浏览器中可以使用特殊字符替换（当然现在标准还么有支持，支持情况也不容乐观）。</p>
-<p>6.无空格文本不支持</p>
-<p>当我们在一段文本中无空格时，使用 <code>-webkit-line-clamp</code> 不会生效。</p>
-<p>7.不同语言 ellipsis 语义不同</p>
-<p>在不同语言中 ellipsis 对应的语义不同，比如波兰语中，省略号表示语音的中断或者暂停，而在CJK语言中，省略号表示语句没有说完，更常见的是省略号应该是文本行垂直居中的，但是现在 <code>line-clamp</code> 属性是不支持的。更多不同请参考<a href="https://en.wikipedia.org/wiki/Ellipsis" target="_blank" rel="noopener">Wikit Ellipsis: https://en.wikipedia.org/wiki/Ellipsis</a>。</p>
-<h2 id="Opera-独特兼容方案"><a href="#Opera-独特兼容方案" class="headerlink" title="Opera 独特兼容方案"></a>Opera 独特兼容方案</h2><p>Opera浏览器对此属性在未来支持如何如何仍尚未可知。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.line-clamp</span> &#123;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">3.6em</span>;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">text-overflow</span>: -o-ellipsis-lastline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Javascript-兼容方案"><a href="#Javascript-兼容方案" class="headerlink" title="Javascript 兼容方案"></a>Javascript 兼容方案</h2><p>1.简单实现方案：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> clamps = <span class="built_in">document</span>.querySelectorAll(<span class="string">'.line-clamp'</span>);</span><br><span class="line">[].forEach.call(clamps, (item, index) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> clientH = item.clientHeight;</span><br><span class="line">    <span class="keyword">while</span> (item.scrollHeight &gt; clientH) &#123;</span><br><span class="line">        item.textContent = item.textContent.replace(<span class="regexp">/\W*\s\S*$/</span>, <span class="string">'...'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>2.建议的实现方案</p>
-<ul>
-<li><a href="https://github.com/josephschmitt/Clamp.js" target="_blank" rel="noopener">clamp.js</a> </li>
-<li><a href="https://github.com/ftlabs/ftellipsis/blob/master/lib/index.js" target="_blank" rel="noopener">ftellipsis</a></li>
-</ul>
-<p>简单的实现方案，不建议采用，如果需要使用在生产环境中，建议使用以上两个方案，其基本实现思路根据行高、行数、容器高度进行判断，进行截断处理。</p>
-
+                <div class="postShorten-excerpt">
+                    <a id="more"></a>
                     
+                        <a
+                            href="/2017/07/15/line-clamp/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": line-clamp"
+                        >
+                            阅读全文
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2017/07/15/line-clamp/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -624,7 +439,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -656,50 +471,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <p><a href="https://www.w3.org/TR/css-ui-3/#text-overflow" target="_blank" rel="noopener">text-overflow</a> 属性常用来处理文本溢出时剪切文本，常用的取值有 clip 、ellipsis 、inherit; 常见的文本溢出处理 CSS：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ellipsis</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><ol>
-<li>该元素必须为 <code>display:block</code> 或者 <code>display:inline-block</code> 元素，需要设置宽度来控制文本被溢出。</li>
-<li>该元素必须设置 <code>overflow: hidden | scroll | auto</code>。</li>
-<li>文本溢出方向依赖 <code>direction: rtl | ltr</code> 属性。</li>
-<li>整行溢出依赖 <code>white-space: nowrap</code> 属性。</li>
-</ol>
-<h2 id="可取值"><a href="#可取值" class="headerlink" title="可取值"></a>可取值</h2><h3 id="clip"><a href="#clip" class="headerlink" title="clip"></a>clip</h3><p>默认值，设置该值时文本会被裁切。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.to-clip</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: clip;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="ellipsis"><a href="#ellipsis" class="headerlink" title="ellipsis"></a>ellipsis</h3><p>设置改属性文本溢出时会显示省略号。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.to-ellipsis</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="自定义字符串"><a href="#自定义字符串" class="headerlink" title="自定义字符串"></a>自定义字符串</h2><p>可以给text-overflow 设置溢出自定义字符串，现在只有 Firefox 浏览器支持</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.custom</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: <span class="string">"fedlab"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="两个属性值"><a href="#两个属性值" class="headerlink" title="两个属性值"></a>两个属性值</h2><p>两个属性值语法，左右方向溢出，设置 <code>text-align: center</code>， 显示中间部分文本，现在只有Firefox支持。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.double</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis ellipsis;</span><br><span class="line">    <span class="comment">/* 两边溢出 */</span></span><br><span class="line">    <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>PS：自定字符串及两个属性值情况，都有被遗弃的风险，在生产环境中慎用，目前只在 firefox 中支持。</p>
-</blockquote>
-<h2 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h2><ul>
-<li>IE8/9浏览器 input[type=text] 元素上无效</li>
-<li>Chrome/IE 浏览器 select 元素上无效</li>
-<li>Opera 浏览器加前缀兼容 <code>-o-text-overflow</code></li>
-</ul>
-
+                <div class="postShorten-excerpt">
+                    <a id="more"></a>
                     
+                        <a
+                            href="/2017/07/08/text-overflow/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": text-overflow"
+                        >
+                            阅读全文
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2017/07/08/text-overflow/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -708,7 +490,7 @@
     </article>
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom">
+    <article class="postShorten postShorten--thumbnailimg-right">
         <div class="postShorten-wrap">
             
             <div class="postShorten-header">
@@ -740,68 +522,17 @@
 
             </div>
             
-                <div class="postShorten-content">
-                    <p>根据 W3C 的 <a href="https://drafts.csswg.org/css-text/" target="_blank" rel="noopener">CSS Text Module Level 3</a> 文件来看，在网页中文本断行的规则通常是断在 <code>软性断行机会点</code>（Soft Wrap Oppportunity）。各种标点符号和空白通常都是一个断行机会点。这对英文来说很方便，因为英文中每个单字都会以空白分隔开。无论是断在空白或者标点符号，都不会影响一个单字被完整呈现。但是对于 <code>CJK</code>（中日韩）来说，每个字都是断行机会点。本期内容和大家一起学习CSS断行相关的属性 <code>word-break</code>、<code>word-wrap</code>。</p>
-<h2 id="word-break"><a href="#word-break" class="headerlink" title="word-break"></a>word-break</h2><p>该属性指定字母之间的“软性断行机会点”，何为软性断行机会点，即断行发生在断行机会点处。word-break 可取值为 normal | break-all | keep-all。只在 <code>white-space</code>属性值运行断行时生效。</p>
-<ol>
-<li>normal，不同字体根据下面自定义规则断行<ul>
-<li>CJK可以在任何一个CJK字体后断行；</li>
-<li>non-CJK会在半角空格或者连字符(-)位置自动断行，不会在长单词的中间断行；</li>
-<li>CJK中包含non-CJK:non-CJK部分按 non-CJK情况处理进行断行处理；</li>
-<li>CJK中含有标点符号时，浏览器不会让标点符号位于一个行的行首，会使标点符号和前一个字符组成一个整体进行断行；</li>
-</ul>
-</li>
-<li>break-all，在任意的软性断行机会点处断行<ul>
-<li>允许词内断行</li>
-</ul>
-</li>
-<li>keep-all，禁止词内断行<ul>
-<li>non-CJK与normal属性相同</li>
-<li>IE浏览器中CJK在半空格、连接符或者任何标点符号处换行</li>
-<li>Chrome &amp; Safari不支持该属性(使用默认换行)</li>
-</ul>
-</li>
-<li>break-word，非官方属性<ul>
-<li>该属性只在支持 Webkit/Blink 为内核的浏览器支持，比如Chrome、Safari</li>
-<li>该属性效果和下面讲到的 <code>word-wrap: break-word</code> 相同</li>
-</ul>
-</li>
-</ol>
-<p>引用 W3C 文档中的例子：</p>
-<blockquote>
-<p>Here’s a mixed-script sample text:</p>
-<p>这是一些汉字, and some Latin, و کمی نوشتن عربی,<br>และตัวอย่างการเขียนภาษาไทย.<br>The break-points are determined as follows (indicated by ‘·’):</p>
-<p>word-break: normal<br>这·是·一·些·汉·字,·and·some·Latin,·و·کمی·نوشتن·عربی,·<br>และ·ตัวอย่าง·การเขียน·ภาษาไทย.<br>word-break: break-all<br>这·是·一·些·汉·字,·a·n·d·s·o·m·e·L·a·t·i·n,·و·ﮐ·ﻤ·ﻰ·ﻧ·ﻮ·ﺷ·ﺘ·ﻦ·ﻋ·ﺮ·ﺑ·ﻰ,·<br>แ·ล·ะ·ตั·ว·อ·ย่·า·ง·ก·า·ร·เ·ขี·ย·น·ภ·า·ษ·า·ไ·ท·ย.<br>word-break: keep-all<br>这是一些汉字,·and·some·Latin,·و·کمی·نوشتن·عربی,·<br>แและ·ตัวอย่าง·การเขียน·ภาษาไทย.</p>
-</blockquote>
-<h2 id="word-wrap"><a href="#word-wrap" class="headerlink" title="word-wrap"></a>word-wrap</h2><p>该属性指定是否可以在单词内任意断开，以防止在另外不可破坏的字符串太长而不能放置在行框内而造成溢出。只在 <code>white-space</code>属性值运行断行时生效。支持所有浏览器。可取值为 normal | break-word。</p>
-<ol>
-<li>normal<ul>
-<li>在半空格、连接符位置处断行；</li>
-</ul>
-</li>
-<li>break-word<ul>
-<li>如果行中没有其他可接受的断点，则一个不可破坏的“单词”可能会在任意点断开；</li>
-</ul>
-</li>
-</ol>
-<h2 id="实例对比"><a href="#实例对比" class="headerlink" title="实例对比"></a>实例对比</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box keepall"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">此例中注意keep-all在不同浏览器中的兼容，特殊符号处的换行！</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box breakall"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">此例中注意逗号的位置!</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box breakword"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;style type="text/css"&gt;</span><br><span class="line">    <span class="selector-class">.box</span>&#123;<span class="attribute">width</span>:<span class="number">100px</span>;<span class="attribute">height</span>:<span class="number">100px</span>;<span class="attribute">border</span>:<span class="number">2px</span> solid <span class="number">#f00</span>;<span class="attribute">color</span>:<span class="number">#333</span>;<span class="attribute">font</span>:<span class="number">12px</span> arial;<span class="attribute">margin-bottom</span>:<span class="number">10px</span>;&#125;</span><br><span class="line">    <span class="selector-class">.keepall</span>&#123;<span class="attribute">word-break</span>:keep-all;&#125;</span><br><span class="line">    <span class="selector-class">.breakall</span>&#123;<span class="attribute">word-break</span>:break-all;&#125;</span><br><span class="line">    <span class="selector-class">.breakword</span>&#123;<span class="attribute">word-wrap</span>:break-word;&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+                <div class="postShorten-excerpt">
+                    <a id="more"></a>
                     
+                        <a
+                            href="/2017/06/21/word-wrap/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": word-wrap"
+                        >
+                            阅读全文
+                        </a>
                         
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2017/06/21/word-wrap/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
                     
                 </div>
             
@@ -869,10 +600,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ogaxrurcpmycz7m6zn50p8mo6tatzjf3bim6ghv4axcaiqa908v5le39rcgp.min.js"></script>
+<script src="/assets/js/script-k4fsncomirfxos2wvgiknsa2ot2cgmimzltzvchznz5ffzquntbtntfzpwxb.min.js"></script>
 
 <!--SCRIPTS END-->
 
