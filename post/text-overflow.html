@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="煦涵驛">
+    <title>text-overflow - 煦涵驛</title>
+    <meta name="author" content="煦涵">
+    
+        <meta name="keywords" content="WEB开发,前端开发,用户体验">
+    
+    
+        <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"},"articleBody":"\n\n\ntext-overflow 属性常用来处理文本溢出时剪切文本，常用的取值有 clip 、ellipsis 、inherit; 常见的文本溢出处理 CSS：\n12345.ellipsis &#123;    overflow: hidden;    white-space: nowrap;    text-overflow: ellipsis;&#125;\n\n前置条件\n该元素必须为 display:block 或者 display:inline-block 元素，需要设置宽度来控制文本被溢出。\n该元素必须设置 overflow: hidden | scroll | auto。\n文本溢出方向依赖 direction: rtl | ltr 属性。\n整行溢出依赖 white-space: nowrap 属性。\n\n可取值clip默认值，设置该值时文本会被裁切。\n123.to-clip &#123;    text-overflow: clip;&#125;\n\nellipsis设置改属性文本溢出时会显示省略号。\n123.to-ellipsis &#123;    text-overflow: ellipsis;&#125;\n自定义字符串可以给text-overflow 设置溢出自定义字符串，现在只有 Firefox 浏览器支持\n123.custom &#123;    text-overflow: \"fedlab\";&#125;\n两个属性值两个属性值语法，左右方向溢出，设置 text-align: center， 显示中间部分文本，现在只有Firefox支持。\n12345.double &#123;    text-overflow: ellipsis ellipsis;    /* 两边溢出 */    text-align: center;&#125;\n\n\nPS：自定字符串及两个属性值情况，都有被遗弃的风险，在生产环境中慎用，目前只在 firefox 中支持。\n\n兼容\nIE8/9浏览器 input[type=text] 元素上无效\nChrome/IE 浏览器 select 元素上无效\nOpera 浏览器加前缀兼容 -o-text-overflow\n","dateCreated":"2017-07-08T13:49:31+08:00","dateModified":"2020-02-29T16:58:57+08:00","datePublished":"2017-07-08T13:49:31+08:00","description":"","headline":"text-overflow","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/text-overflow.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4","logo":{"@type":"ImageObject","url":"https://avatars0.githubusercontent.com/u/5378965?s=460&v=4"}},"url":"https://zuojj.com/post/text-overflow.html","keywords":"css"}</script>
+    <meta property="og:type" content="blog">
+<meta property="og:title" content="text-overflow">
+<meta property="og:url" content="https://zuojj.com/post/text-overflow.html">
+<meta property="og:site_name" content="煦涵驛">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-07-08T05:49:31.000Z">
+<meta property="article:modified_time" content="2020-02-29T08:58:57.954Z">
+<meta property="article:author" content="煦涵">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://avatars0.githubusercontent.com/u/5378965?s=460&amp;v=4"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-cgojgrvdwkbswyxmqlm0cydrnjz0fwkqvvk5bnibxzbezfy59rrlpk7epsp4.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159301267-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-159301267-1');
+    </script>
+
+
+    
+
+    
+        
+            
+<link rel="stylesheet" href="/assets/css/gitalk.css">
+
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/%20"
+            aria-label=""
+        >
+            煦涵驛
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="https://avatars0.githubusercontent.com/u/5378965?s=460&amp;v=4" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="https://avatars0.githubusercontent.com/u/5378965?s=460&amp;v=4" alt="作者的图片" onerror="this.style.display='none'"/>
+                </a>
+                <h4 class="sidebar-profile-name">煦涵</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>因为热爱，所以坚持。</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/zuojj"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:zuojj.com@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            text-overflow
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2017-07-08T13:49:31+08:00">
+	
+		    7月 08, 2017
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <!-- excerpt -->
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前置条件"><span class="toc-text">前置条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可取值"><span class="toc-text">可取值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clip"><span class="toc-text">clip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ellipsis"><span class="toc-text">ellipsis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义字符串"><span class="toc-text">自定义字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个属性值"><span class="toc-text">两个属性值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#兼容"><span class="toc-text">兼容</span></a></li></ol>
+
+<p><a href="https://www.w3.org/TR/css-ui-3/#text-overflow" target="_blank" rel="noopener">text-overflow</a> 属性常用来处理文本溢出时剪切文本，常用的取值有 clip 、ellipsis 、inherit; 常见的文本溢出处理 CSS：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ellipsis</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><ol>
+<li>该元素必须为 <code>display:block</code> 或者 <code>display:inline-block</code> 元素，需要设置宽度来控制文本被溢出。</li>
+<li>该元素必须设置 <code>overflow: hidden | scroll | auto</code>。</li>
+<li>文本溢出方向依赖 <code>direction: rtl | ltr</code> 属性。</li>
+<li>整行溢出依赖 <code>white-space: nowrap</code> 属性。</li>
+</ol>
+<h2 id="可取值"><a href="#可取值" class="headerlink" title="可取值"></a>可取值</h2><h3 id="clip"><a href="#clip" class="headerlink" title="clip"></a>clip</h3><p>默认值，设置该值时文本会被裁切。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.to-clip</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: clip;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ellipsis"><a href="#ellipsis" class="headerlink" title="ellipsis"></a>ellipsis</h3><p>设置改属性文本溢出时会显示省略号。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.to-ellipsis</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义字符串"><a href="#自定义字符串" class="headerlink" title="自定义字符串"></a>自定义字符串</h2><p>可以给text-overflow 设置溢出自定义字符串，现在只有 Firefox 浏览器支持</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.custom</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: <span class="string">"fedlab"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="两个属性值"><a href="#两个属性值" class="headerlink" title="两个属性值"></a>两个属性值</h2><p>两个属性值语法，左右方向溢出，设置 <code>text-align: center</code>， 显示中间部分文本，现在只有Firefox支持。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.double</span> &#123;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis ellipsis;</span><br><span class="line">    <span class="comment">/* 两边溢出 */</span></span><br><span class="line">    <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>PS：自定字符串及两个属性值情况，都有被遗弃的风险，在生产环境中慎用，目前只在 firefox 中支持。</p>
+</blockquote>
+<h2 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h2><ul>
+<li>IE8/9浏览器 input[type=text] 元素上无效</li>
+<li>Chrome/IE 浏览器 select 元素上无效</li>
+<li>Opera 浏览器加前缀兼容 <code>-o-text-overflow</code></li>
+</ul>
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/css/" rel="tag">css</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/line-clamp.html"
+                    data-tooltip="line-clamp"
+                    aria-label="上一篇: line-clamp"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/word-wrap.html"
+                    data-tooltip="word-wrap"
+                    aria-label="下一篇: word-wrap"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/text-overflow.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/text-overflow.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/text-overflow.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/text-overflow.html&amp;title=text-overflow"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitalk"></div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2020 煦涵. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/line-clamp.html"
+                    data-tooltip="line-clamp"
+                    aria-label="上一篇: line-clamp"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/word-wrap.html"
+                    data-tooltip="word-wrap"
+                    aria-label="下一篇: word-wrap"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/text-overflow.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/text-overflow.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/text-overflow.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/text-overflow.html&amp;title=text-overflow"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/text-overflow.html"
+                        aria-label="分享到 Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/text-overflow.html"
+                        aria-label="分享到 Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/text-overflow.html"
+                        aria-label="分享到 Weibo"
+                    >
+                        <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/text-overflow.html&amp;title=text-overflow"
+                        aria-label="分享到 QQ"
+                    >
+                        <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://avatars0.githubusercontent.com/u/5378965?s=460&amp;v=4" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">煦涵</h4>
+        
+            <div id="about-card-bio"><p>因为热爱，所以坚持。</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Front-end Engineer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-kjk50rdps5jcw6lpeqewmuviutgc3pfm2vhrmlpp2hieiweyh7sphlcdkahe.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+        
+<script src="/assets/js/gitalk.js"></script>
+
+        <script type="text/javascript">
+          (function() {
+            new Gitalk({
+              clientID: 'c7c1ad823b46b771570d',
+              clientSecret: '46d251bb9ed9d97efcf23a00db098bf7f7400a31',
+              repo: 'zuojj.github.io',
+              owner: 'zuojj',
+              admin: ['zuojj'],
+              id: 'post/text-overflow.html',
+              ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
+            }).render('gitalk')
+          })()
+        </script>
+    
+
+
+
+
+    </body>
+</html>
