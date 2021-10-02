@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="煦涵驛">
-    <title>CSS属性：font-display - 煦涵驛</title>
+    <title>回车自动提交表单几种情况总结 - 煦涵驛</title>
     <meta name="author" content="煦涵">
     
         <meta name="keywords" content="WEB开发,前端开发,用户体验">
@@ -15,18 +15,18 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"\n\n\n当我们在前端开发中使用自定义字体时，会遇到字体加载慢影响用户体验的情况，今天本篇文章来介绍 font-display 属性，该属性定义了浏览器加载和显示自定义字体文件的方式。开始介绍 font-display 属性前，我们来看看浏览器渲染字体有哪些差异：\n\n\n\nBrowser\nTimeout\nFallback\nSwap\n\n\n\nChrome 35+\n3 seconds\nyes\nyes\n\n\nOpera\n3 seconds\nyes\nyes\n\n\nFirefox\n3 seconds\nyes\nyes\n\n\nIE\n0 seconds\nyes\nyes\n\n\nSafari\nNo timeout\nN/A\nN/A\n\n\nChrome、Opera、Firefox 浏览器超时时间为 3 秒，超时后将使用后备字体渲染。如果字体下载成功，将替换后备字体，重新渲染文本。在 IE 浏览器会立即渲染文本，如果字体未下载完成，使用后备字体立即渲染，如果字体下载成功，使用后备字体重新渲染。Safari浏览器没有超时行为，不知道后备字体和字体替换。\n基本使用123456@font-face &#123;    font-family: 'YourWebFont',    src: url('https://fonts.gstatic.com/s/baloobhai/v1/xxxx.woff2') format('woff2')         url('https://fonts.gstatic.com/s/baloobhai/v1/xxxx.woff') format('woff');    font-display: swap;&#125;\n\n为什么用 font-display\n决定是否使用后备字体显示字体或者字体下载过程中将其隐藏\n控制字体加载后你想要做什么，即继续显示后备字体或者用自定义字体替换。当然，你也可以在每个元素上进行设置\n可以为每一个字体指定下载超时值，甚至可以应用到某个指定元素\n有效的提升用户体验，以免文字加载太慢影响用户使用和操作。\n\nfont-display 可取值\nauto: 默认值，指定浏览器使用默认方式加载字体，现在大多数浏览器使用默认策略和 block 相似。\nblock: 指定浏览器要隐藏的文本，直到字体完全下载完成。 更准确地说，浏览器用无形占位符绘制文本，然后在字体加载完后立即与自定义字体交换。 这也被称为 “Flash of Invisible Text” 或者 “FOIT”。\nswap: 指定浏览器使用后备字体渲染文本，直到字体文件下载完成。这也被称为 “flash of unstyled text” 或者 “FOUT”\nfallback: 该状态是 auto 和 swap 的一个中间状态，浏览器隐藏文本大约 100ms, 如果字体没有下载完成，则使用后备文本字体渲染，知道自定义字体下载完成。\noptinal: 与 fallback 类似，如果字体能够为页面效果增色不少，但并非特别重要时，使用 optional 正好。使用 optional 时，将由浏览器来决定是否开始下载字体。可以不下载，也可以给予字体较低的优先级，一切取决于浏览器是否认为对用户最有利。当用户处于弱网络下，这是非常有用的，下载字体可能并不是对资源最好的利用。\n\n浏览器支持Chrome 60+, Opera 47+ 已经支持 font-display 属性\n不支持 font-display 使用 Font Loading APIW3C Font Loading API Draft\n1234567891011var html = document.documentElement;if(\"fontDisplay\" in document.body.style === false) &#123;    if('fonts' in document) &#123;        document.fonts.load('1em Open Sans Regular');        document.fonts.ready.then(function(fontFaceSet) &#123;            html.className += ' fonts-loaded';        &#125;).catch(function() &#123;            html.className += ' fonts-failed';        &#125;);    &#125;&#125;\n","dateCreated":"2017-08-13T13:53:17+08:00","dateModified":"2021-10-02T16:12:00+08:00","datePublished":"2017-08-13T13:53:17+08:00","description":"当我们在前端开发中使用自定义字体时，会遇到字体加载慢影响用户体验的情况，今天本篇文章来介绍 `font-display` 属性，该属性定义了浏览器加载和显示自定义字体文件的方式。开始介绍 `font-display` 属性前，我们来看看浏览器渲染字体有哪些差异","headline":"CSS属性：font-display","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/font-display.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/font-display.html","keywords":"css"}</script>
-    <meta name="description" content="当我们在前端开发中使用自定义字体时，会遇到字体加载慢影响用户体验的情况，今天本篇文章来介绍 &#96;font-display&#96; 属性，该属性定义了浏览器加载和显示自定义字体文件的方式。开始介绍 &#96;font-display&#96; 属性前，我们来看看浏览器渲染字体有哪些差异">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Form表单中按回车键会自动提交表单的几种情况1.表单里只有一个input[type=’text’]，不管按钮是什么type，当input中有输入值后，回车自动提交。\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_name\"&gt;    &lt;span&gt;提交&lt;/span&gt;&lt;/form&gt;\n\n2.表单里有一个input[type=’submit’]，当input中有输入值后，回车自动提交\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;input type=\"submit\" value=\"提交\"&gt;&lt;/form&gt;\n\n3.如果button[notype]，IE下默认为button[type=’button’]，FF、Chrome默认为button[type=’submit’]\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n4.input[type=’image’]效果等同于input[type=’submit’]\n5.textarea、select不影响，radio/checkbox在FF/Chrome下选中后会响应回车键，在IE下不响应\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"radio\" name=\"rio_a\" checked&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n二、禁用回车自动提交的几种方式：1.同步提交：利用keydown事件屏蔽回车键2.异步提交：禁用表单的submit事件\n123form.addEventListener('submit', function(e) &#123;    e.preventDefault();&#125;);\n","dateCreated":"2014-07-30T21:09:16+08:00","dateModified":"2021-10-02T16:12:00+08:00","datePublished":"2014-07-30T21:09:16+08:00","description":"Form表单中按回车键会自动提交表单的几种情况","headline":"回车自动提交表单几种情况总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/form-auto-submit-list.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/form-auto-submit-list.html","keywords":"html"}</script>
+    <meta name="description" content="Form表单中按回车键会自动提交表单的几种情况">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="CSS属性：font-display">
-<meta property="og:url" content="https://zuojj.com/post/font-display.html">
+<meta property="og:title" content="回车自动提交表单几种情况总结">
+<meta property="og:url" content="https://zuojj.com/post/form-auto-submit-list.html">
 <meta property="og:site_name" content="煦涵驛">
-<meta property="og:description" content="当我们在前端开发中使用自定义字体时，会遇到字体加载慢影响用户体验的情况，今天本篇文章来介绍 &#96;font-display&#96; 属性，该属性定义了浏览器加载和显示自定义字体文件的方式。开始介绍 &#96;font-display&#96; 属性前，我们来看看浏览器渲染字体有哪些差异">
+<meta property="og:description" content="Form表单中按回车键会自动提交表单的几种情况">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-08-13T05:53:17.000Z">
+<meta property="article:published_time" content="2014-07-30T13:09:16.000Z">
 <meta property="article:modified_time" content="2021-10-02T08:12:00.911Z">
 <meta property="article:author" content="煦涵">
-<meta property="article:tag" content="css">
+<meta property="article:tag" content="html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
     
@@ -253,14 +253,14 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            CSS属性：font-display
+            回车自动提交表单几种情况总结
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2017-08-13T13:53:17+08:00">
+    <time datetime="2014-07-30T21:09:16+08:00">
 	
-		    8月 13, 2017
+		    7月 30, 2014
     	
     </time>
     
@@ -278,69 +278,21 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <!-- more -->
-<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本使用"><span class="toc-text">基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么用-font-display"><span class="toc-text">为什么用 font-display</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#font-display-可取值"><span class="toc-text">font-display 可取值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器支持"><span class="toc-text">浏览器支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不支持-font-display-使用-Font-Loading-API"><span class="toc-text">不支持 font-display 使用 Font Loading API</span></a></li></ol>
+            <h2 id="Form表单中按回车键会自动提交表单的几种情况"><a href="#Form表单中按回车键会自动提交表单的几种情况" class="headerlink" title="Form表单中按回车键会自动提交表单的几种情况"></a>Form表单中按回车键会自动提交表单的几种情况</h2><p>1.表单里只有一个input[type=’text’]，不管按钮是什么type，当input中有输入值后，回车自动提交。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">"form_a"</span> <span class="attr">action</span>=<span class="string">"/weiui.php"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"txt_name"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>当我们在前端开发中使用自定义字体时，会遇到字体加载慢影响用户体验的情况，今天本篇文章来介绍 <code>font-display</code> 属性，该属性定义了浏览器加载和显示自定义字体文件的方式。开始介绍 <code>font-display</code> 属性前，我们来看看浏览器渲染字体有哪些差异：</p>
-<table>
-<thead>
-<tr>
-<th>Browser</th>
-<th>Timeout</th>
-<th>Fallback</th>
-<th>Swap</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Chrome 35+</td>
-<td>3 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Opera</td>
-<td>3 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Firefox</td>
-<td>3 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>IE</td>
-<td>0 seconds</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Safari</td>
-<td>No timeout</td>
-<td>N/A</td>
-<td>N/A</td>
-</tr>
-</tbody></table>
-<p>Chrome、Opera、Firefox 浏览器超时时间为 3 秒，超时后将使用后备字体渲染。如果字体下载成功，将替换后备字体，重新渲染文本。在 IE 浏览器会立即渲染文本，如果字体未下载完成，使用后备字体立即渲染，如果字体下载成功，使用后备字体重新渲染。Safari浏览器没有超时行为，不知道后备字体和字体替换。</p>
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">'YourWebFont'</span>,</span><br><span class="line">    src: <span class="built_in">url</span>(<span class="string">'https://fonts.gstatic.com/s/baloobhai/v1/xxxx.woff2'</span>) <span class="built_in">format</span>(<span class="string">'woff2'</span>)</span><br><span class="line">         <span class="built_in">url</span>(<span class="string">'https://fonts.gstatic.com/s/baloobhai/v1/xxxx.woff'</span>) <span class="built_in">format</span>(<span class="string">'woff'</span>);</span><br><span class="line">    <span class="attribute">font-display</span>: swap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.表单里有一个input[type=’submit’]，当input中有输入值后，回车自动提交</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">"form_a"</span> <span class="attr">action</span>=<span class="string">"/weiui.php"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"txt_01"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"txt_02"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="为什么用-font-display"><a href="#为什么用-font-display" class="headerlink" title="为什么用 font-display"></a>为什么用 font-display</h2><ul>
-<li>决定是否使用后备字体显示字体或者字体下载过程中将其隐藏</li>
-<li>控制字体加载后你想要做什么，即继续显示后备字体或者用自定义字体替换。当然，你也可以在每个元素上进行设置</li>
-<li>可以为每一个字体指定下载超时值，甚至可以应用到某个指定元素</li>
-<li>有效的提升用户体验，以免文字加载太慢影响用户使用和操作。</li>
-</ul>
-<h2 id="font-display-可取值"><a href="#font-display-可取值" class="headerlink" title="font-display 可取值"></a>font-display 可取值</h2><ul>
-<li>auto: 默认值，指定浏览器使用默认方式加载字体，现在大多数浏览器使用默认策略和 block 相似。</li>
-<li>block: 指定浏览器要隐藏的文本，直到字体完全下载完成。 更准确地说，浏览器用无形占位符绘制文本，然后在字体加载完后立即与自定义字体交换。 这也被称为 “Flash of Invisible Text” 或者 “FOIT”。</li>
-<li>swap: 指定浏览器使用后备字体渲染文本，直到字体文件下载完成。这也被称为 “flash of unstyled text” 或者 “FOUT”</li>
-<li>fallback: 该状态是 auto 和 swap 的一个中间状态，浏览器隐藏文本大约 100ms, 如果字体没有下载完成，则使用后备文本字体渲染，知道自定义字体下载完成。</li>
-<li>optinal: 与 fallback 类似，如果字体能够为页面效果增色不少，但并非特别重要时，使用 optional 正好。使用 optional 时，将由浏览器来决定是否开始下载字体。可以不下载，也可以给予字体较低的优先级，一切取决于浏览器是否认为对用户最有利。当<strong>用户处于弱网络</strong>下，这是非常有用的，下载字体可能并不是对资源最好的利用。</li>
-</ul>
-<h2 id="浏览器支持"><a href="#浏览器支持" class="headerlink" title="浏览器支持"></a>浏览器支持</h2><p>Chrome 60+, Opera 47+ 已经支持 <code>font-display</code> 属性</p>
-<h2 id="不支持-font-display-使用-Font-Loading-API"><a href="#不支持-font-display-使用-Font-Loading-API" class="headerlink" title="不支持 font-display 使用 Font Loading API"></a>不支持 font-display 使用 Font Loading API</h2><p><a href="https://drafts.csswg.org/css-font-loading/" target="_blank" rel="noopener">W3C Font Loading API Draft</a></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> html = <span class="built_in">document</span>.documentElement;</span><br><span class="line"><span class="keyword">if</span>(<span class="string">"fontDisplay"</span> <span class="keyword">in</span> <span class="built_in">document</span>.body.style === <span class="literal">false</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">'fonts'</span> <span class="keyword">in</span> <span class="built_in">document</span>) &#123;</span><br><span class="line">        <span class="built_in">document</span>.fonts.load(<span class="string">'1em Open Sans Regular'</span>);</span><br><span class="line">        <span class="built_in">document</span>.fonts.ready.then(<span class="function"><span class="keyword">function</span>(<span class="params">fontFaceSet</span>) </span>&#123;</span><br><span class="line">            html.className += <span class="string">' fonts-loaded'</span>;</span><br><span class="line">        &#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            html.className += <span class="string">' fonts-failed'</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.如果button[notype]，IE下默认为button[type=’button’]，FF、Chrome默认为button[type=’submit’]</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">"form_a"</span> <span class="attr">action</span>=<span class="string">"/weiui.php"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"txt_01"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"txt_02"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>4.input[type=’image’]效果等同于input[type=’submit’]</p>
+<p>5.textarea、select不影响，radio/checkbox在FF/Chrome下选中后会响应回车键，在IE下不响应</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">"form_a"</span> <span class="attr">action</span>=<span class="string">"/weiui.php"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"rio_a"</span> <span class="attr">checked</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>二、禁用回车自动提交的几种方式：<br>1.同步提交：利用keydown事件屏蔽回车键<br>2.异步提交：禁用表单的submit事件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">form.addEventListener(<span class="string">'submit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.preventDefault();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
             
 
@@ -354,7 +306,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/css/" rel="tag">css</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/html/" rel="tag">html</a>
 
             </div>
         
@@ -367,9 +319,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/when-component-development-meets-custom-property-cascade-variables.html"
-                    data-tooltip="当组件化开发遇上自定义属性级联变量"
-                    aria-label="上一篇: 当组件化开发遇上自定义属性级联变量"
+                    href="/post/JSON.html"
+                    data-tooltip="JSON"
+                    aria-label="上一篇: JSON"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -381,9 +333,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/overflow.html"
-                    data-tooltip="CSS属性：overflow"
-                    aria-label="下一篇: CSS属性：overflow"
+                    href="/post/ie67-span-float.html"
+                    data-tooltip="IE6/7行内元素后相邻的浮动元素折行的原因"
+                    aria-label="下一篇: IE6/7行内元素后相邻的浮动元素折行的原因"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -408,7 +360,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/font-display.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/form-auto-submit-list.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -421,7 +373,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/font-display.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/form-auto-submit-list.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -434,7 +386,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/font-display.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/form-auto-submit-list.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -447,7 +399,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/font-display.html&amp;title=CSS属性：font-display"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/form-auto-submit-list.html&amp;title=回车自动提交表单几种情况总结"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -470,7 +422,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -508,9 +460,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/when-component-development-meets-custom-property-cascade-variables.html"
-                    data-tooltip="当组件化开发遇上自定义属性级联变量"
-                    aria-label="上一篇: 当组件化开发遇上自定义属性级联变量"
+                    href="/post/JSON.html"
+                    data-tooltip="JSON"
+                    aria-label="上一篇: JSON"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -522,9 +474,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/overflow.html"
-                    data-tooltip="CSS属性：overflow"
-                    aria-label="下一篇: CSS属性：overflow"
+                    href="/post/ie67-span-float.html"
+                    data-tooltip="IE6/7行内元素后相邻的浮动元素折行的原因"
+                    aria-label="下一篇: IE6/7行内元素后相邻的浮动元素折行的原因"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -549,7 +501,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/font-display.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/form-auto-submit-list.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -562,7 +514,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/font-display.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/form-auto-submit-list.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -575,7 +527,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/font-display.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/form-auto-submit-list.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -588,7 +540,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/font-display.html&amp;title=CSS属性：font-display"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/form-auto-submit-list.html&amp;title=回车自动提交表单几种情况总结"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -611,7 +563,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -632,7 +584,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/font-display.html"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/form-auto-submit-list.html"
                         aria-label="分享到 Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
@@ -645,7 +597,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/font-display.html"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/form-auto-submit-list.html"
                         aria-label="分享到 Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
@@ -658,7 +610,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/font-display.html"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/form-auto-submit-list.html"
                         aria-label="分享到 Weibo"
                     >
                         <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
@@ -671,7 +623,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/font-display.html&amp;title=CSS属性：font-display"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/form-auto-submit-list.html&amp;title=回车自动提交表单几种情况总结"
                         aria-label="分享到 QQ"
                     >
                         <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
@@ -744,7 +696,7 @@
               repo: 'zuojj.github.io',
               owner: 'zuojj',
               admin: ['zuojj'],
-              id: 'post/font-display.html',
+              id: 'post/form-auto-submit-list.html',
               ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
             }).render('gitalk')
           })()
