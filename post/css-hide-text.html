@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="煦涵驛">
-    <title>word-wrap - 煦涵驛</title>
+    <title>CSS隐藏文本的几种方式 - 煦涵驛</title>
     <meta name="author" content="煦涵">
     
         <meta name="keywords" content="WEB开发,前端开发,用户体验">
@@ -15,18 +15,18 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"\n\n\n根据 W3C 的 CSS Text Module Level 3 文件来看，在网页中文本断行的规则通常是断在 软性断行机会点（Soft Wrap Oppportunity）。各种标点符号和空白通常都是一个断行机会点。这对英文来说很方便，因为英文中每个单字都会以空白分隔开。无论是断在空白或者标点符号，都不会影响一个单字被完整呈现。但是对于 CJK（中日韩）来说，每个字都是断行机会点。本期内容和大家一起学习CSS断行相关的属性 word-break、word-wrap。\nword-break该属性指定字母之间的“软性断行机会点”，何为软性断行机会点，即断行发生在断行机会点处。word-break 可取值为 normal | break-all | keep-all。只在 white-space属性值运行断行时生效。\n\nnormal，不同字体根据下面自定义规则断行\nCJK可以在任何一个CJK字体后断行；\nnon-CJK会在半角空格或者连字符(-)位置自动断行，不会在长单词的中间断行；\nCJK中包含non-CJK:non-CJK部分按 non-CJK情况处理进行断行处理；\nCJK中含有标点符号时，浏览器不会让标点符号位于一个行的行首，会使标点符号和前一个字符组成一个整体进行断行；\n\n\nbreak-all，在任意的软性断行机会点处断行\n允许词内断行\n\n\nkeep-all，禁止词内断行\nnon-CJK与normal属性相同\nIE浏览器中CJK在半空格、连接符或者任何标点符号处换行\nChrome &amp; Safari不支持该属性(使用默认换行)\n\n\nbreak-word，非官方属性\n该属性只在支持 Webkit/Blink 为内核的浏览器支持，比如Chrome、Safari\n该属性效果和下面讲到的 word-wrap: break-word 相同\n\n\n\n引用 W3C 文档中的例子：\n\nHere’s a mixed-script sample text:\n这是一些汉字, and some Latin, و کمی نوشتن عربی,และตัวอย่างการเขียนภาษาไทย.The break-points are determined as follows (indicated by ‘·’):\nword-break: normal这·是·一·些·汉·字,·and·some·Latin,·و·کمی·نوشتن·عربی,·และ·ตัวอย่าง·การเขียน·ภาษาไทย.word-break: break-all这·是·一·些·汉·字,·a·n·d·s·o·m·e·L·a·t·i·n,·و·ﮐ·ﻤ·ﻰ·ﻧ·ﻮ·ﺷ·ﺘ·ﻦ·ﻋ·ﺮ·ﺑ·ﻰ,·แ·ล·ะ·ตั·ว·อ·ย่·า·ง·ก·า·ร·เ·ขี·ย·น·ภ·า·ษ·า·ไ·ท·ย.word-break: keep-all这是一些汉字,·and·some·Latin,·و·کمی·نوشتن·عربی,·แและ·ตัวอย่าง·การเขียน·ภาษาไทย.\n\nword-wrap该属性指定是否可以在单词内任意断开，以防止在另外不可破坏的字符串太长而不能放置在行框内而造成溢出。只在 white-space属性值运行断行时生效。支持所有浏览器。可取值为 normal | break-word。\n\nnormal\n在半空格、连接符位置处断行；\n\n\nbreak-word\n如果行中没有其他可接受的断点，则一个不可破坏的“单词”可能会在任意点断开；\n\n\n\n实例对比1234567891011&lt;div class=\"box keepall\"&gt;自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。&lt;/div&gt;此例中注意keep-all在不同浏览器中的兼容，特殊符号处的换行！&lt;div class=\"box breakall\"&gt;自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。&lt;/div&gt;此例中注意逗号的位置!&lt;div class=\"box breakword\"&gt;自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。&lt;/div&gt;\n\n123456&lt;style type=\"text/css\"&gt;    .box&#123;width:100px;height:100px;border:2px solid #f00;color:#333;font:12px arial;margin-bottom:10px;&#125;    .keepall&#123;word-break:keep-all;&#125;    .breakall&#123;word-break:break-all;&#125;    .breakword&#123;word-wrap:break-word;&#125;&lt;/style&gt;","dateCreated":"2017-06-21T13:47:34+08:00","dateModified":"2021-10-02T15:23:00+08:00","datePublished":"2017-06-21T13:47:34+08:00","description":"根据 W3C 的 [CSS Text Module Level 3](https://drafts.csswg.org/css-text/) 文件来看，在网页中文本断行的规则通常是断在 `软性断行机会点`（Soft Wrap Oppportunity）。","headline":"word-wrap","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/word-wrap.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/word-wrap.html","keywords":"css"}</script>
-    <meta name="description" content="根据 W3C 的 [CSS Text Module Level 3](https:&#x2F;&#x2F;drafts.csswg.org&#x2F;css-text&#x2F;) 文件来看，在网页中文本断行的规则通常是断在 &#96;软性断行机会点&#96;（Soft Wrap Oppportunity）。">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"方式一：文字缩进123.div &#123;    text-indent:-9999px;&#125;\n\n方式二：字体大小123.div &#123;    font-size: 0;&#125;\n\n此方式在没有给容器设置height 或者行高的情况下，设置font-size:0,则容器将无高度\n方式三：设置padding撑开容器123456789101112131415161718&lt;div class=\"btn\"&gt;    &lt;a class=\"btn_download\" href=\"#\" title=\"下载\"&gt;下载&lt;/a&gt;&lt;/div&gt;&lt;style type=\"text/css\"&gt;    .btn &#123;         width: 55px;        height: 22px;        overflow: hidden;    &#125;    .btn_download &#123;        display: inline-block;        width: 55px;        height: 22px;        padding-top: 22px;        background: url(btn_download.gif) no-repeat;        text-align: center;    &#125;&lt;/style&gt;\n\nletter-spacing+first-letter\n此方法兼容IE6+, 适用于inline-block水平元素，且适用于button元素，不过，需要是下面这种写法\n\n123&lt;button type=\"button/submit\"&gt;按钮&lt;/button&gt;而不能是这样子：&lt;input type=\"button/submit\" value=\"按钮\" /&gt;\n\n\n此方法受text-align属性影响\n\ntext-align:left;letter-spacing+first-letter的margin使用负值，text-align:right;letter-spacing+first-letter的margin需要使用正值。值的大小其实没有定值。一般，letter-spacing绝对值大于2em可以，首字符margin可以大一些，demo中是-20em.\n\n多个:first-letter伪元素不要使用逗号分隔，貌似会全部失效，应分开写使用逗号分隔的时候逗号前面一定要留一个空格。否则，IE6浏览器会忽略这条声明：\n\n123456789.btn:first-letter,.img:first-letter &#123;    margin-left: -20em;&#125;.btn:first-letter ,    /* 逗号前需有1个空格 */.img:first-letter &#123;    margin-left: -20em;&#125;\n\n\n可放到公共样式中，单独调用\n\n12345678.notext &#123;    text-align: left;    letter-spacing: -3em;    overflow: hidden;&#125;.notext:first-letter &#123;    margin-left: -20em;&#125;","dateCreated":"2014-03-31T18:02:16+08:00","dateModified":"2021-10-02T15:23:00+08:00","datePublished":"2014-03-31T18:02:16+08:00","description":"汇总css隐藏文字的几种常见方式","headline":"CSS隐藏文本的几种方式","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/css-hide-text.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/css-hide-text.html","keywords":"js"}</script>
+    <meta name="description" content="汇总css隐藏文字的几种常见方式">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="word-wrap">
-<meta property="og:url" content="https://zuojj.com/post/word-wrap.html">
+<meta property="og:title" content="CSS隐藏文本的几种方式">
+<meta property="og:url" content="https://zuojj.com/post/css-hide-text.html">
 <meta property="og:site_name" content="煦涵驛">
-<meta property="og:description" content="根据 W3C 的 [CSS Text Module Level 3](https:&#x2F;&#x2F;drafts.csswg.org&#x2F;css-text&#x2F;) 文件来看，在网页中文本断行的规则通常是断在 &#96;软性断行机会点&#96;（Soft Wrap Oppportunity）。">
+<meta property="og:description" content="汇总css隐藏文字的几种常见方式">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-06-21T05:47:34.000Z">
+<meta property="article:published_time" content="2014-03-31T10:02:16.000Z">
 <meta property="article:modified_time" content="2021-10-02T07:23:00.657Z">
 <meta property="article:author" content="煦涵">
-<meta property="article:tag" content="css">
+<meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
     
@@ -253,14 +253,14 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            word-wrap
+            CSS隐藏文本的几种方式
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2017-06-21T13:47:34+08:00">
+    <time datetime="2014-03-31T18:02:16+08:00">
 	
-		    6月 21, 2017
+		    3月 31, 2014
     	
     </time>
     
@@ -278,55 +278,31 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <!-- more -->
-<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#word-break"><span class="toc-text">word-break</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#word-wrap"><span class="toc-text">word-wrap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例对比"><span class="toc-text">实例对比</span></a></li></ol>
+            <h2 id="方式一：文字缩进"><a href="#方式一：文字缩进" class="headerlink" title="方式一：文字缩进"></a>方式一：文字缩进</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.div</span> &#123;</span><br><span class="line">    <span class="attribute">text-indent</span>:-<span class="number">9999px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>根据 W3C 的 <a href="https://drafts.csswg.org/css-text/" target="_blank" rel="noopener">CSS Text Module Level 3</a> 文件来看，在网页中文本断行的规则通常是断在 <code>软性断行机会点</code>（Soft Wrap Oppportunity）。各种标点符号和空白通常都是一个断行机会点。这对英文来说很方便，因为英文中每个单字都会以空白分隔开。无论是断在空白或者标点符号，都不会影响一个单字被完整呈现。但是对于 <code>CJK</code>（中日韩）来说，每个字都是断行机会点。本期内容和大家一起学习CSS断行相关的属性 <code>word-break</code>、<code>word-wrap</code>。</p>
-<h2 id="word-break"><a href="#word-break" class="headerlink" title="word-break"></a>word-break</h2><p>该属性指定字母之间的“软性断行机会点”，何为软性断行机会点，即断行发生在断行机会点处。word-break 可取值为 normal | break-all | keep-all。只在 <code>white-space</code>属性值运行断行时生效。</p>
-<ol>
-<li>normal，不同字体根据下面自定义规则断行<ul>
-<li>CJK可以在任何一个CJK字体后断行；</li>
-<li>non-CJK会在半角空格或者连字符(-)位置自动断行，不会在长单词的中间断行；</li>
-<li>CJK中包含non-CJK:non-CJK部分按 non-CJK情况处理进行断行处理；</li>
-<li>CJK中含有标点符号时，浏览器不会让标点符号位于一个行的行首，会使标点符号和前一个字符组成一个整体进行断行；</li>
-</ul>
-</li>
-<li>break-all，在任意的软性断行机会点处断行<ul>
-<li>允许词内断行</li>
-</ul>
-</li>
-<li>keep-all，禁止词内断行<ul>
-<li>non-CJK与normal属性相同</li>
-<li>IE浏览器中CJK在半空格、连接符或者任何标点符号处换行</li>
-<li>Chrome &amp; Safari不支持该属性(使用默认换行)</li>
-</ul>
-</li>
-<li>break-word，非官方属性<ul>
-<li>该属性只在支持 Webkit/Blink 为内核的浏览器支持，比如Chrome、Safari</li>
-<li>该属性效果和下面讲到的 <code>word-wrap: break-word</code> 相同</li>
-</ul>
-</li>
-</ol>
-<p>引用 W3C 文档中的例子：</p>
-<blockquote>
-<p>Here’s a mixed-script sample text:</p>
-<p>这是一些汉字, and some Latin, و کمی نوشتن عربی,<br>และตัวอย่างการเขียนภาษาไทย.<br>The break-points are determined as follows (indicated by ‘·’):</p>
-<p>word-break: normal<br>这·是·一·些·汉·字,·and·some·Latin,·و·کمی·نوشتن·عربی,·<br>และ·ตัวอย่าง·การเขียน·ภาษาไทย.<br>word-break: break-all<br>这·是·一·些·汉·字,·a·n·d·s·o·m·e·L·a·t·i·n,·و·ﮐ·ﻤ·ﻰ·ﻧ·ﻮ·ﺷ·ﺘ·ﻦ·ﻋ·ﺮ·ﺑ·ﻰ,·<br>แ·ล·ะ·ตั·ว·อ·ย่·า·ง·ก·า·ร·เ·ขี·ย·น·ภ·า·ษ·า·ไ·ท·ย.<br>word-break: keep-all<br>这是一些汉字,·and·some·Latin,·و·کمی·نوشتن·عربی,·<br>แและ·ตัวอย่าง·การเขียน·ภาษาไทย.</p>
-</blockquote>
-<h2 id="word-wrap"><a href="#word-wrap" class="headerlink" title="word-wrap"></a>word-wrap</h2><p>该属性指定是否可以在单词内任意断开，以防止在另外不可破坏的字符串太长而不能放置在行框内而造成溢出。只在 <code>white-space</code>属性值运行断行时生效。支持所有浏览器。可取值为 normal | break-word。</p>
-<ol>
-<li>normal<ul>
-<li>在半空格、连接符位置处断行；</li>
-</ul>
-</li>
-<li>break-word<ul>
-<li>如果行中没有其他可接受的断点，则一个不可破坏的“单词”可能会在任意点断开；</li>
-</ul>
-</li>
-</ol>
-<h2 id="实例对比"><a href="#实例对比" class="headerlink" title="实例对比"></a>实例对比</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box keepall"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">此例中注意keep-all在不同浏览器中的兼容，特殊符号处的换行！</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box breakall"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">此例中注意逗号的位置!</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box breakword"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="方式二：字体大小"><a href="#方式二：字体大小" class="headerlink" title="方式二：字体大小"></a>方式二：字体大小</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.div</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;style type="text/css"&gt;</span><br><span class="line">    <span class="selector-class">.box</span>&#123;<span class="attribute">width</span>:<span class="number">100px</span>;<span class="attribute">height</span>:<span class="number">100px</span>;<span class="attribute">border</span>:<span class="number">2px</span> solid <span class="number">#f00</span>;<span class="attribute">color</span>:<span class="number">#333</span>;<span class="attribute">font</span>:<span class="number">12px</span> arial;<span class="attribute">margin-bottom</span>:<span class="number">10px</span>;&#125;</span><br><span class="line">    <span class="selector-class">.keepall</span>&#123;<span class="attribute">word-break</span>:keep-all;&#125;</span><br><span class="line">    <span class="selector-class">.breakall</span>&#123;<span class="attribute">word-break</span>:break-all;&#125;</span><br><span class="line">    <span class="selector-class">.breakword</span>&#123;<span class="attribute">word-wrap</span>:break-word;&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<p>此方式在没有给容器设置height 或者行高的情况下，设置font-size:0,则容器将无高度</p>
+<h2 id="方式三：设置padding撑开容器"><a href="#方式三：设置padding撑开容器" class="headerlink" title="方式三：设置padding撑开容器"></a>方式三：设置padding撑开容器</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"btn"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"btn_download"</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">title</span>=<span class="string">"下载"</span>&gt;</span>下载<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.btn</span> &#123; </span></span><br><span class="line">        width: 55px;</span><br><span class="line">        height: 22px;</span><br><span class="line">        overflow: hidden;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-class">.btn_download</span> &#123;</span></span><br><span class="line">        display: inline-block;</span><br><span class="line">        width: 55px;</span><br><span class="line">        height: 22px;</span><br><span class="line">        padding-top: 22px;</span><br><span class="line"><span class="css">        <span class="selector-tag">background</span>: <span class="selector-tag">url</span>(<span class="selector-tag">btn_download</span><span class="selector-class">.gif</span>) <span class="selector-tag">no-repeat</span>;</span></span><br><span class="line">        text-align: center;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="letter-spacing-first-letter"><a href="#letter-spacing-first-letter" class="headerlink" title="letter-spacing+first-letter"></a>letter-spacing+first-letter</h2><ol>
+<li>此方法兼容IE6+, 适用于inline-block水平元素，且适用于button元素，不过，需要是下面这种写法</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button/submit"</span>&gt;</span>按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">而不能是这样子：</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button/submit"</span> <span class="attr">value</span>=<span class="string">"按钮"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>此方法受text-align属性影响</li>
+</ol>
+<p>text-align:left;letter-spacing+first-letter的margin使用负值，<br>text-align:right;letter-spacing+first-letter的margin需要使用正值。<br>值的大小其实没有定值。一般，letter-spacing绝对值大于2em可以，首字符margin可以大一些，demo中是-20em.</p>
+<ol start="3">
+<li>多个:first-letter伪元素不要使用逗号分隔，貌似会全部失效，应分开写使用逗号分隔的时候逗号前面一定要留一个空格。否则，IE6浏览器会忽略这条声明：</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.btn</span><span class="selector-pseudo">:first-letter</span>,</span><br><span class="line"><span class="selector-class">.img</span><span class="selector-pseudo">:first-letter</span> &#123;</span><br><span class="line">    <span class="attribute">margin-left</span>: -<span class="number">20em</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.btn</span><span class="selector-pseudo">:first-letter</span> ,    <span class="comment">/* 逗号前需有1个空格 */</span></span><br><span class="line"><span class="selector-class">.img</span><span class="selector-pseudo">:first-letter</span> &#123;</span><br><span class="line">    <span class="attribute">margin-left</span>: -<span class="number">20em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>可放到公共样式中，单独调用</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.notext</span> &#123;</span><br><span class="line">    <span class="attribute">text-align</span>: left;</span><br><span class="line">    <span class="attribute">letter-spacing</span>: -<span class="number">3em</span>;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.notext</span><span class="selector-pseudo">:first-letter</span> &#123;</span><br><span class="line">    <span class="attribute">margin-left</span>: -<span class="number">20em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
             
 
 
@@ -339,7 +315,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/css/" rel="tag">css</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/js/" rel="tag">js</a>
 
             </div>
         
@@ -352,9 +328,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/text-overflow.html"
-                    data-tooltip="text-overflow"
-                    aria-label="上一篇: text-overflow"
+                    href="/post/JSON.html"
+                    data-tooltip="JSON"
+                    aria-label="上一篇: JSON"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -366,9 +342,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/Babel.html"
-                    data-tooltip="Babel"
-                    aria-label="下一篇: Babel"
+                    href="/post/null-and-undefined.html"
+                    data-tooltip="null 与 undefined"
+                    aria-label="下一篇: null 与 undefined"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -393,7 +369,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/css-hide-text.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -406,7 +382,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/css-hide-text.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -419,7 +395,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/css-hide-text.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -432,7 +408,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/word-wrap.html&amp;title=word-wrap"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/css-hide-text.html&amp;title=CSS隐藏文本的几种方式"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -455,7 +431,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -493,9 +469,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/text-overflow.html"
-                    data-tooltip="text-overflow"
-                    aria-label="上一篇: text-overflow"
+                    href="/post/JSON.html"
+                    data-tooltip="JSON"
+                    aria-label="上一篇: JSON"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -507,9 +483,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/Babel.html"
-                    data-tooltip="Babel"
-                    aria-label="下一篇: Babel"
+                    href="/post/null-and-undefined.html"
+                    data-tooltip="null 与 undefined"
+                    aria-label="下一篇: null 与 undefined"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -534,7 +510,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/css-hide-text.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -547,7 +523,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/css-hide-text.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -560,7 +536,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/css-hide-text.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -573,7 +549,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/word-wrap.html&amp;title=word-wrap"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/css-hide-text.html&amp;title=CSS隐藏文本的几种方式"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -596,7 +572,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -617,7 +593,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/word-wrap.html"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/css-hide-text.html"
                         aria-label="分享到 Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
@@ -630,7 +606,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/word-wrap.html"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/css-hide-text.html"
                         aria-label="分享到 Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
@@ -643,7 +619,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/word-wrap.html"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/css-hide-text.html"
                         aria-label="分享到 Weibo"
                     >
                         <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
@@ -656,7 +632,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/word-wrap.html&amp;title=word-wrap"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/css-hide-text.html&amp;title=CSS隐藏文本的几种方式"
                         aria-label="分享到 QQ"
                     >
                         <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
@@ -729,7 +705,7 @@
               repo: 'zuojj.github.io',
               owner: 'zuojj',
               admin: ['zuojj'],
-              id: 'post/word-wrap.html',
+              id: 'post/css-hide-text.html',
               ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
             }).render('gitalk')
           })()

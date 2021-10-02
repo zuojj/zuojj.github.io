@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="煦涵驛">
-    <title>word-wrap - 煦涵驛</title>
+    <title>null 与 undefined - 煦涵驛</title>
     <meta name="author" content="煦涵">
     
         <meta name="keywords" content="WEB开发,前端开发,用户体验">
@@ -15,18 +15,18 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"\n\n\n根据 W3C 的 CSS Text Module Level 3 文件来看，在网页中文本断行的规则通常是断在 软性断行机会点（Soft Wrap Oppportunity）。各种标点符号和空白通常都是一个断行机会点。这对英文来说很方便，因为英文中每个单字都会以空白分隔开。无论是断在空白或者标点符号，都不会影响一个单字被完整呈现。但是对于 CJK（中日韩）来说，每个字都是断行机会点。本期内容和大家一起学习CSS断行相关的属性 word-break、word-wrap。\nword-break该属性指定字母之间的“软性断行机会点”，何为软性断行机会点，即断行发生在断行机会点处。word-break 可取值为 normal | break-all | keep-all。只在 white-space属性值运行断行时生效。\n\nnormal，不同字体根据下面自定义规则断行\nCJK可以在任何一个CJK字体后断行；\nnon-CJK会在半角空格或者连字符(-)位置自动断行，不会在长单词的中间断行；\nCJK中包含non-CJK:non-CJK部分按 non-CJK情况处理进行断行处理；\nCJK中含有标点符号时，浏览器不会让标点符号位于一个行的行首，会使标点符号和前一个字符组成一个整体进行断行；\n\n\nbreak-all，在任意的软性断行机会点处断行\n允许词内断行\n\n\nkeep-all，禁止词内断行\nnon-CJK与normal属性相同\nIE浏览器中CJK在半空格、连接符或者任何标点符号处换行\nChrome &amp; Safari不支持该属性(使用默认换行)\n\n\nbreak-word，非官方属性\n该属性只在支持 Webkit/Blink 为内核的浏览器支持，比如Chrome、Safari\n该属性效果和下面讲到的 word-wrap: break-word 相同\n\n\n\n引用 W3C 文档中的例子：\n\nHere’s a mixed-script sample text:\n这是一些汉字, and some Latin, و کمی نوشتن عربی,และตัวอย่างการเขียนภาษาไทย.The break-points are determined as follows (indicated by ‘·’):\nword-break: normal这·是·一·些·汉·字,·and·some·Latin,·و·کمی·نوشتن·عربی,·และ·ตัวอย่าง·การเขียน·ภาษาไทย.word-break: break-all这·是·一·些·汉·字,·a·n·d·s·o·m·e·L·a·t·i·n,·و·ﮐ·ﻤ·ﻰ·ﻧ·ﻮ·ﺷ·ﺘ·ﻦ·ﻋ·ﺮ·ﺑ·ﻰ,·แ·ล·ะ·ตั·ว·อ·ย่·า·ง·ก·า·ร·เ·ขี·ย·น·ภ·า·ษ·า·ไ·ท·ย.word-break: keep-all这是一些汉字,·and·some·Latin,·و·کمی·نوشتن·عربی,·แและ·ตัวอย่าง·การเขียน·ภาษาไทย.\n\nword-wrap该属性指定是否可以在单词内任意断开，以防止在另外不可破坏的字符串太长而不能放置在行框内而造成溢出。只在 white-space属性值运行断行时生效。支持所有浏览器。可取值为 normal | break-word。\n\nnormal\n在半空格、连接符位置处断行；\n\n\nbreak-word\n如果行中没有其他可接受的断点，则一个不可破坏的“单词”可能会在任意点断开；\n\n\n\n实例对比1234567891011&lt;div class=\"box keepall\"&gt;自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。&lt;/div&gt;此例中注意keep-all在不同浏览器中的兼容，特殊符号处的换行！&lt;div class=\"box breakall\"&gt;自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。&lt;/div&gt;此例中注意逗号的位置!&lt;div class=\"box breakword\"&gt;自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。&lt;/div&gt;\n\n123456&lt;style type=\"text/css\"&gt;    .box&#123;width:100px;height:100px;border:2px solid #f00;color:#333;font:12px arial;margin-bottom:10px;&#125;    .keepall&#123;word-break:keep-all;&#125;    .breakall&#123;word-break:break-all;&#125;    .breakword&#123;word-wrap:break-word;&#125;&lt;/style&gt;","dateCreated":"2017-06-21T13:47:34+08:00","dateModified":"2021-10-02T15:23:00+08:00","datePublished":"2017-06-21T13:47:34+08:00","description":"根据 W3C 的 [CSS Text Module Level 3](https://drafts.csswg.org/css-text/) 文件来看，在网页中文本断行的规则通常是断在 `软性断行机会点`（Soft Wrap Oppportunity）。","headline":"word-wrap","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/word-wrap.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/word-wrap.html","keywords":"css"}</script>
-    <meta name="description" content="根据 W3C 的 [CSS Text Module Level 3](https:&#x2F;&#x2F;drafts.csswg.org&#x2F;css-text&#x2F;) 文件来看，在网页中文本断行的规则通常是断在 &#96;软性断行机会点&#96;（Soft Wrap Oppportunity）。">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。\n基本含义undefined:”未定义”null:”空对象指针”\n是否保留字undefined:”否”,可以作为标识符，可覆盖null:”是”\n定义ECMAScipt中的变量是松散类型的，即可以用来保存任何类型的数据。\n1234567var Benjamin;var Benjamin02 = null;console.log(Benjamin);//undefinedconsole.log(Ben);//报错：Ben is not definedconsole.log(typeof Benjamin);//undefinedconsole.log(typeof Ben); //undefinedconsole.log(typeof Benjamin02);//object\n\n因null是空对象，所以一般定义存放对象的标识符时，会指定null值\nin操作符1234console.log(undefined in window);//trueconsole.log(undefined in &#123;&#125;);//falseconsole.log(null instanceof Object);//falseundefined 是window下的一个特殊属性\n\n返回值\n返回undefined值的情形：1)访问未修改的全局变量 undefined。2)由于没有定义 return 表达式的函数隐式返回。3)return 表达式没有显式的返回任何内容。4)访问不存在的属性。5)函数参数没有被显式的传递值。6)任何被设置为 undefined 值的变量。\n\n返回null值的情形：1)任何被设置为 undefined 值的变量2)它在JavaScript内部有一些使用场景(如声明原型链的终结 Foo.prototype = null)但是大多数情况下都可以使用undefined来代替。\n\n\n计算123console.log(333+undefined);//NaNconsole.log(333+null);//333null 与数值运算时转换为0\n\n性能1)由于window对象的属性值是非常多的，在每一次与undefined的比较中，搜索window对象的undefined属性都会花费时间。在需要频繁与undefined进行比较的函数中，这可能会是一个性能问题点。2)为了避免可能对undefined值的改变，一个常用的技巧是使用一个传递到匿名包装器的额外参数。 在调用时，这个参数不会获取任何值。\n123(function(win, doc, undefined) &#123;    //这样undefined就成了局部变量&#125;)(window,document);\n","dateCreated":"2014-03-03T12:49:16+08:00","dateModified":"2021-10-02T15:23:00+08:00","datePublished":"2014-03-03T12:49:16+08:00","description":"Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。","headline":"null 与 undefined","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/null-and-undefined.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/null-and-undefined.html","keywords":"js"}</script>
+    <meta name="description" content="Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="word-wrap">
-<meta property="og:url" content="https://zuojj.com/post/word-wrap.html">
+<meta property="og:title" content="null 与 undefined">
+<meta property="og:url" content="https://zuojj.com/post/null-and-undefined.html">
 <meta property="og:site_name" content="煦涵驛">
-<meta property="og:description" content="根据 W3C 的 [CSS Text Module Level 3](https:&#x2F;&#x2F;drafts.csswg.org&#x2F;css-text&#x2F;) 文件来看，在网页中文本断行的规则通常是断在 &#96;软性断行机会点&#96;（Soft Wrap Oppportunity）。">
+<meta property="og:description" content="Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-06-21T05:47:34.000Z">
+<meta property="article:published_time" content="2014-03-03T04:49:16.000Z">
 <meta property="article:modified_time" content="2021-10-02T07:23:00.657Z">
 <meta property="article:author" content="煦涵">
-<meta property="article:tag" content="css">
+<meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
     
@@ -253,14 +253,14 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            word-wrap
+            null 与 undefined
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2017-06-21T13:47:34+08:00">
+    <time datetime="2014-03-03T12:49:16+08:00">
 	
-		    6月 21, 2017
+		    3月 03, 2014
     	
     </time>
     
@@ -278,55 +278,26 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <!-- more -->
-<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#word-break"><span class="toc-text">word-break</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#word-wrap"><span class="toc-text">word-wrap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例对比"><span class="toc-text">实例对比</span></a></li></ol>
+            <p>Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。</p>
+<h2 id="基本含义"><a href="#基本含义" class="headerlink" title="基本含义"></a>基本含义</h2><p>undefined:”未定义”<br>null:”空对象指针”</p>
+<h2 id="是否保留字"><a href="#是否保留字" class="headerlink" title="是否保留字"></a>是否保留字</h2><p>undefined:”否”,可以作为标识符，可覆盖<br>null:”是”</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>ECMAScipt中的变量是松散类型的，即可以用来保存任何类型的数据。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Benjamin;</span><br><span class="line"><span class="keyword">var</span> Benjamin02 = <span class="literal">null</span>;</span><br><span class="line"><span class="built_in">console</span>.log(Benjamin);<span class="comment">//undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(Ben);<span class="comment">//报错：Ben is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> Benjamin);<span class="comment">//undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> Ben); <span class="comment">//undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> Benjamin02);<span class="comment">//object</span></span><br></pre></td></tr></table></figure>
 
-<p>根据 W3C 的 <a href="https://drafts.csswg.org/css-text/" target="_blank" rel="noopener">CSS Text Module Level 3</a> 文件来看，在网页中文本断行的规则通常是断在 <code>软性断行机会点</code>（Soft Wrap Oppportunity）。各种标点符号和空白通常都是一个断行机会点。这对英文来说很方便，因为英文中每个单字都会以空白分隔开。无论是断在空白或者标点符号，都不会影响一个单字被完整呈现。但是对于 <code>CJK</code>（中日韩）来说，每个字都是断行机会点。本期内容和大家一起学习CSS断行相关的属性 <code>word-break</code>、<code>word-wrap</code>。</p>
-<h2 id="word-break"><a href="#word-break" class="headerlink" title="word-break"></a>word-break</h2><p>该属性指定字母之间的“软性断行机会点”，何为软性断行机会点，即断行发生在断行机会点处。word-break 可取值为 normal | break-all | keep-all。只在 <code>white-space</code>属性值运行断行时生效。</p>
-<ol>
-<li>normal，不同字体根据下面自定义规则断行<ul>
-<li>CJK可以在任何一个CJK字体后断行；</li>
-<li>non-CJK会在半角空格或者连字符(-)位置自动断行，不会在长单词的中间断行；</li>
-<li>CJK中包含non-CJK:non-CJK部分按 non-CJK情况处理进行断行处理；</li>
-<li>CJK中含有标点符号时，浏览器不会让标点符号位于一个行的行首，会使标点符号和前一个字符组成一个整体进行断行；</li>
-</ul>
-</li>
-<li>break-all，在任意的软性断行机会点处断行<ul>
-<li>允许词内断行</li>
-</ul>
-</li>
-<li>keep-all，禁止词内断行<ul>
-<li>non-CJK与normal属性相同</li>
-<li>IE浏览器中CJK在半空格、连接符或者任何标点符号处换行</li>
-<li>Chrome &amp; Safari不支持该属性(使用默认换行)</li>
-</ul>
-</li>
-<li>break-word，非官方属性<ul>
-<li>该属性只在支持 Webkit/Blink 为内核的浏览器支持，比如Chrome、Safari</li>
-<li>该属性效果和下面讲到的 <code>word-wrap: break-word</code> 相同</li>
-</ul>
-</li>
-</ol>
-<p>引用 W3C 文档中的例子：</p>
-<blockquote>
-<p>Here’s a mixed-script sample text:</p>
-<p>这是一些汉字, and some Latin, و کمی نوشتن عربی,<br>และตัวอย่างการเขียนภาษาไทย.<br>The break-points are determined as follows (indicated by ‘·’):</p>
-<p>word-break: normal<br>这·是·一·些·汉·字,·and·some·Latin,·و·کمی·نوشتن·عربی,·<br>และ·ตัวอย่าง·การเขียน·ภาษาไทย.<br>word-break: break-all<br>这·是·一·些·汉·字,·a·n·d·s·o·m·e·L·a·t·i·n,·و·ﮐ·ﻤ·ﻰ·ﻧ·ﻮ·ﺷ·ﺘ·ﻦ·ﻋ·ﺮ·ﺑ·ﻰ,·<br>แ·ล·ะ·ตั·ว·อ·ย่·า·ง·ก·า·ร·เ·ขี·ย·น·ภ·า·ษ·า·ไ·ท·ย.<br>word-break: keep-all<br>这是一些汉字,·and·some·Latin,·و·کمی·نوشتن·عربی,·<br>แและ·ตัวอย่าง·การเขียน·ภาษาไทย.</p>
-</blockquote>
-<h2 id="word-wrap"><a href="#word-wrap" class="headerlink" title="word-wrap"></a>word-wrap</h2><p>该属性指定是否可以在单词内任意断开，以防止在另外不可破坏的字符串太长而不能放置在行框内而造成溢出。只在 <code>white-space</code>属性值运行断行时生效。支持所有浏览器。可取值为 normal | break-word。</p>
-<ol>
-<li>normal<ul>
-<li>在半空格、连接符位置处断行；</li>
-</ul>
-</li>
-<li>break-word<ul>
-<li>如果行中没有其他可接受的断点，则一个不可破坏的“单词”可能会在任意点断开；</li>
-</ul>
-</li>
-</ol>
-<h2 id="实例对比"><a href="#实例对比" class="headerlink" title="实例对比"></a>实例对比</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box keepall"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">此例中注意keep-all在不同浏览器中的兼容，特殊符号处的换行！</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box breakall"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">此例中注意逗号的位置!</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box breakword"</span>&gt;</span></span><br><span class="line">自身都带有自动换行功能啊，AAAAAA BBBBBBBBBBBBB,CCCCCCCCC，的右端自动换行。</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因null是空对象，所以一般定义存放对象的标识符时，会指定null值</p>
+<h2 id="in操作符"><a href="#in操作符" class="headerlink" title="in操作符"></a>in操作符</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span> <span class="keyword">in</span> <span class="built_in">window</span>);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span> <span class="keyword">in</span> &#123;&#125;);<span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">null</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span>);<span class="comment">//false</span></span><br><span class="line"><span class="literal">undefined</span> 是<span class="built_in">window</span>下的一个特殊属性</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;style type="text/css"&gt;</span><br><span class="line">    <span class="selector-class">.box</span>&#123;<span class="attribute">width</span>:<span class="number">100px</span>;<span class="attribute">height</span>:<span class="number">100px</span>;<span class="attribute">border</span>:<span class="number">2px</span> solid <span class="number">#f00</span>;<span class="attribute">color</span>:<span class="number">#333</span>;<span class="attribute">font</span>:<span class="number">12px</span> arial;<span class="attribute">margin-bottom</span>:<span class="number">10px</span>;&#125;</span><br><span class="line">    <span class="selector-class">.keepall</span>&#123;<span class="attribute">word-break</span>:keep-all;&#125;</span><br><span class="line">    <span class="selector-class">.breakall</span>&#123;<span class="attribute">word-break</span>:break-all;&#125;</span><br><span class="line">    <span class="selector-class">.breakword</span>&#123;<span class="attribute">word-wrap</span>:break-word;&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><ul>
+<li><p>返回undefined值的情形：<br>1)访问未修改的全局变量 undefined。<br>2)由于没有定义 return 表达式的函数隐式返回。<br>3)return 表达式没有显式的返回任何内容。<br>4)访问不存在的属性。<br>5)函数参数没有被显式的传递值。<br>6)任何被设置为 undefined 值的变量。</p>
+</li>
+<li><p>返回null值的情形：<br>1)任何被设置为 undefined 值的变量<br>2)它在JavaScript内部有一些使用场景(如声明原型链的终结 Foo.prototype = null)但是大多数情况下都可以使用undefined来代替。</p>
+</li>
+</ul>
+<h2 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">333</span>+<span class="literal">undefined</span>);<span class="comment">//NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">333</span>+<span class="literal">null</span>);<span class="comment">//333</span></span><br><span class="line"><span class="literal">null</span> 与数值运算时转换为<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>1)由于window对象的属性值是非常多的，在每一次与undefined的比较中，搜索window对象的undefined属性都会花费时间。在需要频繁与undefined进行比较的函数中，这可能会是一个性能问题点。<br>2)为了避免可能对undefined值的改变，一个常用的技巧是使用一个传递到匿名包装器的额外参数。 在调用时，这个参数不会获取任何值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">win, doc, undefined</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//这样undefined就成了局部变量</span></span><br><span class="line">&#125;)(<span class="built_in">window</span>,<span class="built_in">document</span>);</span><br></pre></td></tr></table></figure>
+
             
 
 
@@ -339,7 +310,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/css/" rel="tag">css</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/js/" rel="tag">js</a>
 
             </div>
         
@@ -352,9 +323,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/text-overflow.html"
-                    data-tooltip="text-overflow"
-                    aria-label="上一篇: text-overflow"
+                    href="/post/css-hide-text.html"
+                    data-tooltip="CSS隐藏文本的几种方式"
+                    aria-label="上一篇: CSS隐藏文本的几种方式"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -366,9 +337,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/Babel.html"
-                    data-tooltip="Babel"
-                    aria-label="下一篇: Babel"
+                    href="/post/closure.html"
+                    data-tooltip="闭包"
+                    aria-label="下一篇: 闭包"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -393,7 +364,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/null-and-undefined.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -406,7 +377,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/null-and-undefined.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -419,7 +390,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/null-and-undefined.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -432,7 +403,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/word-wrap.html&amp;title=word-wrap"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/null-and-undefined.html&amp;title=null 与 undefined"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -455,7 +426,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -493,9 +464,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/text-overflow.html"
-                    data-tooltip="text-overflow"
-                    aria-label="上一篇: text-overflow"
+                    href="/post/css-hide-text.html"
+                    data-tooltip="CSS隐藏文本的几种方式"
+                    aria-label="上一篇: CSS隐藏文本的几种方式"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -507,9 +478,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/Babel.html"
-                    data-tooltip="Babel"
-                    aria-label="下一篇: Babel"
+                    href="/post/closure.html"
+                    data-tooltip="闭包"
+                    aria-label="下一篇: 闭包"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -534,7 +505,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/null-and-undefined.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -547,7 +518,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/null-and-undefined.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -560,7 +531,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/word-wrap.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/null-and-undefined.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -573,7 +544,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/word-wrap.html&amp;title=word-wrap"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/null-and-undefined.html&amp;title=null 与 undefined"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -596,7 +567,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -617,7 +588,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/word-wrap.html"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/null-and-undefined.html"
                         aria-label="分享到 Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
@@ -630,7 +601,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/word-wrap.html"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/null-and-undefined.html"
                         aria-label="分享到 Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
@@ -643,7 +614,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/word-wrap.html"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/null-and-undefined.html"
                         aria-label="分享到 Weibo"
                     >
                         <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
@@ -656,7 +627,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/word-wrap.html&amp;title=word-wrap"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/null-and-undefined.html&amp;title=null 与 undefined"
                         aria-label="分享到 QQ"
                     >
                         <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
@@ -729,7 +700,7 @@
               repo: 'zuojj.github.io',
               owner: 'zuojj',
               admin: ['zuojj'],
-              id: 'post/word-wrap.html',
+              id: 'post/null-and-undefined.html',
               ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
             }).render('gitalk')
           })()
