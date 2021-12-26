@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="煦涵驛">
+    <title>如何构建最新的 Nodejs RPM 包 - 煦涵驛</title>
+    <meta name="author" content="煦涵">
+    
+        <meta name="keywords" content="WEB开发,前端开发,用户体验">
+    
+    
+        <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"RPM 构建环境安装1.rpm-build 安装首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build，执行 rpm-build --version，如果返回结果表示已经安装，如果返回 rpmbuild: command not found 说明没有安装，需要我们手动安装\n1$ sudo yum install rpm-build\n\n安装完成后使用 repm-build --version 验证\n2.redhat-rpm-config 安装\n在 CentOS 上构建时，可能需要包含 rpmbuild 构建脚本 redhat-rpm-config 。通过 rpm -q redhat-rpm-config 来 check 是否被安装，如果正确输出，表示已安装。\n3.创建 RPM build 目录\n1$ mkdir -p ~/rpmbuild/&#123;BUILD,RPMS,SOURCES,SPECS,SRPMS&#125;\n\n下面这个命令会覆盖现有的 .rpmacros 文件，操作之前应该 check 是否有该文件\n1$ echo '%_topdir %(echo $HOME)/rpmbuild' &gt; ~/.rpmmacros\n\n4.可能需要的其他工具\n12$ sudo yum install make$ sudo yum install gcc\n到此 RPM Build 环境已经安装完成，可以 cd 到对应目录查看\nRPM 包创建1.下载最新的 node.js 包\n1$ curl -sR -o ~/rpmbuild/SOURCES/node-v8.10.0.tar.gz http://nodejs.org/dist/v8.10.0/node-v8.10.0.tar.gz\n\n2.下载 RPM 包规范文件\n1$ curl -sR -o ~/rpmbuild/SPECS/node-v8.10.0.spec https://raw.githubusercontent.com/kazuhisya/nodejs-rpm/master/nodejs.spec\n​3.修改包规范文件\n更新 version 字段为8.10.0 版本，如果 build 过程中相关文件不存在，可以在 https://github.com/kazuhisya/nodejs-rpm 仓库下载\n4.开始构建\n1$ rpmbuild -ba ~/rpmbuild/SPECS/node-v8.10.0.spec\n\n构建过程需要nodejs进行编译，构建速度依赖当前机器配置。\n5.构建完成后，可以在下面目录下查看构建的 RPM 包\n1$ cd ~&#x2F;rpmbuild&#x2F;RPMS&#x2F;\n\nrpm 方式安装验证12345# install node$ rpm -ivh ~/rpmbuild/RPMS/x86_64/nodejs-0.8.14-1.el7.x86_64.rpm# view versionnode --version\n\n参考资料：\nHow to build the latest node.js RPM and install it on CentOS / RedHat / Fedora\nrpm 常用命令\nRPM Documentation\n\n","dateCreated":"2018-03-21T15:32:30+08:00","dateModified":"2021-12-26T16:52:11+08:00","datePublished":"2018-03-21T15:32:30+08:00","description":"首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build","headline":"如何构建最新的 Nodejs RPM 包","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/how_to_build_nodejs_rpm_package.html","keywords":"web"}</script>
+    <meta name="description" content="首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="如何构建最新的 Nodejs RPM 包">
+<meta property="og:url" content="https://zuojj.com/post/how_to_build_nodejs_rpm_package.html">
+<meta property="og:site_name" content="煦涵驛">
+<meta property="og:description" content="首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-21T07:32:30.000Z">
+<meta property="article:modified_time" content="2021-12-26T08:52:11.371Z">
+<meta property="article:author" content="煦涵">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://zuojj.com/assets/images/android-icon-192x192.png"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wfzbizzmog0zfqlqyt0o7q6a4nsrrpguu2turykfwhywf0hvjqca7z7ekj34.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159301267-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-159301267-1');
+    </script>
+
+
+    
+
+    
+        
+            
+<link rel="stylesheet" href="/assets/css/gitalk.css">
+
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/%20"
+            aria-label=""
+        >
+            煦涵驛
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+                </a>
+                <h4 class="sidebar-profile-name">煦涵</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>因为热爱，所以坚持。</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/zuojj"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:zuojj.com@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            如何构建最新的 Nodejs RPM 包
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-03-21T15:32:30+08:00">
+	
+		    3月 21, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h2 id="RPM-构建环境安装"><a href="#RPM-构建环境安装" class="headerlink" title="RPM 构建环境安装"></a>RPM 构建环境安装</h2><p>1.rpm-build 安装<br>首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build，执行 <code>rpm-build --version</code>，如果返回结果表示已经安装，如果返回 <code>rpmbuild: command not found</code> 说明没有安装，需要我们手动安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install rpm-build</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后使用 <code>repm-build --version</code> 验证</p>
+<p>2.redhat-rpm-config 安装</p>
+<p>在 CentOS 上构建时，可能需要包含 rpmbuild 构建脚本 redhat-rpm-config 。通过 <code>rpm -q redhat-rpm-config</code> 来 check 是否被安装，如果正确输出，表示已安装。</p>
+<p>3.创建 RPM build 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p ~/rpmbuild/&#123;BUILD,RPMS,SOURCES,SPECS,SRPMS&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面这个命令会覆盖现有的 .rpmacros 文件，操作之前应该 check 是否有该文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">'%_topdir %(echo $HOME)/rpmbuild'</span> &gt; ~/.rpmmacros</span><br></pre></td></tr></table></figure>
+
+<p>4.可能需要的其他工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install make</span><br><span class="line">$ sudo yum install gcc</span><br></pre></td></tr></table></figure>
+<p>到此 RPM Build 环境已经安装完成，可以 cd 到对应目录查看</p>
+<h2 id="RPM-包创建"><a href="#RPM-包创建" class="headerlink" title="RPM 包创建"></a>RPM 包创建</h2><p>1.下载最新的 node.js 包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -sR -o ~/rpmbuild/SOURCES/node-v8.10.0.tar.gz http://nodejs.org/dist/v8.10.0/node-v8.10.0.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>2.下载 RPM 包规范文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -sR -o ~/rpmbuild/SPECS/node-v8.10.0.spec https://raw.githubusercontent.com/kazuhisya/nodejs-rpm/master/nodejs.spec</span><br></pre></td></tr></table></figure>
+<p>​<br>3.修改包规范文件</p>
+<p>更新 version 字段为8.10.0 版本，如果 build 过程中相关文件不存在，可以在 <a href="https://github.com/kazuhisya/nodejs-rpm" target="_blank" rel="noopener">https://github.com/kazuhisya/nodejs-rpm</a> 仓库下载</p>
+<p>4.开始构建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rpmbuild -ba ~/rpmbuild/SPECS/node-v8.10.0.spec</span><br></pre></td></tr></table></figure>
+
+<p>构建过程需要nodejs进行编译，构建速度依赖当前机器配置。</p>
+<p>5.构建完成后，可以在下面目录下查看构建的 RPM 包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~&#x2F;rpmbuild&#x2F;RPMS&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h2 id="rpm-方式安装验证"><a href="#rpm-方式安装验证" class="headerlink" title="rpm 方式安装验证"></a>rpm 方式安装验证</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install node</span></span><br><span class="line">$ rpm -ivh ~/rpmbuild/RPMS/x86_64/nodejs-0.8.14-1.el7.x86_64.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># view version</span></span><br><span class="line">node --version</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><ul>
+<li><a href="http://www.adriano.ws/how-to-build-the-latest-node-js-rpm-and-install-it-on-centos-redhat-fedora" target="_blank" rel="noopener">How to build the latest node.js RPM and install it on CentOS / RedHat / Fedora</a></li>
+<li><a href="http://man.linuxde.net/rpm" target="_blank" rel="noopener">rpm 常用命令</a></li>
+<li><a href="http://fedoranews.org/alex/tutorial/rpm/" target="_blank" rel="noopener">RPM Documentation</a></li>
+</ul>
+
+            
+
+
+            <h3>转载申请</h3>
+            <p>本作品采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名 4.0 国际许可协议</a>进行许可，转载时请注明原文链接，文章内图片请保留全部内容。</p>
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/web/" rel="tag">web</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/docker_private_registry_and_nodejs_app_publish.html"
+                    data-tooltip="Docker 私有仓库搭建及 Node.js 应用发布"
+                    aria-label="上一篇: Docker 私有仓库搭建及 Node.js 应用发布"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/selection_and_range_object_practice.html"
+                    data-tooltip="Selection 和 Range 对象实践"
+                    aria-label="下一篇: Selection 和 Range 对象实践"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html&amp;title=如何构建最新的 Nodejs RPM 包"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitalk"></div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2021 煦涵. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/docker_private_registry_and_nodejs_app_publish.html"
+                    data-tooltip="Docker 私有仓库搭建及 Node.js 应用发布"
+                    aria-label="上一篇: Docker 私有仓库搭建及 Node.js 应用发布"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/selection_and_range_object_practice.html"
+                    data-tooltip="Selection 和 Range 对象实践"
+                    aria-label="下一篇: Selection 和 Range 对象实践"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html&amp;title=如何构建最新的 Nodejs RPM 包"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                        aria-label="分享到 Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                        aria-label="分享到 Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"
+                        aria-label="分享到 Weibo"
+                    >
+                        <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/how_to_build_nodejs_rpm_package.html&amp;title=如何构建最新的 Nodejs RPM 包"
+                        aria-label="分享到 QQ"
+                    >
+                        <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+        
+            <h4 id="about-card-name">煦涵</h4>
+        
+            <div id="about-card-bio"><p>因为热爱，所以坚持。</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-pz3ouzjfhrhtrtajew61g1zoeelxkecqmahkxgnnslbcijcvv4mx8k5ycrlv.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+        
+<script src="/assets/js/gitalk.js"></script>
+
+        <script type="text/javascript">
+          (function() {
+            new Gitalk({
+              clientID: 'c7c1ad823b46b771570d',
+              clientSecret: '46d251bb9ed9d97efcf23a00db098bf7f7400a31',
+              repo: 'zuojj.github.io',
+              owner: 'zuojj',
+              admin: ['zuojj'],
+              id: 'post/how_to_build_nodejs_rpm_package.html',
+              ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
+            }).render('gitalk')
+          })()
+        </script>
+    
+
+
+
+
+    </body>
+</html>

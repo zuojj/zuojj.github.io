@@ -1,0 +1,723 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="煦涵驛">
+    <title>实时监听输入框值变化的兼容性方案 - 煦涵驛</title>
+    <meta name="author" content="煦涵">
+    
+        <meta name="keywords" content="WEB开发,前端开发,用户体验">
+    
+    
+        <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"最近在项目中需要实时监听输入框的值的变化，首先想到的是onchange,onblur,onkeydown,onkeyup,onpress等一系列常见事件，但是使用这些往往达不到实时监听的效果。\nonchange事件：只在键盘或者鼠标操作改变对象属性，且失去焦点时触发，js脚本触发无效。\nonkeydown/onkeypress/onkeyup事件：在处理复制、粘贴、拖拽、长按键（按住键盘不放）等细节上并不完善。\nonpropertychange事件：使用该事件某些情况下解决上面存在的问题，不用考虑是否失去焦点，不管js操作还是键盘鼠标手动操作，只要HTML元素属性发生改变即可立即捕获到。但是该事件是IE专属事件，其它浏览器不支持。需要注意的是：\n\ninput设置[disabled=true]的控件不会触发；\n在input任何属性改变时都会触发，使用时注意event.propertyName == ‘value’过滤；\n修改了 input:checkbox 或者 input:radio 元素的选择中状态， checked 属性发生变化时触发。\n修改了 input:text 或者 textarea 元素的值，value 属性发生变化时触发。\n修改了 select 元素的选中项，selectedIndex 属性发生变化时触发。\n\noninput事件：该事件是HTML5的标准事件，查看浏览器支持情况可以戳这里。需要注意的是：\n\n通过脚本改变value时不会触发；\n从浏览器的自动完成[autocomplete=”on”]中选取时不会触发；\n适用元素textarea, input:text, input:password 和 input:search\n\n综上所述要实现实时监听的需求：如果在移动端（M端），可以直接使用oninput来解决；如果在桌面端（PC端），可以使用oninput+onpropertychange兼容性处理。\n但是这两个事件在IE9中都有个小BUG，那就是通过右键菜单中的剪切和删除命令删除内容的时候不会触发，而IE其他版本都是正常的，目前还没有很好的解决方案。不过 oninput &amp; onpropertychange 仍然是监听输入框值变化的最佳方案。引用oninput event | input event中的描述：\nThe oninput event is buggy in Internet Explorer 9. It is not fired when characters are deleted from a text field through the user interface only when characters are inserted. Although the onpropertychange event is supported in Internet Explorer 9, but similarly to the oninput event, it is also buggy, it is not fired on deletion.\nSince characters can be deleted in several ways (Backspace and Delete keys, CTRL + X, Cut and Delete command in context menu), there is no good solution to detect all changes. If characters are deleted by the Delete command of the context menu, the modification cannot be detected in JavaScript in Internet Explorer 9.\n下面来看段代码来实现实时监听：\n// This example shows how to use the oninput, onpropertychange and textInput events to detect when the contents of a textarea element is changed. Both the oninput and onpropertychange events are buggy in Internet Explorer 9, they are not fired when characters are deleted only when inserted.\nvar textarea = document.getElementById (\"textarea\");\n\nif (textarea.addEventListener) {    // all browsers except IE before version 9  textarea.addEventListener (“input”, OnInput, false);  // Google Chrome and  Safari  textarea.addEventListener (“textInput”, OnTextInput, false);  // Internet Explorer from version 9  textarea.addEventListener (“textinput”, OnTextInput, false);}\nif (textarea.attachEvent) {    // Internet Explorer and Opera  textarea.attachEvent (“onpropertychange”, OnPropChanged);}\n// Google Chrome, Safari and Internet Explorer from version 9function OnTextInput (event) {  alert (“The following text has been entered: “ + event.data);}// Firefox, Google Chrome, Opera, Safari from version 5, Internet Explorer from version 9function OnInput (event) {  alert (“The new content: “ + event.target.value);}// Internet Explorerfunction OnPropChanged (event) {    // 使用event.propertyName 过滤  if (event.propertyName.toLowerCase () == “value”) {    alert (“The new content: “ + event.srcElement.value);  }}参考链接：input | oninput event[IE]onpropertychange event | propertychange event[JavaScript] oninput and onpropertychange Event AlternativeUsing the oninput event handler with onkeyup/onkeydown as its fallback\n","dateCreated":"2015-06-23T16:24:30+08:00","dateModified":"2021-12-26T16:52:11+08:00","datePublished":"2015-06-23T16:24:30+08:00","description":"最近在项目中需要实时监听输入框的值的变化，首先想到的是onchange,onblur,onkeydown,onkeyup,onpress等一系列常见事件，但是使用这些往往达不到实时监听的效果。","headline":"实时监听输入框值变化的兼容性方案","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/real-time_listening_input_change.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/real-time_listening_input_change.html","keywords":"web"}</script>
+    <meta name="description" content="最近在项目中需要实时监听输入框的值的变化，首先想到的是onchange,onblur,onkeydown,onkeyup,onpress等一系列常见事件，但是使用这些往往达不到实时监听的效果。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="实时监听输入框值变化的兼容性方案">
+<meta property="og:url" content="https://zuojj.com/post/real-time_listening_input_change.html">
+<meta property="og:site_name" content="煦涵驛">
+<meta property="og:description" content="最近在项目中需要实时监听输入框的值的变化，首先想到的是onchange,onblur,onkeydown,onkeyup,onpress等一系列常见事件，但是使用这些往往达不到实时监听的效果。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-06-23T08:24:30.000Z">
+<meta property="article:modified_time" content="2021-12-26T08:52:11.371Z">
+<meta property="article:author" content="煦涵">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://zuojj.com/assets/images/android-icon-192x192.png"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wfzbizzmog0zfqlqyt0o7q6a4nsrrpguu2turykfwhywf0hvjqca7z7ekj34.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159301267-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-159301267-1');
+    </script>
+
+
+    
+
+    
+        
+            
+<link rel="stylesheet" href="/assets/css/gitalk.css">
+
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/%20"
+            aria-label=""
+        >
+            煦涵驛
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+                </a>
+                <h4 class="sidebar-profile-name">煦涵</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>因为热爱，所以坚持。</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/zuojj"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:zuojj.com@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            实时监听输入框值变化的兼容性方案
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2015-06-23T16:24:30+08:00">
+	
+		    6月 23, 2015
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>最近在项目中需要实时监听输入框的值的变化，首先想到的是onchange,onblur,onkeydown,onkeyup,onpress等一系列常见事件，但是使用这些往往达不到实时监听的效果。</p>
+<p><strong>onchange事件：</strong><br>只在键盘或者鼠标操作改变对象属性，且失去焦点时触发，js脚本触发无效。</p>
+<p><strong>onkeydown/onkeypress/onkeyup事件：</strong><br>在处理复制、粘贴、拖拽、长按键（按住键盘不放）等细节上并不完善。</p>
+<p><strong>onpropertychange事件：</strong><br>使用该事件某些情况下解决上面存在的问题，不用考虑是否失去焦点，不管js操作还是键盘鼠标手动操作，只要HTML元素属性发生改变即可立即捕获到。但是该事件是IE专属事件，其它浏览器不支持。<br>需要注意的是：</p>
+<ol>
+<li>input设置[disabled=true]的控件不会触发；</li>
+<li>在input任何属性改变时都会触发，使用时注意<span style="color: #ff0000;">event.propertyName == ‘value’</span>过滤；</li>
+<li>修改了 input:checkbox 或者 input:radio 元素的选择中状态， checked 属性发生变化时触发。</li>
+<li>修改了 input:text 或者 textarea 元素的值，value 属性发生变化时触发。</li>
+<li>修改了 select 元素的选中项，selectedIndex 属性发生变化时触发。</li>
+</ol>
+<p><strong>oninput事件：</strong><br>该事件是<a href="https://html.spec.whatwg.org/multipage/webappapis.html#handler-oninput" target="_blank" rel="noopener">HTML5</a>的标准事件，查看浏览器支持情况可以戳<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/GlobalEventHandlers/oninput" target="_blank" rel="noopener">这里</a>。<br>需要注意的是：</p>
+<ol>
+<li>通过脚本改变value时不会触发；</li>
+<li>从浏览器的自动完成[autocomplete=”on”]中选取时不会触发；</li>
+<li>适用元素textarea, input:text, input:password 和 input:search</li>
+</ol>
+<p><strong>综上所述要实现实时监听的需求：</strong><br>如果在移动端（M端），可以直接使用oninput来解决；<br>如果在桌面端（PC端），可以使用oninput+onpropertychange兼容性处理。</p>
+<p><span style="color: #ff0000;">但是这两个事件在IE9中都有个小BUG，那就是通过右键菜单中的剪切和删除命令删除内容的时候不会触发，而IE其他版本都是正常的，目前还没有很好的解决方案。</span>不过 oninput &amp; onpropertychange 仍然是监听输入框值变化的最佳方案。引用<a href="http://help.dottoro.com/ljhxklln.php" target="_blank" rel="noopener">oninput event | input event</a>中的描述：</p>
+<blockquote>The oninput event is buggy in Internet Explorer 9. It is not fired when characters are deleted from a text field through the user interface only when characters are inserted. Although the onpropertychange event is supported in Internet Explorer 9, but similarly to the oninput event, it is also buggy, it is not fired on deletion.
+Since characters can be deleted in several ways (Backspace and Delete keys, CTRL + X, Cut and Delete command in context menu), there is no good solution to detect all changes. If characters are deleted by the Delete command of the context menu, the modification cannot be detected in JavaScript in Internet Explorer 9.</blockquote>
+下面来看段代码来实现实时监听：
+<pre class="brush:javascript">// This example shows how to use the oninput, onpropertychange and textInput events to detect when the contents of a textarea element is changed. Both the oninput and onpropertychange events are buggy in Internet Explorer 9, they are not fired when characters are deleted only when inserted.
+var textarea = document.getElementById ("textarea");
+
+<p>if (textarea.addEventListener) {<br>    // all browsers except IE before version 9<br>  textarea.addEventListener (“input”, OnInput, false);<br>  // Google Chrome and  Safari<br>  textarea.addEventListener (“textInput”, OnTextInput, false);<br>  // Internet Explorer from version 9<br>  textarea.addEventListener (“textinput”, OnTextInput, false);<br>}</p>
+<p>if (textarea.attachEvent) {<br>    // Internet Explorer and Opera<br>  textarea.attachEvent (“onpropertychange”, OnPropChanged);<br>}</p>
+<p>// Google Chrome, Safari and Internet Explorer from version 9<br>function OnTextInput (event) {<br>  alert (“The following text has been entered: “ + event.data);<br>}<br>// Firefox, Google Chrome, Opera, Safari from version 5, Internet Explorer from version 9<br>function OnInput (event) {<br>  alert (“The new content: “ + event.target.value);<br>}<br>// Internet Explorer<br>function OnPropChanged (event) {<br>    // 使用event.propertyName 过滤<br>  if (event.propertyName.toLowerCase () == “value”) {<br>    alert (“The new content: “ + event.srcElement.value);<br>  }<br>}</pre><br><strong>参考链接：</strong><br><a href="https://msdn.microsoft.com/library/gg592978(v=vs.85).aspx#feedback" target="_blank">input | oninput event[IE]</a><br><a href="http://help.dottoro.com/ljhxklln.php" target="_blank">onpropertychange event | propertychange event</a><br><a href="http://siongui.github.io/2012/09/30/oninput-and-onpropertychange-event-alternative/" target="_blank">[JavaScript] oninput and onpropertychange Event Alternative</a><br><a href="https://mathiasbynens.be/notes/oninput" target="_blank">Using the oninput event handler with onkeyup/onkeydown as its fallback</a></p>
+
+            
+
+
+            <h3>转载申请</h3>
+            <p>本作品采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名 4.0 国际许可协议</a>进行许可，转载时请注明原文链接，文章内图片请保留全部内容。</p>
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/web/" rel="tag">web</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/placeholder_browser_compatible.html"
+                    data-tooltip="placeholder属性多浏览器兼容性方案"
+                    aria-label="上一篇: placeholder属性多浏览器兼容性方案"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/canvas_realizes_electronic_signature.html"
+                    data-tooltip="Canvas实现电子签名"
+                    aria-label="下一篇: Canvas实现电子签名"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/real-time_listening_input_change.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/real-time_listening_input_change.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/real-time_listening_input_change.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/real-time_listening_input_change.html&amp;title=实时监听输入框值变化的兼容性方案"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitalk"></div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2021 煦涵. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/placeholder_browser_compatible.html"
+                    data-tooltip="placeholder属性多浏览器兼容性方案"
+                    aria-label="上一篇: placeholder属性多浏览器兼容性方案"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/canvas_realizes_electronic_signature.html"
+                    data-tooltip="Canvas实现电子签名"
+                    aria-label="下一篇: Canvas实现电子签名"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/real-time_listening_input_change.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/real-time_listening_input_change.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/real-time_listening_input_change.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/real-time_listening_input_change.html&amp;title=实时监听输入框值变化的兼容性方案"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/real-time_listening_input_change.html"
+                        aria-label="分享到 Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/real-time_listening_input_change.html"
+                        aria-label="分享到 Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/real-time_listening_input_change.html"
+                        aria-label="分享到 Weibo"
+                    >
+                        <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/real-time_listening_input_change.html&amp;title=实时监听输入框值变化的兼容性方案"
+                        aria-label="分享到 QQ"
+                    >
+                        <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+        
+            <h4 id="about-card-name">煦涵</h4>
+        
+            <div id="about-card-bio"><p>因为热爱，所以坚持。</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-pz3ouzjfhrhtrtajew61g1zoeelxkecqmahkxgnnslbcijcvv4mx8k5ycrlv.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+        
+<script src="/assets/js/gitalk.js"></script>
+
+        <script type="text/javascript">
+          (function() {
+            new Gitalk({
+              clientID: 'c7c1ad823b46b771570d',
+              clientSecret: '46d251bb9ed9d97efcf23a00db098bf7f7400a31',
+              repo: 'zuojj.github.io',
+              owner: 'zuojj',
+              admin: ['zuojj'],
+              id: 'post/real-time_listening_input_change.html',
+              ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
+            }).render('gitalk')
+          })()
+        </script>
+    
+
+
+
+
+    </body>
+</html>

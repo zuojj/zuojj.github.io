@@ -1,0 +1,714 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="煦涵驛">
+    <title>Selection 和 Range 对象实践 - 煦涵驛</title>
+    <meta name="author" content="煦涵">
+    
+        <meta name="keywords" content="WEB开发,前端开发,用户体验">
+    
+    
+        <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Selection 对象表示用户选择的文本范围或插入符号的当前位置。它代表页面中的文本选区，可能横跨多个元素。文本选区由用户拖拽鼠标经过文字而产生。要获取用于检查或修改的Selection对象，请调用 window.getSelection()。Range，表示包含节点和部分文本节点的文档片段，可以通过 Selection 对象的 getRangeAt 方法取得，也可以通过 Document 对象的 createRange 方法创建。\n在我们日常前端开发中，可能会遇到这样的场景，实现划词翻译、点击取词翻译、编辑器中的复制、粘贴等需求，下面我们通过对这两种需求场景来介绍 Selection 对象 和 Range 对象在实际项目中的应用。\n应用一：实现点击取词并翻译实现基本思路，点击时获取 Selection 对象，并创建选取，通过 Range 的 setStart 和 setEnd 方法扩大文档片段的范围，以空格或者特殊符号为临界状态，终止循环。\n1.方法一实现相关逻辑如下：\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970if (window.getSelection) &#123;    let selection, range, node, start, end, text, rect, isFun, isText;    // 回调函数判断    isFun = !!window.JSInvoker &amp;&amp; typeof window.JSInvoker.toggleWordTooltip === 'function';    // 文本判断    isText = function (text) &#123;        return text &amp;&amp; /^[a-zA-Z]+$/.test(text);    &#125;    // 如果 tooltip 存在，需要先关闭    isFun &amp;&amp; window.JSInvoker.toggleWordTooltip(false);    selection = window.getSelection();    range = selection.getRangeAt(0);    node = selection.anchorNode;    start = range.startOffset;    end = range.endOffset;    text = range.toString();    // &lt;&lt;&lt;    while (!/^\\s+/.test(text)) &#123;        if (start === 0) &#123;            range.setStart(node, start);            text = range.toString();            break;        &#125; else &#123;            start -= 1;            range.setStart(node, start);            text = range.toString();        &#125;        if (!isText(text)) &#123;            start += 1;            range.setStart(node, start);            text = range.toString();            break;        &#125;    &#125;    // &gt;&gt;&gt;    while (!/\\s+$/.test(text)) &#123;        if (end === node.length) &#123;            range.setEnd(node, end);            text = range.toString();            break;        &#125; else &#123;            end += 1;            range.setEnd(node, end);            text = range.toString();        &#125;        if (!isText(text)) &#123;            end -= 1;            range.setEnd(node, end);            text = range.toString();            break;        &#125;    &#125;    // 获取当前文档片段位置信息    rect = range.getBoundingClientRect();    text = text.trim();    if (isText(text) &amp;&amp; isFun &amp;&amp; rect) &#123;        // 打开 tooltip        window.JSInvoker.toggleWordTooltip(true, text, rect.x, rect.y, rect.width, rect.height);    &#125; else &#123;        alert(`Text: $&#123;text&#125;, isFun: $&#123;isFun&#125;, Rect: $&#123;JSON.stringify(rect)&#125;`);    &#125;&#125; else &#123;    // todo&#125;\n\n\nps: 文本选中颜色可以通过 CSS3 ::selection 来实现，但是兼容性是个问题，可以通过 rect 属性值来创建个 mask 浮层 position:absolute; 来实现\n\n2.方法二实现方案比较简单，实现代码逻辑如下：\n123456789101112131415161718if (window.getSelection) &#123;    let selection, start, end, word;    selection = window.getSelection();    selection.modify('extend', 'backward', 'word');    start = selection.toString();    selection.modify('extend', 'forward', 'word');    end = selection.toString();    selection.modify('move', 'forward', 'character');    word = start + end;    alert(`Selected Text: $&#123;word&#125;`);&#125; else &#123;    // todo&#125;\n\n应用二：实现划词翻译1.获取划词文本\n123456789101112131415function getSelected () &#123;    let selection;    if (window.getSelection) &#123;        // webkit and mozilla and IE9 +        selection = window.getSelection();    &#125; else if (document.getSelection) &#123;        // 同上        selection = document.getSelection();    &#125; else if (document.selection) &#123;        // IE        selection = document.selection.createRange().text;    &#125;    return selection.toString().trim();&#125;\n\n2.清空选中文本\n123456789function removeSelection () &#123;    if (window.getSelection) &#123;        window.getSelection().removeAllRanges();    &#125; else if (document.getSelection &amp;&amp; document.getSelection.empty) &#123;        document.getSelection().empty();    &#125; else if (document.selection &amp;&amp; document.selection.empty) &#123;        document.selection.empty();    &#125;&#125;\n\n第三方库rangy A cross-browser JavaScript range and selection library.\n","dateCreated":"2018-03-18T17:10:59+08:00","dateModified":"2021-12-26T16:52:11+08:00","datePublished":"2018-03-18T17:10:59+08:00","description":"在我们日常前端开发中，可能会遇到这样的场景，实现划词翻译、点击取词翻译、编辑器中的复制、粘贴等需求，下面我们通过对这两种需求场景来介绍 Selection 对象 和 Range 对象在实际项目中的应用","headline":"Selection 和 Range 对象实践","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/selection_and_range_object_practice.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/selection_and_range_object_practice.html","keywords":"web"}</script>
+    <meta name="description" content="在我们日常前端开发中，可能会遇到这样的场景，实现划词翻译、点击取词翻译、编辑器中的复制、粘贴等需求，下面我们通过对这两种需求场景来介绍 Selection 对象 和 Range 对象在实际项目中的应用">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Selection 和 Range 对象实践">
+<meta property="og:url" content="https://zuojj.com/post/selection_and_range_object_practice.html">
+<meta property="og:site_name" content="煦涵驛">
+<meta property="og:description" content="在我们日常前端开发中，可能会遇到这样的场景，实现划词翻译、点击取词翻译、编辑器中的复制、粘贴等需求，下面我们通过对这两种需求场景来介绍 Selection 对象 和 Range 对象在实际项目中的应用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-18T09:10:59.000Z">
+<meta property="article:modified_time" content="2021-12-26T08:52:11.371Z">
+<meta property="article:author" content="煦涵">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://zuojj.com/assets/images/android-icon-192x192.png"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wfzbizzmog0zfqlqyt0o7q6a4nsrrpguu2turykfwhywf0hvjqca7z7ekj34.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159301267-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-159301267-1');
+    </script>
+
+
+    
+
+    
+        
+            
+<link rel="stylesheet" href="/assets/css/gitalk.css">
+
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/%20"
+            aria-label=""
+        >
+            煦涵驛
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+                </a>
+                <h4 class="sidebar-profile-name">煦涵</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>因为热爱，所以坚持。</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/zuojj"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:zuojj.com@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Selection 和 Range 对象实践
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-03-18T17:10:59+08:00">
+	
+		    3月 18, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Selection" target="_blank" rel="noopener">Selection</a> 对象表示用户选择的文本范围或插入符号的当前位置。它代表页面中的文本选区，可能横跨多个元素。文本选区由用户拖拽鼠标经过文字而产生。要获取用于检查或修改的Selection对象，请调用 window.getSelection()。<a href="https://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html" target="_blank" rel="noopener">Range</a>，表示包含节点和部分文本节点的文档片段，可以通过 Selection 对象的 getRangeAt 方法取得，也可以通过 Document 对象的 createRange 方法创建。</p>
+<p>在我们日常前端开发中，可能会遇到这样的场景，实现划词翻译、点击取词翻译、编辑器中的复制、粘贴等需求，下面我们通过对这两种需求场景来介绍 Selection 对象 和 Range 对象在实际项目中的应用。</p>
+<h2 id="应用一：实现点击取词并翻译"><a href="#应用一：实现点击取词并翻译" class="headerlink" title="应用一：实现点击取词并翻译"></a>应用一：实现点击取词并翻译</h2><p>实现基本思路，点击时获取 Selection 对象，并创建选取，通过 Range 的 setStart 和 setEnd 方法扩大文档片段的范围，以空格或者特殊符号为临界状态，终止循环。</p>
+<p>1.方法一实现相关逻辑如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.getSelection) &#123;</span><br><span class="line">    <span class="keyword">let</span> selection, range, node, start, end, text, rect, isFun, isText;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 回调函数判断</span></span><br><span class="line">    isFun = !!<span class="built_in">window</span>.JSInvoker &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">window</span>.JSInvoker.toggleWordTooltip === <span class="string">'function'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 文本判断</span></span><br><span class="line">    isText = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> text &amp;&amp; <span class="regexp">/^[a-zA-Z]+$/</span>.test(text);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果 tooltip 存在，需要先关闭</span></span><br><span class="line">    isFun &amp;&amp; <span class="built_in">window</span>.JSInvoker.toggleWordTooltip(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    selection = <span class="built_in">window</span>.getSelection();</span><br><span class="line">    range = selection.getRangeAt(<span class="number">0</span>);</span><br><span class="line">    node = selection.anchorNode;</span><br><span class="line">    start = range.startOffset;</span><br><span class="line">    end = range.endOffset;</span><br><span class="line">    text = range.toString();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// &lt;&lt;&lt;</span></span><br><span class="line">    <span class="keyword">while</span> (!<span class="regexp">/^\s+/</span>.test(text)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (start === <span class="number">0</span>) &#123;</span><br><span class="line">            range.setStart(node, start);</span><br><span class="line">            text = range.toString();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            start -= <span class="number">1</span>;</span><br><span class="line">            range.setStart(node, start);</span><br><span class="line">            text = range.toString();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!isText(text)) &#123;</span><br><span class="line">            start += <span class="number">1</span>;</span><br><span class="line">            range.setStart(node, start);</span><br><span class="line">            text = range.toString();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// &gt;&gt;&gt;</span></span><br><span class="line">    <span class="keyword">while</span> (!<span class="regexp">/\s+$/</span>.test(text)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (end === node.length) &#123;</span><br><span class="line">            range.setEnd(node, end);</span><br><span class="line">            text = range.toString();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            end += <span class="number">1</span>;</span><br><span class="line">            range.setEnd(node, end);</span><br><span class="line">            text = range.toString();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!isText(text)) &#123;</span><br><span class="line">            end -= <span class="number">1</span>;</span><br><span class="line">            range.setEnd(node, end);</span><br><span class="line">            text = range.toString();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取当前文档片段位置信息</span></span><br><span class="line">    rect = range.getBoundingClientRect();</span><br><span class="line">    text = text.trim();</span><br><span class="line">    <span class="keyword">if</span> (isText(text) &amp;&amp; isFun &amp;&amp; rect) &#123;</span><br><span class="line">        <span class="comment">// 打开 tooltip</span></span><br><span class="line">        <span class="built_in">window</span>.JSInvoker.toggleWordTooltip(<span class="literal">true</span>, text, rect.x, rect.y, rect.width, rect.height);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        alert(<span class="string">`Text: <span class="subst">$&#123;text&#125;</span>, isFun: <span class="subst">$&#123;isFun&#125;</span>, Rect: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(rect)&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// todo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>ps: 文本选中颜色可以通过 CSS3 ::selection 来实现，但是兼容性是个问题，可以通过 rect 属性值来创建个 mask 浮层 <code>position:absolute;</code> 来实现</p>
+</blockquote>
+<p>2.方法二实现方案比较简单，实现代码逻辑如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.getSelection) &#123;</span><br><span class="line">    <span class="keyword">let</span> selection, start, end, word;</span><br><span class="line"></span><br><span class="line">    selection = <span class="built_in">window</span>.getSelection();</span><br><span class="line"></span><br><span class="line">    selection.modify(<span class="string">'extend'</span>, <span class="string">'backward'</span>, <span class="string">'word'</span>);</span><br><span class="line">    start = selection.toString();</span><br><span class="line"></span><br><span class="line">    selection.modify(<span class="string">'extend'</span>, <span class="string">'forward'</span>, <span class="string">'word'</span>);</span><br><span class="line">    end = selection.toString();</span><br><span class="line"></span><br><span class="line">    selection.modify(<span class="string">'move'</span>, <span class="string">'forward'</span>, <span class="string">'character'</span>);</span><br><span class="line"></span><br><span class="line">    word = start + end;</span><br><span class="line">    alert(<span class="string">`Selected Text: <span class="subst">$&#123;word&#125;</span>`</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// todo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="应用二：实现划词翻译"><a href="#应用二：实现划词翻译" class="headerlink" title="应用二：实现划词翻译"></a>应用二：实现划词翻译</h2><p>1.获取划词文本</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSelected</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> selection;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.getSelection) &#123;</span><br><span class="line">        <span class="comment">// webkit and mozilla and IE9 +</span></span><br><span class="line">        selection = <span class="built_in">window</span>.getSelection();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.getSelection) &#123;</span><br><span class="line">        <span class="comment">// 同上</span></span><br><span class="line">        selection = <span class="built_in">document</span>.getSelection();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.selection) &#123;</span><br><span class="line">        <span class="comment">// IE</span></span><br><span class="line">        selection = <span class="built_in">document</span>.selection.createRange().text;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> selection.toString().trim();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.清空选中文本</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeSelection</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.getSelection) &#123;</span><br><span class="line">        <span class="built_in">window</span>.getSelection().removeAllRanges();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.getSelection &amp;&amp; <span class="built_in">document</span>.getSelection.empty) &#123;</span><br><span class="line">        <span class="built_in">document</span>.getSelection().empty();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.selection &amp;&amp; <span class="built_in">document</span>.selection.empty) &#123;</span><br><span class="line">        <span class="built_in">document</span>.selection.empty();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三方库"><a href="#第三方库" class="headerlink" title="第三方库"></a>第三方库</h2><p><a href="https://github.com/timdown/rangy" target="_blank" rel="noopener">rangy</a> A cross-browser JavaScript range and selection library.</p>
+
+            
+
+
+            <h3>转载申请</h3>
+            <p>本作品采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名 4.0 国际许可协议</a>进行许可，转载时请注明原文链接，文章内图片请保留全部内容。</p>
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/web/" rel="tag">web</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/how_to_build_nodejs_rpm_package.html"
+                    data-tooltip="如何构建最新的 Nodejs RPM 包"
+                    aria-label="上一篇: 如何构建最新的 Nodejs RPM 包"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/when-component-development-meets-custom-property-cascade-variables.html"
+                    data-tooltip="当组件化开发遇上自定义属性级联变量"
+                    aria-label="下一篇: 当组件化开发遇上自定义属性级联变量"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/selection_and_range_object_practice.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/selection_and_range_object_practice.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/selection_and_range_object_practice.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/selection_and_range_object_practice.html&amp;title=Selection 和 Range 对象实践"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitalk"></div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2021 煦涵. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/how_to_build_nodejs_rpm_package.html"
+                    data-tooltip="如何构建最新的 Nodejs RPM 包"
+                    aria-label="上一篇: 如何构建最新的 Nodejs RPM 包"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/when-component-development-meets-custom-property-cascade-variables.html"
+                    data-tooltip="当组件化开发遇上自定义属性级联变量"
+                    aria-label="下一篇: 当组件化开发遇上自定义属性级联变量"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/selection_and_range_object_practice.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/selection_and_range_object_practice.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/selection_and_range_object_practice.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/selection_and_range_object_practice.html&amp;title=Selection 和 Range 对象实践"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/selection_and_range_object_practice.html"
+                        aria-label="分享到 Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/selection_and_range_object_practice.html"
+                        aria-label="分享到 Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/selection_and_range_object_practice.html"
+                        aria-label="分享到 Weibo"
+                    >
+                        <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/selection_and_range_object_practice.html&amp;title=Selection 和 Range 对象实践"
+                        aria-label="分享到 QQ"
+                    >
+                        <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+        
+            <h4 id="about-card-name">煦涵</h4>
+        
+            <div id="about-card-bio"><p>因为热爱，所以坚持。</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-pz3ouzjfhrhtrtajew61g1zoeelxkecqmahkxgnnslbcijcvv4mx8k5ycrlv.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+        
+<script src="/assets/js/gitalk.js"></script>
+
+        <script type="text/javascript">
+          (function() {
+            new Gitalk({
+              clientID: 'c7c1ad823b46b771570d',
+              clientSecret: '46d251bb9ed9d97efcf23a00db098bf7f7400a31',
+              repo: 'zuojj.github.io',
+              owner: 'zuojj',
+              admin: ['zuojj'],
+              id: 'post/selection_and_range_object_practice.html',
+              ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
+            }).render('gitalk')
+          })()
+        </script>
+    
+
+
+
+
+    </body>
+</html>
