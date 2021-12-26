@@ -1,0 +1,1122 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="煦涵驛">
+    <title>主流动画实现方式总结 - 煦涵驛</title>
+    <meta name="author" content="煦涵">
+    
+        <meta name="keywords" content="WEB开发,前端开发,用户体验">
+    
+    
+        <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"相关概念：绘制频率、屏幕刷新频率、硬件加速、60fps绘制频率：页面上每一帧变化都是系统绘制出来的(GPU或者CPU)【参考浏览器渲染原理】。但这种绘制又和PC游戏的绘制不同，它的最高绘制频率受限于显示器的刷新频率(而非显卡)，所以大多数情况下最高的绘制频率只能是每秒60帧(frame per second，以下用fps简称)，对应于显示器的60Hz。60fps是一个最理想的状态，在日常对页面性能的测试中，60fps也是一个重要的指标，the closer the better。\n刷新频率：图像在屏幕上更新的速度，也即屏幕上的图像每秒钟出现的次数，它的单位是赫兹（Hz）。刷新频率越高，屏幕上图像闪烁感就越小，稳定性也就越高，换言之对视力的保护也越好。一般人的眼睛、不容易察觉75Hz以上刷新频率带来的闪烁感，因此最好能将您显示卡刷新频率调到75Hz以上。要注意的是，并不是所有的显示卡都能够在最大分辨率下达到70Hz以上的刷新频率（这个性能取决于显示卡上RAMDAC的速度），而且显示器也可能因为带宽不够而不能达到要求。影响刷新率最主要的还是显示器的带宽。\n显示器带宽是显示器视频放大器通频带宽度的简称，指电子枪每秒钟在屏幕上扫过的最大总像素数，以MHz(兆赫兹)为单位。 带宽的值越大，显示器性能越好。\n硬件加速：硬件有三个处理器，CPU、GPU和APU（不是加速处理器是声音处理器）。他们通过PCI/AGP/PCIE总线交换数据。今天，GPU已经不再局限于3D图形处理了，GPU通用计算技术发展已经引起业界不少的关注，事实也证明在浮点运算、并行计算等部分计算方面，GPU可以提供数十倍乃至于上百倍于CPU的性能。\n60Hz和60fps是什么关系没有任何关系。fps代表GPU渲染画面的频率，Hz代表显示器刷新屏幕的频率。一幅静态图片，你可以说这副图片的fps是0帧/秒，但绝对不能说此时屏幕的刷新率是0Hz，也就是说刷新率不随图像内容的变化而变化。游戏也好浏览器也好，我们谈到掉帧，是指GPU渲染画面频率降低。比如跌落到30fps甚至20fps，但因为视觉暂留原理，我们看到的画面仍然是运动和连贯的。\nPS: 以下示例在Chrome环境中运行\n一、CSS动画\n1.1 Transitions动画\n实例：\n\n.animate {\n    width: 200px;\n    height: 200px;\n    margin: 0 auto;\n    border-radius: 50%;\n    background-color: #f00;\n    line-height: 200px;\n    border-radius: 50%;\n    text-align: center;\n    color: #fff;\n    font-size: 20px;\n}\n.animate-transition {\n    transition         : transform 2s linear;\n    -moz-transition    : -moz-transform 2s linear;\n    -webkit-transition : -webkit-transform 2s linear;\n    -o-transition      : -o-transform 2s linear;\n}\n\n.animate-transition:hover {    cursor: pointer;    transform         : rotate(360deg);    -moz-transform    : rotate(360deg);    -webkit-transform : rotate(360deg);    -o-transform      : rotate(360deg);}\nTransition Animation\n查看实例演示\n1.2 Keyframes animation\nKeyframes animation通过定义多个关键帧以及定义每个关键帧中的元素的属性值来实现更为复杂的动画效果。\n实例：\n\n.animate-keyframes {\n    -webkit-animation: frames 2s linear infinite;\n}\n\n.animate-keyframes:hover {    cursor: pointer;    -webkit-animation: none;}\n@-webkit-keyframes frames {    0% {        background-color: #f00;        -webkit-transform: rotate(0deg);    }    100% {        background-color: #f00;        -webkit-transform: rotate(360deg);    }}\nkeyframes animation\n查看实例演示\n1.3 CSS动画优缺点\n优点：\n简单、高效\n声明式的\n不依赖与主线程，采用硬件加速（GPU）\n简单的控制keyframe animation 播放和暂停\n\n缺点：不能动态的修改或定义动画内容不同的动画无法实现同步多个动画彼此无法堆叠\n另：\n1) CSS3 transition强制硬件加速会加大GPU消耗，高负荷情形下将导致运行不流畅。这种情况在移动设备上尤为明显。（特殊情况下，比如当数据在浏览器主线程和排版线程之间传递产生的瓶颈也会导致不流畅）。某些CSS属性，比如transform和opacity，则不受这些瓶颈影响。Adobe在这里精心总结了这些问题。详细请戳\ntransition的兼容性问题是个诟病，IE10+及现代浏览器，使用起来会造成很多不便。\n由于transition并不是由JavaScript原生控制（而仅仅是由JavaScript触发），浏览器无法获知如何与控制这些transition的JavaScript代码同步地优化他们。\n2) keyframes animation 的动画曲线会应用到所有变化的属性上，而且手写比较复杂的动画，写起来就是噩梦。\n二、SVG动画\n2.1 实例\n\n    \n        \n            \n\n            &lt;rect width=&quot;200&quot; height=&quot;200&quot; rx=&quot;100&quot; ry=&quot;100&quot; fill=&quot;red&quot; transform=&quot;translate(-100,-100)&quot;&gt;&lt;/rect&gt;\n            &lt;text x=&quot;-60&quot; y=&quot;-0&quot; font-size=&quot;20&quot; fill=&quot;white&quot; &gt;SVG Animation&lt;/text&gt;\n            &lt;!-- Add ease-in-out and infinite iterations to this animation and the code --&gt;\n            &lt;animateTransform attributeName=&quot;transform&quot; attributeType=&quot;xml&quot; type=&quot;rotate&quot; from=&quot;0&quot; to=&quot;360&quot; dur=&quot;3s&quot; repeatCount=&quot;indefinite&quot;&gt;SVG Animation&lt;/animateTransform&gt;\n        &lt;/g&gt;\n    &lt;/g&gt;\n&lt;/svg&gt;\n查看实例演示\n2.2 SVG动画优缺点\n优点：\n1) 矢量图形，不受像素影响——SVG的这个特性使得它在不同的平台或者媒体下表现良好，无论屏幕分辨率如何\n2) SVG对动画的支持较好，其DOM结构可以被其特定语法或者Javascript控制，从而轻松的实现动画\n3) Javascript可以完全控制SVG Dom 元素\n4) SVG的结构是XML，其可访问性（盲文、声音朗读等）、可操作性、可编程性、可被CSS样式化完胜Canvas。另外，其支持 ARIA 属性，使其如虎添翼。\n\n缺点：\n1) DOM比正常的图形慢，而且如果其结点多而杂，就更慢。2) SVG 画点报表什么的，还行；在网页游戏前，就束手无策了；当然可以结合 Canvas + SVG实现。3) 不能动态的修改动画内容4) 不能与HTML内容集成5) 整个SVG作为一个动画6) 浏览器兼容性问题，IE8-以及Android 2.3默认浏览器是不支持SVG\n三、Javascript动画\n3.1 jQuery动画\njQuery动画使用setInterval实现:\n// 用例\n$(\"#div\").animate({});\n\n// 源码jQuery.fx.timer = function( timer ) {    if ( timer() &amp;&amp; jQuery.timers.push( timer ) &amp;&amp; !timerId ) {        timerId = setInterval( jQuery.fx.tick, jQuery.fx.interval );    }};\njQuery.fx.interval = 13;jQuery的动画帧宽为什么是13ms呢How to determine the best “framerate” (setInterval delay) to use in a JavaScript animation loop?为什么jQuery用setInterval而不用RAF？\n优点：易用，低效，兼容好；\n缺点：\n1) setInterval多个间隔可能会被跳过2) setInterval多个间隔可能比预期小3) 不同浏览器的精度量级不同：4) jQuery 无法解决频繁触发 Layout 导致的抽动。\n3.2 requestAnimationFrame\n实例：\n\n.animate-RAF {\n\n}\n.animate-input  {    margin-top: 10px;    text-align: center;}\nRAF Animation\n\n\n\n    var animate_raf   = document.getElementById(\"animate-RAF\"),\n        btn_start = document.getElementById(\"btn_start\"),\n        frameid   = null;\n\n    function frame(time) {\n        animate_raf.style['-webkit-transform'] = 'rotate('+ Math.cos(time/1000)*360 +'deg)';\n        frameid = requestAnimationFrame(frame);\n    }\n\n    // bind Event\n    btn_start.addEventListener(\"click\", function(event) {\n        var val = this.value;\n\n        if(val === \"Start\") {\n            frameid = requestAnimationFrame(frame);\n            this.value = \"Pause\";\n        }else {\n            this.value = \"Start\";\n            cancelAnimationFrame(frameid);\n        }\n    }, false);\n\n\n查看实例演示优点：\n1) 在每次浏览器更新页面时，能获取通知并执行应用。 简单理解为，RAF能在每个16.7ms间执行一次咱们的函数，不多不少。2) 最小化的消耗资源，RAF在页面被切换或浏览器最小化时，会暂停执行，等页面再次关注时，继续执行动画。3) 相比 CSS 动画有更好的掌控，能合理降低CPU的使用。\n缺点：\n1) 无法控制执行时间，执行时间由系统根据屏幕刷新时间决定2) 浏览器兼容性问题，IE10+及现代浏览器，低版本浏览器建议降级处理，使用setInterval或setTimeout\n3.3 Canvas\n优点：\n1) 画2D图形时，页面渲染性能比较高\n2) 页面渲染性能受图形复杂度影响小\n3) 渲染性能只受图形的分辨率的影响\n4) 画出来的图形可以直接保存为 .png 或者 .jpg的图形\n5) 最适合于画光栅图像（如游戏和不规则几何图形等），编辑图片还有其他基于像素的图形操作。\n\n缺点：\n1) 整个就是一张图，无论你往上画什么东西——没有DOM 结点可供操作2) 没有实现动画的API，你必须依靠定时器和其他事件来更新Canvas3) 对文本的渲染支持是比较差4) 对要求有高可访问性（盲文、声音朗读等）页面，比较困难5) 对交互要求高的（比如TIBCO的很多产品）的界面，不建议使用Canvas\n3.4 WebGL\nWebGL是一种3D绘图标准，这种绘图技术标准允许把JavaScript和OpenGL ES 2.0结合在一起，通过增加OpenGL ES 2.0的一个JavaScript绑定，WebGL可以为HTML5 Canvas提供硬件3D加速渲染，这样Web开发人员就可以借助系统显卡来在浏览器里更流畅地展示3D场景和模型了，还能创建复杂的导航和数据视觉化。显然，WebGL技术标准免去了开发网页专用渲染插件的麻烦，可被用于创建具有复杂3D结构的网站页面，甚至可以用来设计3D网页游戏等等。\n\n浏览器支持：Internet Explorer 11+Google Chrome 9+Firefox 4+Opera 12+Safari 5.1+\n3.5 Problems\n1) 不同的api有不同的模型动画\n2) 不必要的维护来支持多种方式实现同样的事情\n3) Web开发人员需要学习多种实现技术\n4) Javascript不容易设置声明式动画\n四、Flash动画(过时)\n五、Web Animations 1.0 ——A new general purpose animation model\n1) W3Web Animations 1.0\n2) JavaScript implementation of the Web Animations API \n\nWeb Animations API为CSS和SVG动画提供了单一接口。旨在通过提供更好的性能、更好的控制时间线和播放、灵活、统一的Javascript编程接口，使做一些事情更容易。\n当前状态：Specification at First Public Working Draft: www.w3.org/TR/web-animationsChrome:CSS Transitions &amp; Animations rewritten on top of the Web Animations modelJavaScript API in development behind a flagFirefox &amp; Safari: Started implementationIE: No public signals\n实例一：A simple example\n        var web_animation_1 = document.getElementById(\"web_animation_1\");\n\n        web_animation_1.addEventListener('click', function() {\n            web_animation_1.animate([{\n                transform: 'rotate(0deg)'\n            }, {\n                transform: 'rotate(360deg)'\n            }],{\n                duration: 2\n            });\n        }, false);\n查看实例演示实例二：More complex timing\nvar web_animation_2 = document.getElementById(\"web_animation_2\");\n\nweb_animation_2.addEventListener('click', function() {\n    web_animation_2.animate([{\n        transform: 'rotate(0deg)'\n    }, {\n        transform: 'rotate(360deg)'\n    }],{\n        direction: 'alternate',\n        duration: 1,\n        iterations: Infinity,\n        easing: 'ease-in-out',\n        playbackRate: 2\n    });\n}, false);\n查看实例演示实例三：Without the syntactic sugar\nvar web_animation_3 = document.getElementById(\"web_animation_3\");\n\nweb_animation_3.addEventListener('click', function() {\n    var obj = new Animation(web_animation_3,[{\n        transform: 'rotate(0deg)'\n    }, {\n        transform: 'rotate(360deg)'\n    }],{\n        duration: 2\n    });\n    document.timeline.play(obj);\n}, false);\n\n查看实例演示实例四：Parallel animation grouping\nvar web_animation_4 = document.getElementById(\"web_animation_4\"),\n    parItem1 = document.getElementById(\"parItem1\"),\n    parItem2 = document.getElementById(\"parItem2\"),\n    parItem3 = document.getElementById(\"parItem3\");\n\nweb_animation_4.addEventListener('click', function() {\n    var obj = new ParGroup([\n        new Animation(parItem1, [{width: '0px'}, {width: '500px'}], 1),\n        new Animation(parItem2, [{width: '0px'}, {width: '700px'}], 1),\n        new Animation(parItem3, [{width: '0px'}, {width: '200px'}], 1),\n    ])\n    document.timeline.play(obj);\n}, false);\n查看实例演示实例五：Sequential animation grouping\nvar web_animation_5 = document.getElementById(\"web_animation_5\"),\n    seqItem1 = document.getElementById(\"seqItem1\"),\n    seqItem2 = document.getElementById(\"seqItem2\"),\n    seqItem3 = document.getElementById(\"seqItem3\");\n\nweb_animation_5.addEventListener('click', function() {\n    var obj = new SeqGroup([\n        new Animation(seqItem1, [{width: '0px'}, {width: '200px'}], 1),\n        new Animation(seqItem2, [{width: '0px'}, {width: '300px'}], 1),\n        new Animation(seqItem3, [{width: '0px'}, {width: '200px'}], 1),\n    ])\n    document.timeline.play(obj);\n}, false);\n查看实例演示实例六：Nested grouped animations\nvar web_animation_6 = document.getElementById(\"web_animation_6\"),\n    outerSeqItem1 = document.getElementById(\"outerSeqItem1\"),\n    outerSeqItem2 = document.getElementById(\"outerSeqItem2\"),\n    innerParItem1 = document.getElementById(\"innerParItem1\"),\n    innerParItem2 = document.getElementById(\"innerParItem2\"),\n    innerParItem3 = document.getElementById(\"innerParItem3\");\n\nweb_animation_6.addEventListener('click', function() {\n    var parobj = new ParGroup([\n        new Animation(innerParItem1, [{width: '0px'}, {width: '300px'}], 1),\n        new Animation(innerParItem2, [{width: '0px'}, {width: '300px'}], 1),\n        new Animation(innerParItem3, [{width: '0px'}, {width: '300px'}], 1),\n    ]);\n    var seqobj = new SeqGroup([\n            new Animation(outerSeqItem1, [{width: '0px'}, {width: '200px'}], 1),\n            parobj,\n            new Animation(outerSeqItem2, [{width: '0px'}, {width: '200px'}], 1),\n        ]);\n    document.timeline.play(seqobj);\n}, false);\n\n查看实例演示实例七：Path animations\nvar web_animation_7 = document.getElementById(\"web_animation_7\");\n\nweb_animation_7.addEventListener('click', function() {\n    var obj = new Animation(web_animation_7,\n        new PathAnimationEffect(\n            'M 100 200 ' +\n            'C 200 100 300   0 400 100 ' +\n            'C 500 200 600 300 700 200 ' +\n            'C 800 100 900 100 900 100', 'auto-rotate'), {\n            duration: 2,\n            direction: 'alternate',\n            easing: 'ease-in-out',\n            iterations: Infinity,\n        });\n\n    document.timeline.play(obj);\n}, false);\n查看实例演示实例八：Custom animation effects\nfunction customAnimationEffect(timeFraction, iteration, target) {\n    web_animation_8.innerHTML = 'timeFraction: ' + timeFraction.toFixed(2) + '\\n' +\n                             'iteration: ' + iteration;\n}\nvar web_animation_8 = document.getElementById(\"web_animation_8\");\n\nvar obj = new Animation(null,\n    {sample: customAnimationEffect},\n    {\n        duration: 2,\n        direction: 'alternate',\n        easing: 'ease-in-out',\n        iterations: Infinity,\n    });\n\nvar customPlayer = document.timeline.play(obj);\n\nwindow.addEventListener('slideenter', function(event) {\n    if (event.slide == customSlide) {\n        customPlayer.currentTime = 0;\n    }\n}, false);\n查看实例演示实例九：综合实例\n(function(document) {\n\n    'use strict';\n    var Animations = {},\n        player, controls = document.getElementById('animate-controls');\n\n    Animations.targets = {\n        path: document.getElementById('path'),\n        ballContainer: document.getElementById('animate-ball-container'),\n        ball: document.getElementById('animate-ball')\n    };\n\n    Animations.keyframeMove = new Animation(Animations.targets.ballContainer, [{\n        offset: 0,\n        transform: 'translate(0,0)'\n    }, {\n        offset: 1,\n        transform: 'translate(600,0)'\n    }], {\n        duration: 2000\n    });\n\n    Animations.keyframeSpinRoll = new Animation(Animations.targets.ball, [{\n        transform: 'rotate(950deg)'\n    }], {\n        duration: 2000\n    });\n\n    Animations.motionpathBounce = new Animation(Animations.targets.ballContainer, new MotionPathEffect(\"M25,25 \" + \"a150,100 0 0,1 300,0 \" + \"a75,50 0 0,1 150,0 \" + \"a35,20 0 0,1 70,0 \" + \"a2,1 0 0,1 35,0 \" + \"h45\"), {\n        duration: 2500\n    });\n\n    Animations.keyframeSpinBounce = new Animation(Animations.targets.ball, [{\n        transform: 'rotate(950deg)'\n    }], {\n        duration: 2500\n    });\n\n    Animations.animationGroupRoll = new AnimationGroup([Animations.keyframeMove, Animations.keyframeSpinRoll], {\n        easing: 'ease-out'\n    });\n\n    Animations.animationGroupBounce = new AnimationGroup([Animations.motionpathBounce, Animations.keyframeSpinBounce], {\n        easing: 'ease-out'\n    });\n\n    controls.addEventListener('click', function(event) {\n        if (event.target) {\n            var targetElement = event.target;\n            switch (targetElement.id) {\n                case 'keyframe-start':\n                    player = document.timeline.play(Animations.animationGroupRoll);\n                    break;\n                case 'motionpath-start':\n                    player = document.timeline.play(Animations.animationGroupBounce);\n                    break;\n                case 'pause':\n                    player.pause();\n                    break;\n                case 'cancel':\n                    player.cancel();\n                    break;\n                case 'play':\n                    player.play();\n                    break;\n                case 'reverse':\n                    player.reverse()\n            }\n        }\n    })\n})(document);\n查看实例演示\n六、现行兼容性方案\n1) 页面增强动画建议使用CSS动画\n\n2) 复杂动画交互建议使用RAF及setInterval 或setTimeout优雅降级处理\n(function() {\n    var lastTime = 0,\n        vendors = [&#39;webkit&#39;, &#39;moz&#39;];\n\n    for(var x = 0; x < vendors.length &amp;&amp; !window.requestAnimationFrame; ++x) {\n        window.requestAnimationFrame = window[vendors[x]+&#39;RequestAnimationFrame&#39;];\n\n        window.cancelAnimationFrame = window[vendors[x]+&#39;CancelAnimationFrame&#39;] || window[vendors[x]+&#39;CancelRequestAnimationFrame&#39;];\n    }\n\n    if (!window.requestAnimationFrame) {\n        window.requestAnimationFrame = function(callback, element) {\n            var currTime = new Date().getTime(),\n                timeToCall = Math.max(0, 16.6 - (currTime - lastTime) ),\n                id = window.setTimeout(function() { \n                    callback(currTime + timeToCall); \n                },timeToCall);\n\n            lastTime = currTime + timeToCall;\n            return id;\n        };\n    }\n\n    if (!window.cancelAnimationFrame) {\n        window.cancelAnimationFrame = function(id) {\n            clearTimeout(id);\n        };\n    }\n\n})();\n3) 推荐动画库Velocity.js、GreenSock:\n1) Velocity.js是一款动画切换的jQuery插件，它重新实现了jQuery的$.animate()方法从而加快动画切换的速度。Velocity.js只有7k的大小，它不仅包含了$.animate()的所有功能，并且还包含了颜色切换、转换(transform)、循环、缓动、CSS切换、Scroll功能，它是jQuery、 jQuery UI、CSS变换 在动画方面的最佳组合。\nVelocity.js支持IE8+、Chrome、Firefox等浏览器，并支持Andriod以及IOS。\nVelocity.js在内部实现中使用了jQuery的$.queue()方法，因此它比 jQuery的$.animate()、$.fade()、$.delay()方法更加流畅，其性能也高于CSS的animation属性。\n2) GreenSock：GSAP v12平台\n非常快的速度：性能是非常重要的，尤其是在移动设备上。GSAP不断优化，以保证互动项目的快速响应、高效率及平滑，你可以从这里查看动画效果测试。\n异想天开的强劲：内置众多引擎的功能，如动画色彩、贝塞尔曲线、CSS样式属性、Flash滤镜、数组等等，定义不同的回调，可以通过帧或者秒定义运动。\n兼容性：Flash，HTML5，jQuery，Canvas，CSS，新浏览器，旧浏览器，RequireJS，EaseIJS，移动设备等等-GSAP都可以很好的与他们兼容，你可以选择你熟悉的工具来使用。\nJavascript，AS3/AS2：选择适合你的语言来完成动画。\n轻量与可扩展性：模块化与插件式的结构保持了核心引擎的轻量，TweenLite包非常小（基本上低于7kb）。\n没有依赖：GSAP没有基于第三方工具来构建（虽然它将jQuery作为选择器），因此能保证最短的加载时间与最大化性能。\n高等序列：不用受限于线性序列，可以重叠动画序列，你可以通过精确时间控制，灵活地使用最少的代码实现动画。\n良好的技术支持：可以通过论坛反馈，会有专家和资深活跃用户回答问题。\n任何对象都可以实现动画：是的，任何，不用预定义的属性，任何对象的任意数字属性都可以实现动画，如果这些属性（如颜色，滤镜，非数值属性等）需要处理，插件可以实现。如果没有，我们可以实现一个。\n重写管理：GSAP帮助防止动画引擎的冲突以及高级选项的设置。\n易于学习：文档、教程、 示例、学习指南、论坛，还有很多学习资源，非常地丰富。\n许可证：除商业用途意外，GSAP完全免费。\n参考链接：\nWeb Animations 1.0\n\nCSS Will Change Module Level 1\nCSS Will Change Module Level 1 （中文版本）\nJavascript高性能动画与页面渲染\nCSS vs. JS Animation: Which is Faster?\nCSS animations and transitions performance: looking inside the browser\nSVG or Canvas? СHoosing Between the Two\nExploring the Web Animations API \nWeb Animations by Google\nEverything You Need to Know About the CSS will-change Property\nThe (80-storey) Elevator Pitch\nHTML5 Animation Speed Test\n","dateCreated":"2015-01-25T19:15:16+08:00","dateModified":"2021-12-26T16:47:27+08:00","datePublished":"2015-01-25T19:15:16+08:00","description":"相关概念：绘制频率、屏幕刷新频率、硬件加速、60fps","headline":"主流动画实现方式总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/mainstream-animation-implementation.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/mainstream-animation-implementation.html","keywords":"web"}</script>
+    <meta name="description" content="相关概念：绘制频率、屏幕刷新频率、硬件加速、60fps">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="主流动画实现方式总结">
+<meta property="og:url" content="https://zuojj.com/post/mainstream-animation-implementation.html">
+<meta property="og:site_name" content="煦涵驛">
+<meta property="og:description" content="相关概念：绘制频率、屏幕刷新频率、硬件加速、60fps">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-01-25T11:15:16.000Z">
+<meta property="article:modified_time" content="2021-12-26T08:47:27.083Z">
+<meta property="article:author" content="煦涵">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://zuojj.com/assets/images/android-icon-192x192.png"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-azzecasiyoljwft84q6xgomz7u93dvmp6u8dowm74bkxtpgm6veljcsjex4d.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159301267-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-159301267-1');
+    </script>
+
+
+    
+
+    
+        
+            
+<link rel="stylesheet" href="/assets/css/gitalk.css">
+
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/%20"
+            aria-label=""
+        >
+            煦涵驛
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+                </a>
+                <h4 class="sidebar-profile-name">煦涵</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>因为热爱，所以坚持。</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/zuojj"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:zuojj.com@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            主流动画实现方式总结
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2015-01-25T19:15:16+08:00">
+	
+		    1月 25, 2015
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>相关概念：绘制频率、屏幕刷新频率、硬件加速、60fps<br><strong>绘制频率：</strong><br>页面上每一帧变化都是系统绘制出来的(GPU或者CPU)【参考浏览器渲染原理】。但这种绘制又和PC游戏的绘制不同，它的最高绘制频率受限于显示器的刷新频率(而非显卡)，所以大多数情况下最高的绘制频率只能是每秒60帧(frame per second，以下用fps简称)，对应于显示器的60Hz。60fps是一个最理想的状态，在日常对页面性能的测试中，60fps也是一个重要的指标，the closer the better。</p>
+<p><strong>刷新频率：</strong><br>图像在屏幕上更新的速度，也即屏幕上的图像每秒钟出现的次数，它的单位是赫兹（Hz）。刷新频率越高，屏幕上图像闪烁感就越小，稳定性也就越高，换言之对视力的保护也越好。一般人的眼睛、不容易察觉75Hz以上刷新频率带来的闪烁感，因此最好能将您显示卡刷新频率调到75Hz以上。要注意的是，并不是所有的显示卡都能够在最大分辨率下达到70Hz以上的刷新频率（这个性能取决于显示卡上RAMDAC的速度），而且显示器也可能因为带宽不够而不能达到要求。影响刷新率最主要的还是显示器的带宽。</p>
+<p>显示器带宽是显示器视频放大器通频带宽度的简称，指电子枪每秒钟在屏幕上扫过的最大总像素数，以MHz(兆赫兹)为单位。 带宽的值越大，显示器性能越好。</p>
+<p><strong>硬件加速：</strong><br>硬件有三个处理器，CPU、GPU和APU（不是加速处理器是声音处理器）。他们通过PCI/AGP/PCIE总线交换数据。今天，GPU已经不再局限于3D图形处理了，GPU通用计算技术发展已经引起业界不少的关注，事实也证明在浮点运算、并行计算等部分计算方面，GPU可以提供数十倍乃至于上百倍于CPU的性能。</p>
+<p><strong>60Hz和60fps是什么关系</strong><br>没有任何关系。fps代表GPU渲染画面的频率，Hz代表显示器刷新屏幕的频率。一幅静态图片，你可以说这副图片的fps是0帧/秒，但绝对不能说此时屏幕的刷新率是0Hz，也就是说刷新率不随图像内容的变化而变化。游戏也好浏览器也好，我们谈到掉帧，是指GPU渲染画面频率降低。比如跌落到30fps甚至20fps，但因为视觉暂留原理，我们看到的画面仍然是运动和连贯的。</p>
+<p><span style="color: #ff0000;"><em>PS: 以下示例在Chrome环境中运行</em></span></p>
+<h2>一、CSS动画</h2>
+<h3>1.1 Transitions动画</h3>
+实例：
+<pre class="brush:php"><style type="text/css">
+.animate {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background-color: #f00;
+    line-height: 200px;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+}
+.animate-transition {
+    transition         : transform 2s linear;
+    -moz-transition    : -moz-transform 2s linear;
+    -webkit-transition : -webkit-transform 2s linear;
+    -o-transition      : -o-transform 2s linear;
+}
+
+<p>.animate-transition:hover {<br>    cursor: pointer;<br>    transform         : rotate(360deg);<br>    -moz-transform    : rotate(360deg);<br>    -webkit-transform : rotate(360deg);<br>    -o-transform      : rotate(360deg);<br>}<br></style></p>
+<div class="animate animate-transition">Transition Animation</div></pre>
+<a href="http://www.zuojj.com/demo/2015/01/animations-transition.html" target="_blank">查看实例演示</a>
+<h3>1.2 Keyframes animation</h3>
+Keyframes animation通过定义多个关键帧以及定义每个关键帧中的元素的属性值来实现更为复杂的动画效果。
+实例：
+<pre class="brush:php"><style type="text/css">
+.animate-keyframes {
+    -webkit-animation: frames 2s linear infinite;
+}
+
+<p>.animate-keyframes:hover {<br>    cursor: pointer;<br>    -webkit-animation: none;<br>}</p>
+<p>@-webkit-keyframes frames {<br>    0% {<br>        background-color: #f00;<br>        -webkit-transform: rotate(0deg);<br>    }<br>    100% {<br>        background-color: #f00;<br>        -webkit-transform: rotate(360deg);<br>    }<br>}<br></style></p>
+<div class="animate animate-keyframes">keyframes animation</div></pre>
+<a href="http://www.zuojj.com/demo/2015/01/animations-keyframes.html" target="_blank">查看实例演示</a>
+<h3>1.3 CSS动画优缺点</h3>
+优点：
+简单、高效
+声明式的
+不依赖与主线程，采用硬件加速（GPU）
+简单的控制keyframe animation 播放和暂停
+
+<p>缺点：<br>不能动态的修改或定义动画内容<br>不同的动画无法实现同步<br>多个动画彼此无法堆叠</p>
+<p>另：</p>
+<p>1) CSS3 transition强制硬件加速会加大GPU消耗，高负荷情形下将导致运行不流畅。这种情况在移动设备上尤为明显。（特殊情况下，比如当数据在浏览器主线程和排版线程之间传递产生的瓶颈也会导致不流畅）。某些CSS属性，比如transform和opacity，则不受这些瓶颈影响。Adobe在这里精心总结了这些问题。详细请戳</p>
+<p>transition的兼容性问题是个诟病，IE10+及现代浏览器，使用起来会造成很多不便。</p>
+<p>由于transition并不是由JavaScript原生控制（而仅仅是由JavaScript触发），浏览器无法获知如何与控制这些transition的JavaScript代码同步地优化他们。</p>
+<p>2) keyframes animation 的动画曲线会应用到所有变化的属性上，而且手写比较复杂的动画，写起来就是噩梦。</p>
+<h2>二、SVG动画</h2>
+<h3>2.1 实例</h3>
+<pre class="brush:php"><div class="animate-svg">
+    <svg id="svgAnimation" ns="http://www.w3.org/2000/svg" version="1.1" width="200" height="200">
+        <g transform="translate(100,100)">
+            <g>
+
+<pre><code>            &lt;rect width=&quot;200&quot; height=&quot;200&quot; rx=&quot;100&quot; ry=&quot;100&quot; fill=&quot;red&quot; transform=&quot;translate(-100,-100)&quot;&gt;&lt;/rect&gt;
+            &lt;text x=&quot;-60&quot; y=&quot;-0&quot; font-size=&quot;20&quot; fill=&quot;white&quot; &gt;SVG Animation&lt;/text&gt;
+            &lt;!-- Add ease-in-out and infinite iterations to this animation and the code --&gt;
+            &lt;animateTransform attributeName=&quot;transform&quot; attributeType=&quot;xml&quot; type=&quot;rotate&quot; from=&quot;0&quot; to=&quot;360&quot; dur=&quot;3s&quot; repeatCount=&quot;indefinite&quot;&gt;SVG Animation&lt;/animateTransform&gt;
+        &lt;/g&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;</code></pre></div></pre>
+<a href="http://www.zuojj.com/demo/2015/01/animations-svg.html" target="_blank">查看实例演示</a>
+<h3>2.2 SVG动画优缺点</h3>
+优点：
+1) 矢量图形，不受像素影响——SVG的这个特性使得它在不同的平台或者媒体下表现良好，无论屏幕分辨率如何
+2) SVG对动画的支持较好，其DOM结构可以被其特定语法或者Javascript控制，从而轻松的实现动画
+3) Javascript可以完全控制SVG Dom 元素
+4) SVG的结构是XML，其可访问性（盲文、声音朗读等）、可操作性、可编程性、可被CSS样式化完胜Canvas。另外，其支持 ARIA 属性，使其如虎添翼。
+
+<p>缺点：</p>
+<p>1) DOM比正常的图形慢，而且如果其结点多而杂，就更慢。<br>2) SVG 画点报表什么的，还行；在网页游戏前，就束手无策了；当然可以结合 Canvas + SVG实现。<br>3) 不能动态的修改动画内容<br>4) 不能与HTML内容集成<br>5) 整个SVG作为一个动画<br>6) 浏览器兼容性问题，IE8-以及Android 2.3默认浏览器是不支持SVG</p>
+<h2>三、Javascript动画</h2>
+<h3>3.1 jQuery动画</h3>
+jQuery动画使用setInterval实现:
+<pre class="brush:javascript">// 用例
+$("#div").animate({});
+
+<p>// 源码<br>jQuery.fx.timer = function( timer ) {<br>    if ( timer() &amp;&amp; jQuery.timers.push( timer ) &amp;&amp; !timerId ) {<br>        timerId = setInterval( jQuery.fx.tick, jQuery.fx.interval );<br>    }<br>};</p>
+<p>jQuery.fx.interval = 13;</pre><br><a href="http://www.zhihu.com/question/19824093" target="_blank">jQuery的动画帧宽为什么是13ms呢</a><br><a href="http://stackoverflow.com/questions/2940054/how-to-determine-the-best-framerate-setinterval-delay-to-use-in-a-javascript" target="_blank" rel="noopener">How to determine the best “framerate” (setInterval delay) to use in a JavaScript animation loop?</a><br><a href="http://bugs.jquery.com/ticket/9381" target="_blank">为什么jQuery用setInterval而不用RAF？</a></p>
+<p>优点：<br>易用，低效，兼容好；</p>
+<p>缺点：</p>
+<p>1) setInterval多个间隔可能会被跳过<br>2) setInterval多个间隔可能比预期小<br>3) 不同浏览器的精度量级不同：<br>4) jQuery 无法解决频繁触发 Layout 导致的抽动。</p>
+<h3>3.2 requestAnimationFrame</h3>
+实例：
+<pre class="brush:php"><style type="text/css">
+.animate-RAF {
+
+<p>}</p>
+<p>.animate-input  {<br>    margin-top: 10px;<br>    text-align: center;<br>}<br></style></p>
+<div id="animate-RAF" class="animate animate-RAF">RAF Animation</div>
+<div class="animate-input"><input type="button" id="btn_start" value="Start" style="width:100px;height:30px"></div>
+
+<script type="text/javascript">
+    var animate_raf   = document.getElementById("animate-RAF"),
+        btn_start = document.getElementById("btn_start"),
+        frameid   = null;
+
+    function frame(time) {
+        animate_raf.style['-webkit-transform'] = 'rotate('+ Math.cos(time/1000)*360 +'deg)';
+        frameid = requestAnimationFrame(frame);
+    }
+
+    // bind Event
+    btn_start.addEventListener("click", function(event) {
+        var val = this.value;
+
+        if(val === "Start") {
+            frameid = requestAnimationFrame(frame);
+            this.value = "Pause";
+        }else {
+            this.value = "Start";
+            cancelAnimationFrame(frameid);
+        }
+    }, false);
+
+</script></pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/animations-RAF.html" target="_blank">查看实例演示</a><br>优点：</p>
+<p>1) 在每次浏览器更新页面时，能获取通知并执行应用。 简单理解为，RAF能在每个16.7ms间执行一次咱们的函数，不多不少。<br>2) 最小化的消耗资源，RAF在页面被切换或浏览器最小化时，会暂停执行，等页面再次关注时，继续执行动画。<br>3) 相比 CSS 动画有更好的掌控，能合理降低CPU的使用。</p>
+<p>缺点：</p>
+<p>1) 无法控制执行时间，执行时间由系统根据屏幕刷新时间决定<br>2) 浏览器兼容性问题，IE10+及现代浏览器，低版本浏览器建议降级处理，使用setInterval或setTimeout</p>
+<h3>3.3 Canvas</h3>
+优点：
+1) 画2D图形时，页面渲染性能比较高
+2) 页面渲染性能受图形复杂度影响小
+3) 渲染性能只受图形的分辨率的影响
+4) 画出来的图形可以直接保存为 .png 或者 .jpg的图形
+5) 最适合于画光栅图像（如游戏和不规则几何图形等），编辑图片还有其他基于像素的图形操作。
+
+<p>缺点：</p>
+<p>1) 整个就是一张图，无论你往上画什么东西——没有DOM 结点可供操作<br>2) 没有实现动画的API，你必须依靠定时器和其他事件来更新Canvas<br>3) 对文本的渲染支持是比较差<br>4) 对要求有高可访问性（盲文、声音朗读等）页面，比较困难<br>5) 对交互要求高的（比如TIBCO的很多产品）的界面，不建议使用Canvas</p>
+<h3>3.4 WebGL</h3>
+WebGL是一种3D绘图标准，这种绘图技术标准允许把JavaScript和OpenGL ES 2.0结合在一起，通过增加OpenGL ES 2.0的一个JavaScript绑定，WebGL可以为HTML5 Canvas提供硬件3D加速渲染，这样Web开发人员就可以借助系统显卡来在浏览器里更流畅地展示3D场景和模型了，还能创建复杂的导航和数据视觉化。显然，WebGL技术标准免去了开发网页专用渲染插件的麻烦，可被用于创建具有复杂3D结构的网站页面，甚至可以用来设计3D网页游戏等等。
+
+<p>浏览器支持：<br>Internet Explorer 11+<br>Google Chrome 9+<br>Firefox 4+<br>Opera 12+<br>Safari 5.1+</p>
+<h3>3.5 Problems</h3>
+1) 不同的api有不同的模型动画
+2) 不必要的维护来支持多种方式实现同样的事情
+3) Web开发人员需要学习多种实现技术
+4) Javascript不容易设置声明式动画
+<h2>四、Flash动画(过时)</h2>
+<h2>五、Web Animations 1.0 ——A new general purpose animation model</h2>
+1) <a href="http://www.w3.org/TR/web-animations/" target="_blank" rel="noopener">W3Web Animations 1.0</a>
+2) <a href="https://github.com/web-animations/web-animations-js" target="_blank">JavaScript implementation of the Web Animations API </a>
+
+<p>Web Animations API为CSS和SVG动画提供了单一接口。旨在通过提供更好的性能、更好的控制时间线和播放、灵活、统一的Javascript编程接口，使做一些事情更容易。</p>
+<p>当前状态：<br>Specification at First Public Working Draft: <a href="http://www.w3.org/TR/web-animations" target="_blank" rel="noopener">www.w3.org/TR/web-animations</a><br>Chrome:<br>CSS Transitions &amp; Animations rewritten on top of the Web Animations model<br>JavaScript API in development behind a flag<br>Firefox &amp; Safari: Started implementation<br>IE: No public signals</p>
+<p>实例一：A simple example</p>
+<pre class="brush:javascript">        var web_animation_1 = document.getElementById("web_animation_1");
+
+        web_animation_1.addEventListener('click', function() {
+            web_animation_1.animate([{
+                transform: 'rotate(0deg)'
+            }, {
+                transform: 'rotate(360deg)'
+            }],{
+                duration: 2
+            });
+        }, false);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-1.html" target="_blank">查看实例演示</a><br>实例二：More complex timing</p>
+<pre class="brush:javascript">var web_animation_2 = document.getElementById("web_animation_2");
+
+web_animation_2.addEventListener('click', function() {
+    web_animation_2.animate([{
+        transform: 'rotate(0deg)'
+    }, {
+        transform: 'rotate(360deg)'
+    }],{
+        direction: 'alternate',
+        duration: 1,
+        iterations: Infinity,
+        easing: 'ease-in-out',
+        playbackRate: 2
+    });
+}, false);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-2.html" target="_blank">查看实例演示</a><br>实例三：Without the syntactic sugar</p>
+<pre class="brush:javascript">var web_animation_3 = document.getElementById("web_animation_3");
+
+web_animation_3.addEventListener('click', function() {
+    var obj = new Animation(web_animation_3,[{
+        transform: 'rotate(0deg)'
+    }, {
+        transform: 'rotate(360deg)'
+    }],{
+        duration: 2
+    });
+    document.timeline.play(obj);
+}, false);
+</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-3.html" target="_blank">查看实例演示</a><br>实例四：Parallel animation grouping</p>
+<pre class="brush:javascript">var web_animation_4 = document.getElementById("web_animation_4"),
+    parItem1 = document.getElementById("parItem1"),
+    parItem2 = document.getElementById("parItem2"),
+    parItem3 = document.getElementById("parItem3");
+
+web_animation_4.addEventListener('click', function() {
+    var obj = new ParGroup([
+        new Animation(parItem1, [{width: '0px'}, {width: '500px'}], 1),
+        new Animation(parItem2, [{width: '0px'}, {width: '700px'}], 1),
+        new Animation(parItem3, [{width: '0px'}, {width: '200px'}], 1),
+    ])
+    document.timeline.play(obj);
+}, false);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-4.html" target="_blank">查看实例演示</a><br>实例五：Sequential animation grouping</p>
+<pre class="brush:javascript">var web_animation_5 = document.getElementById("web_animation_5"),
+    seqItem1 = document.getElementById("seqItem1"),
+    seqItem2 = document.getElementById("seqItem2"),
+    seqItem3 = document.getElementById("seqItem3");
+
+web_animation_5.addEventListener('click', function() {
+    var obj = new SeqGroup([
+        new Animation(seqItem1, [{width: '0px'}, {width: '200px'}], 1),
+        new Animation(seqItem2, [{width: '0px'}, {width: '300px'}], 1),
+        new Animation(seqItem3, [{width: '0px'}, {width: '200px'}], 1),
+    ])
+    document.timeline.play(obj);
+}, false);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-5.html" target="_blank">查看实例演示</a><br>实例六：Nested grouped animations</p>
+<pre class="brush:javascript">var web_animation_6 = document.getElementById("web_animation_6"),
+    outerSeqItem1 = document.getElementById("outerSeqItem1"),
+    outerSeqItem2 = document.getElementById("outerSeqItem2"),
+    innerParItem1 = document.getElementById("innerParItem1"),
+    innerParItem2 = document.getElementById("innerParItem2"),
+    innerParItem3 = document.getElementById("innerParItem3");
+
+web_animation_6.addEventListener('click', function() {
+    var parobj = new ParGroup([
+        new Animation(innerParItem1, [{width: '0px'}, {width: '300px'}], 1),
+        new Animation(innerParItem2, [{width: '0px'}, {width: '300px'}], 1),
+        new Animation(innerParItem3, [{width: '0px'}, {width: '300px'}], 1),
+    ]);
+    var seqobj = new SeqGroup([
+            new Animation(outerSeqItem1, [{width: '0px'}, {width: '200px'}], 1),
+            parobj,
+            new Animation(outerSeqItem2, [{width: '0px'}, {width: '200px'}], 1),
+        ]);
+    document.timeline.play(seqobj);
+}, false);
+</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-6.html" target="_blank">查看实例演示</a><br>实例七：Path animations</p>
+<pre class="brush:javascript">var web_animation_7 = document.getElementById("web_animation_7");
+
+web_animation_7.addEventListener('click', function() {
+    var obj = new Animation(web_animation_7,
+        new PathAnimationEffect(
+            'M 100 200 ' +
+            'C 200 100 300   0 400 100 ' +
+            'C 500 200 600 300 700 200 ' +
+            'C 800 100 900 100 900 100', 'auto-rotate'), {
+            duration: 2,
+            direction: 'alternate',
+            easing: 'ease-in-out',
+            iterations: Infinity,
+        });
+
+    document.timeline.play(obj);
+}, false);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-7.html" target="_blank">查看实例演示</a><br>实例八：Custom animation effects</p>
+<pre class="brush:javascript">function customAnimationEffect(timeFraction, iteration, target) {
+    web_animation_8.innerHTML = 'timeFraction: ' + timeFraction.toFixed(2) + '\n' +
+                             'iteration: ' + iteration;
+}
+var web_animation_8 = document.getElementById("web_animation_8");
+
+var obj = new Animation(null,
+    {sample: customAnimationEffect},
+    {
+        duration: 2,
+        direction: 'alternate',
+        easing: 'ease-in-out',
+        iterations: Infinity,
+    });
+
+var customPlayer = document.timeline.play(obj);
+
+window.addEventListener('slideenter', function(event) {
+    if (event.slide == customSlide) {
+        customPlayer.currentTime = 0;
+    }
+}, false);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-8.html" target="_blank">查看实例演示</a><br>实例九：综合实例</p>
+<pre class="brush:javascript">(function(document) {
+
+    'use strict';
+    var Animations = {},
+        player, controls = document.getElementById('animate-controls');
+
+    Animations.targets = {
+        path: document.getElementById('path'),
+        ballContainer: document.getElementById('animate-ball-container'),
+        ball: document.getElementById('animate-ball')
+    };
+
+    Animations.keyframeMove = new Animation(Animations.targets.ballContainer, [{
+        offset: 0,
+        transform: 'translate(0,0)'
+    }, {
+        offset: 1,
+        transform: 'translate(600,0)'
+    }], {
+        duration: 2000
+    });
+
+    Animations.keyframeSpinRoll = new Animation(Animations.targets.ball, [{
+        transform: 'rotate(950deg)'
+    }], {
+        duration: 2000
+    });
+
+    Animations.motionpathBounce = new Animation(Animations.targets.ballContainer, new MotionPathEffect("M25,25 " + "a150,100 0 0,1 300,0 " + "a75,50 0 0,1 150,0 " + "a35,20 0 0,1 70,0 " + "a2,1 0 0,1 35,0 " + "h45"), {
+        duration: 2500
+    });
+
+    Animations.keyframeSpinBounce = new Animation(Animations.targets.ball, [{
+        transform: 'rotate(950deg)'
+    }], {
+        duration: 2500
+    });
+
+    Animations.animationGroupRoll = new AnimationGroup([Animations.keyframeMove, Animations.keyframeSpinRoll], {
+        easing: 'ease-out'
+    });
+
+    Animations.animationGroupBounce = new AnimationGroup([Animations.motionpathBounce, Animations.keyframeSpinBounce], {
+        easing: 'ease-out'
+    });
+
+    controls.addEventListener('click', function(event) {
+        if (event.target) {
+            var targetElement = event.target;
+            switch (targetElement.id) {
+                case 'keyframe-start':
+                    player = document.timeline.play(Animations.animationGroupRoll);
+                    break;
+                case 'motionpath-start':
+                    player = document.timeline.play(Animations.animationGroupBounce);
+                    break;
+                case 'pause':
+                    player.pause();
+                    break;
+                case 'cancel':
+                    player.cancel();
+                    break;
+                case 'play':
+                    player.play();
+                    break;
+                case 'reverse':
+                    player.reverse()
+            }
+        }
+    })
+})(document);</pre>
+<p><a href="http://www.zuojj.com/demo/2015/01/web-animations-9.html" target="_blank">查看实例演示</a></p>
+<h2>六、现行兼容性方案</h2>
+1) 页面增强动画建议使用CSS动画
+
+<p>2) 复杂动画交互建议使用RAF及setInterval 或setTimeout优雅降级处理</p>
+<pre class="brush:javascript">(function() {
+    var lastTime = 0,
+        vendors = [&#39;webkit&#39;, &#39;moz&#39;];
+
+    for(var x = 0; x < vendors.length &amp;&amp; !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+&#39;RequestAnimationFrame&#39;];
+
+        window.cancelAnimationFrame = window[vendors[x]+&#39;CancelAnimationFrame&#39;] || window[vendors[x]+&#39;CancelRequestAnimationFrame&#39;];
+    }
+
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime(),
+                timeToCall = Math.max(0, 16.6 - (currTime - lastTime) ),
+                id = window.setTimeout(function() { 
+                    callback(currTime + timeToCall); 
+                },timeToCall);
+
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+    }
+
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+    }
+
+})();</pre>
+<p>3) 推荐动画库Velocity.js、GreenSock:</p>
+<p>1) Velocity.js是一款动画切换的jQuery插件，它重新实现了jQuery的$.animate()方法从而加快动画切换的速度。Velocity.js只有7k的大小，它不仅包含了$.animate()的所有功能，并且还包含了颜色切换、转换(transform)、循环、缓动、CSS切换、Scroll功能，它是jQuery、 jQuery UI、CSS变换 在动画方面的最佳组合。</p>
+<p>Velocity.js支持IE8+、Chrome、Firefox等浏览器，并支持Andriod以及IOS。</p>
+<p>Velocity.js在内部实现中使用了jQuery的$.queue()方法，因此它比 jQuery的$.animate()、$.fade()、$.delay()方法更加流畅，其性能也高于CSS的animation属性。</p>
+<p>2) GreenSock：GSAP v12平台</p>
+<p>非常快的速度：性能是非常重要的，尤其是在移动设备上。GSAP不断优化，以保证互动项目的快速响应、高效率及平滑，你可以从这里查看动画效果测试。</p>
+<p>异想天开的强劲：内置众多引擎的功能，如动画色彩、贝塞尔曲线、CSS样式属性、Flash滤镜、数组等等，定义不同的回调，可以通过帧或者秒定义运动。</p>
+<p>兼容性：Flash，HTML5，jQuery，Canvas，CSS，新浏览器，旧浏览器，RequireJS，EaseIJS，移动设备等等-GSAP都可以很好的与他们兼容，你可以选择你熟悉的工具来使用。</p>
+<p>Javascript，AS3/AS2：选择适合你的语言来完成动画。</p>
+<p>轻量与可扩展性：模块化与插件式的结构保持了核心引擎的轻量，TweenLite包非常小（基本上低于7kb）。</p>
+<p>没有依赖：GSAP没有基于第三方工具来构建（虽然它将jQuery作为选择器），因此能保证最短的加载时间与最大化性能。</p>
+<p>高等序列：不用受限于线性序列，可以重叠动画序列，你可以通过精确时间控制，灵活地使用最少的代码实现动画。</p>
+<p>良好的技术支持：可以通过论坛反馈，会有专家和资深活跃用户回答问题。</p>
+<p>任何对象都可以实现动画：是的，任何，不用预定义的属性，任何对象的任意数字属性都可以实现动画，如果这些属性（如颜色，滤镜，非数值属性等）需要处理，插件可以实现。如果没有，我们可以实现一个。</p>
+<p>重写管理：GSAP帮助防止动画引擎的冲突以及高级选项的设置。</p>
+<p>易于学习：文档、教程、 示例、学习指南、论坛，还有很多学习资源，非常地丰富。</p>
+<p>许可证：除商业用途意外，GSAP完全免费。</p>
+<h2>参考链接：</h2>
+<a href="http://www.w3.org/TR/web-animations/" target="_blank">Web Animations 1.0</a>
+
+<p><a href="http://dev.w3.org/csswg/css-will-change/" target="_blank">CSS Will Change Module Level 1</a></p>
+<p><a href="http://jinjiang.github.io/css-will-change/" target="_blank">CSS Will Change Module Level 1 （中文版本）</a></p>
+<p><a href="http://www.infoq.com/cn/articles/javascript-high-performance-animation-and-page-rendering" target="_blank">Javascript高性能动画与页面渲染</a></p>
+<p><a href="http://davidwalsh.name/css-js-animation" target="_blank">CSS vs. JS Animation: Which is Faster?</a></p>
+<p><a href="http://blogs.adobe.com/webplatform/2014/03/18/css-animations-and-transitions-performance/" target="_blank">CSS animations and transitions performance: looking inside the browser</a></p>
+<p><a href="https://dev.opera.com/articles/svg-or-canvas-choose/" target="_blank">SVG or Canvas? СHoosing Between the Two</a></p>
+<p><a href="https://webdesigner-webdeveloper.com/weblog/exploring-web-animations/" target="_blank">Exploring the Web Animations API </a></p>
+<p><a href="http://alancutter.github.io/web-animations-slides-lca-2014/" target="_blank">Web Animations by Google</a></p>
+<p><a href="https://dev.opera.com/articles/css-will-change-property/" target="_blank">Everything You Need to Know About the CSS will-change Property</a></p>
+<p><a href="https://github.com/GoogleChrome/frame-timing-polyfill/wiki/Explainer" target="_blank">The (80-storey) Elevator Pitch</a></p>
+<p><a href="http://www.greensock.com/js/speed.html" target="_blank" rel="noopener">HTML5 Animation Speed Test</a></p>
+
+            
+
+
+            <h3>转载申请</h3>
+            <p>本作品采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名 4.0 国际许可协议</a>进行许可，转载时请注明原文链接，文章内图片请保留全部内容。</p>
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/web/" rel="tag">web</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/JSON.html"
+                    data-tooltip="JSON"
+                    aria-label="上一篇: JSON"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/css-pseudo-classes-and-pseudo-elements.html"
+                    data-tooltip="CSS伪类和伪元素的异同"
+                    aria-label="下一篇: CSS伪类和伪元素的异同"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/mainstream-animation-implementation.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/mainstream-animation-implementation.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/mainstream-animation-implementation.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/mainstream-animation-implementation.html&amp;title=主流动画实现方式总结"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitalk"></div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2021 煦涵. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/JSON.html"
+                    data-tooltip="JSON"
+                    aria-label="上一篇: JSON"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/css-pseudo-classes-and-pseudo-elements.html"
+                    data-tooltip="CSS伪类和伪元素的异同"
+                    aria-label="下一篇: CSS伪类和伪元素的异同"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/mainstream-animation-implementation.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/mainstream-animation-implementation.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/mainstream-animation-implementation.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/mainstream-animation-implementation.html&amp;title=主流动画实现方式总结"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/mainstream-animation-implementation.html"
+                        aria-label="分享到 Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/mainstream-animation-implementation.html"
+                        aria-label="分享到 Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/mainstream-animation-implementation.html"
+                        aria-label="分享到 Weibo"
+                    >
+                        <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/mainstream-animation-implementation.html&amp;title=主流动画实现方式总结"
+                        aria-label="分享到 QQ"
+                    >
+                        <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+        
+            <h4 id="about-card-name">煦涵</h4>
+        
+            <div id="about-card-bio"><p>因为热爱，所以坚持。</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-3ly1an8qifrle07rooalnkhid4w3octovmeefzioriutksmh99pbg6s1zco8.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+        
+<script src="/assets/js/gitalk.js"></script>
+
+        <script type="text/javascript">
+          (function() {
+            new Gitalk({
+              clientID: 'c7c1ad823b46b771570d',
+              clientSecret: '46d251bb9ed9d97efcf23a00db098bf7f7400a31',
+              repo: 'zuojj.github.io',
+              owner: 'zuojj',
+              admin: ['zuojj'],
+              id: 'post/mainstream-animation-implementation.html',
+              ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
+            }).render('gitalk')
+          })()
+        </script>
+    
+
+
+
+
+    </body>
+</html>
