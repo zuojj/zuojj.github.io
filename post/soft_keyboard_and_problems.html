@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.\n一. 不同系统中软键盘的特点\n1) iOS系统\na.如果控件在键盘高度上方的话,键盘是以一个浮层的方式弹出,并且将那个触发的控件推到键盘的上方.\nb.如果控件在页面底部,键盘会覆盖该控件,系统会将整个页面向上推,直到将那个控件推到键盘上方为止.\n\n2) Andriod系统a.有一部分的Android的实现和iOS一样.b.另一部分，如果发现触发的input控件比键盘的高度低的时候，会自动将整个document的高度增加，增加到这个控件的高度超过键盘的高度为止.\n二. 软键盘的类型\n软键盘的类型,随着H5的出现,产生了各种键盘类型,比较常见的有数字/手机/符号/email/搜索等. 现在由于不同浏览器产商对input[type=\"xxx\"]的实现各异,能在各浏览器中兼容的比较好的要数input[type=tel],input[type=number],但是number的时候在Andriod和iOS上UI不同.\n三. 软键盘的事件\n软件盘有哪些事件呢,常见的就是弹起和收起了把\n1) 键盘弹起\na.iOS6之前,当控件获得focus的时候，如果不是用户触发的事件，键盘是不会弹起的.\nb. 在iOS6之后，设置了一个属性(autofocus)可以做到.\nc. 在Android上，只要不是用户触发的事件都无法触发.\n2) 键盘的收起\n可以通过js的blur的方式来实现.\n四. 软键盘引发的问题及解决方案\n1) JS模拟的弹窗,造成position:fixed失效问题.\na. 以我们常实现toast为例:\n如果按照iOS的方式，会将整个文档往上推，则不会出现问题;\n如果是将整个document动态增高，会出现toast在键盘的下面，位置不好的话，会正好出现在键盘的中间，由于键盘是在整个浏览器的上层，因此通过z-index的方式是无法将定位的元素覆盖在键盘之上的。\n\nb. 解决方案:方案一: 出现toast的时候,监听所有控件的事件,出现focus的时候动态计算当前位置,重新设置toast位置.也有使用isScroll.js来实现的,但是性能上确是个问题.\n方案二: 初始化toast的时候,使用$(“:focus”).blur()方法,实现input失去焦点,隐藏软键盘.\n2) input嵌入到过于复杂的布局中,加上比较复杂的css属性引发的问题建议尽可能不要把input嵌入到复杂的布局中去,当使用CSS3某些高级特性时(translate,transform等),以免造成少数Andriod系统计算错误.\n五. 总结\n键盘的弹起，完全依赖系统和厂商的实现,我们无法定制键盘的类型,在APP端可能会更好控制一点.\n\nPS: 上次使用脉脉软件时也发现有个input在窗口中飘的bug!!!\n参考链接:mobile-safari-autofocus-text-fieldhow-can-you-autofocus-on-a-form-field-in-iphone-safari\n","dateCreated":"2015-09-10T16:20:23+08:00","dateModified":"2023-09-02T20:38:37+08:00","datePublished":"2015-09-10T16:20:23+08:00","description":"移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.","headline":"前端开发中软键盘及常见问题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/soft_keyboard_and_problems.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/soft_keyboard_and_problems.html","keywords":"web"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.\n一. 不同系统中软键盘的特点\n1) iOS系统\na.如果控件在键盘高度上方的话,键盘是以一个浮层的方式弹出,并且将那个触发的控件推到键盘的上方.\nb.如果控件在页面底部,键盘会覆盖该控件,系统会将整个页面向上推,直到将那个控件推到键盘上方为止.\n\n2) Andriod系统a.有一部分的Android的实现和iOS一样.b.另一部分，如果发现触发的input控件比键盘的高度低的时候，会自动将整个document的高度增加，增加到这个控件的高度超过键盘的高度为止.\n二. 软键盘的类型\n软键盘的类型,随着H5的出现,产生了各种键盘类型,比较常见的有数字/手机/符号/email/搜索等. 现在由于不同浏览器产商对input[type=\"xxx\"]的实现各异,能在各浏览器中兼容的比较好的要数input[type=tel],input[type=number],但是number的时候在Andriod和iOS上UI不同.\n三. 软键盘的事件\n软件盘有哪些事件呢,常见的就是弹起和收起了把\n1) 键盘弹起\na.iOS6之前,当控件获得focus的时候，如果不是用户触发的事件，键盘是不会弹起的.\nb. 在iOS6之后，设置了一个属性(autofocus)可以做到.\nc. 在Android上，只要不是用户触发的事件都无法触发.\n2) 键盘的收起\n可以通过js的blur的方式来实现.\n四. 软键盘引发的问题及解决方案\n1) JS模拟的弹窗,造成position:fixed失效问题.\na. 以我们常实现toast为例:\n如果按照iOS的方式，会将整个文档往上推，则不会出现问题;\n如果是将整个document动态增高，会出现toast在键盘的下面，位置不好的话，会正好出现在键盘的中间，由于键盘是在整个浏览器的上层，因此通过z-index的方式是无法将定位的元素覆盖在键盘之上的。\n\nb. 解决方案:方案一: 出现toast的时候,监听所有控件的事件,出现focus的时候动态计算当前位置,重新设置toast位置.也有使用isScroll.js来实现的,但是性能上确是个问题.\n方案二: 初始化toast的时候,使用$(“:focus”).blur()方法,实现input失去焦点,隐藏软键盘.\n2) input嵌入到过于复杂的布局中,加上比较复杂的css属性引发的问题建议尽可能不要把input嵌入到复杂的布局中去,当使用CSS3某些高级特性时(translate,transform等),以免造成少数Andriod系统计算错误.\n五. 总结\n键盘的弹起，完全依赖系统和厂商的实现,我们无法定制键盘的类型,在APP端可能会更好控制一点.\n\nPS: 上次使用脉脉软件时也发现有个input在窗口中飘的bug!!!\n参考链接:mobile-safari-autofocus-text-fieldhow-can-you-autofocus-on-a-form-field-in-iphone-safari\n","dateCreated":"2015-09-10T16:20:23+08:00","dateModified":"2023-09-02T20:43:43+08:00","datePublished":"2015-09-10T16:20:23+08:00","description":"移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.","headline":"前端开发中软键盘及常见问题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/soft_keyboard_and_problems.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/soft_keyboard_and_problems.html","keywords":"web"}</script>
     <meta name="description" content="移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="前端开发中软键盘及常见问题">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2015-09-10T08:20:23.000Z">
-<meta property="article:modified_time" content="2023-09-02T12:38:37.900Z">
+<meta property="article:modified_time" content="2023-09-02T12:43:43.908Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-1t44ls6jirjxvh3qivltadxoubdvptyg6y5peuwb6vozwwq1dd3pbrn6ge5b.min.css">
+<link rel="stylesheet" href="/assets/css/style-brzomzmyvizwt4ok3l9tlgmbzshuydyjahc8scm9ndrbvfzp7isjji8q4a58.min.css">
 
     <!--STYLES END-->
     
@@ -695,7 +695,7 @@ a. 以我们常实现toast为例:
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-7kponisdg4owabno3vv3rjtecwjeiyoflknmw0aeaoi1rxycdffqu6me7rre.min.js"></script>
+<script src="/assets/js/script-rsg65mlv7qtfkn3hzu2iabhiybcm1qkiqfzhumtn6iouadhiqvocymaqexb5.min.js"></script>
 
 <!--SCRIPTS END-->
 
