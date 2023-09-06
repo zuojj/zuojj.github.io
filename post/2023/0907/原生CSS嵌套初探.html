@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="煦涵驛">
-    <title>前端开发中软键盘及常见问题 - 煦涵驛</title>
+    <title>2023/0907/原生CSS嵌套初探 - 煦涵驛</title>
     <meta name="author" content="煦涵">
     
         <meta name="keywords" content="WEB开发,前端开发,用户体验">
@@ -15,18 +15,20 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.\n一. 不同系统中软键盘的特点\n1) iOS系统\na.如果控件在键盘高度上方的话,键盘是以一个浮层的方式弹出,并且将那个触发的控件推到键盘的上方.\nb.如果控件在页面底部,键盘会覆盖该控件,系统会将整个页面向上推,直到将那个控件推到键盘上方为止.\n\n2) Andriod系统a.有一部分的Android的实现和iOS一样.b.另一部分，如果发现触发的input控件比键盘的高度低的时候，会自动将整个document的高度增加，增加到这个控件的高度超过键盘的高度为止.\n二. 软键盘的类型\n软键盘的类型,随着H5的出现,产生了各种键盘类型,比较常见的有数字/手机/符号/email/搜索等. 现在由于不同浏览器产商对input[type=\"xxx\"]的实现各异,能在各浏览器中兼容的比较好的要数input[type=tel],input[type=number],但是number的时候在Andriod和iOS上UI不同.\n三. 软键盘的事件\n软件盘有哪些事件呢,常见的就是弹起和收起了把\n1) 键盘弹起\na.iOS6之前,当控件获得focus的时候，如果不是用户触发的事件，键盘是不会弹起的.\nb. 在iOS6之后，设置了一个属性(autofocus)可以做到.\nc. 在Android上，只要不是用户触发的事件都无法触发.\n2) 键盘的收起\n可以通过js的blur的方式来实现.\n四. 软键盘引发的问题及解决方案\n1) JS模拟的弹窗,造成position:fixed失效问题.\na. 以我们常实现toast为例:\n如果按照iOS的方式，会将整个文档往上推，则不会出现问题;\n如果是将整个document动态增高，会出现toast在键盘的下面，位置不好的话，会正好出现在键盘的中间，由于键盘是在整个浏览器的上层，因此通过z-index的方式是无法将定位的元素覆盖在键盘之上的。\n\nb. 解决方案:方案一: 出现toast的时候,监听所有控件的事件,出现focus的时候动态计算当前位置,重新设置toast位置.也有使用isScroll.js来实现的,但是性能上确是个问题.\n方案二: 初始化toast的时候,使用$(“:focus”).blur()方法,实现input失去焦点,隐藏软键盘.\n2) input嵌入到过于复杂的布局中,加上比较复杂的css属性引发的问题建议尽可能不要把input嵌入到复杂的布局中去,当使用CSS3某些高级特性时(translate,transform等),以免造成少数Andriod系统计算错误.\n五. 总结\n键盘的弹起，完全依赖系统和厂商的实现,我们无法定制键盘的类型,在APP端可能会更好控制一点.\n\nPS: 上次使用脉脉软件时也发现有个input在窗口中飘的bug!!!\n参考链接:mobile-safari-autofocus-text-fieldhow-can-you-autofocus-on-a-form-field-in-iphone-safari\n","dateCreated":"2015-09-10T16:20:23+08:00","dateModified":"2023-09-06T11:05:02+08:00","datePublished":"2015-09-10T16:20:23+08:00","description":"移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.","headline":"前端开发中软键盘及常见问题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/soft_keyboard_and_problems.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/soft_keyboard_and_problems.html","keywords":"web"}</script>
-    <meta name="description" content="移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"","dateCreated":"2023-09-06T11:05:02+08:00","dateModified":"2023-09-06T11:05:02+08:00","datePublished":"2023-09-06T11:05:02+08:00","description":"","headline":"2023/0907/原生CSS嵌套初探","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"}</script>
+    <meta name="description" content="一介码农，尝试用代码改变世界，用智慧颠覆未来">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="前端开发中软键盘及常见问题">
-<meta property="og:url" content="https://zuojj.com/post/soft_keyboard_and_problems.html">
+<meta property="og:title" content="2023&#x2F;0907&#x2F;原生CSS嵌套初探">
+<meta property="og:url" content="https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html">
 <meta property="og:site_name" content="煦涵驛">
-<meta property="og:description" content="移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.">
+<meta property="og:description" content="一介码农，尝试用代码改变世界，用智慧颠覆未来">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2015-09-10T08:20:23.000Z">
-<meta property="article:modified_time" content="2023-09-06T03:05:02.141Z">
+<meta property="article:published_time" content="2023-09-06T03:05:02.165Z">
+<meta property="article:modified_time" content="2023-09-06T03:05:02.165Z">
 <meta property="article:author" content="煦涵">
-<meta property="article:tag" content="web">
+<meta property="article:tag" content="WEB开发">
+<meta property="article:tag" content="前端开发">
+<meta property="article:tag" content="用户体验">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
     
@@ -253,22 +255,16 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            前端开发中软键盘及常见问题
+            2023/0907/原生CSS嵌套初探
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2015-09-10T16:20:23+08:00">
+    <time datetime="2023-09-06T11:05:02+08:00">
 	
-		    9月 10, 2015
+		    9月 06, 2023
     	
     </time>
-    
-        <span>发布在 </span>
-        
-    <a class="category-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
-
-
     
 </div>
 
@@ -278,38 +274,7 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>移动端软件和PC端不同,Android和iOS两个系统的处理方式各异,其中Andriod中各个厂商对软键盘的处理方式也不同.本文将从以下几个方面阐述移动端软键盘的各异.</p>
-<h3>一. 不同系统中软键盘的特点</h3>
-<strong>1) iOS系统</strong>
-a.如果控件在键盘高度上方的话,键盘是以一个浮层的方式弹出,并且将那个触发的控件推到键盘的上方.
-b.如果控件在页面底部,键盘会覆盖该控件,系统会将整个页面向上推,直到将那个控件推到键盘上方为止.
-
-<p><strong>2) Andriod系统</strong><br>a.有一部分的Android的实现和iOS一样.<br>b.另一部分，如果发现触发的input控件比键盘的高度低的时候，会自动将整个document的高度增加，增加到这个控件的高度超过键盘的高度为止.</p>
-<h3>二. 软键盘的类型</h3>
-软键盘的类型,随着H5的出现,产生了各种键盘类型,比较常见的有数字/手机/符号/email/搜索等. 现在由于不同浏览器产商对input[type="xxx"]的实现各异,能在各浏览器中兼容的比较好的要数input[type=tel],input[type=number],但是number的时候在Andriod和iOS上UI不同.
-<h3>三. 软键盘的事件</h3>
-软件盘有哪些事件呢,常见的就是弹起和收起了把
-<strong>1) 键盘弹起</strong>
-a.iOS6之前,当控件获得focus的时候，如果不是用户触发的事件，键盘是不会弹起的.
-b. 在iOS6之后，设置了一个属性(autofocus)可以做到.
-c. 在Android上，只要不是用户触发的事件都无法触发.
-<strong>2) 键盘的收起</strong>
-可以通过js的blur的方式来实现.
-<h3>四. 软键盘引发的问题及解决方案</h3>
-<strong>1) JS模拟的弹窗,造成position:fixed失效问题.</strong>
-a. 以我们常实现toast为例:
-如果按照iOS的方式，会将整个文档往上推，则不会出现问题;
-如果是将整个document动态增高，会出现toast在键盘的下面，位置不好的话，会正好出现在键盘的中间，由于键盘是在整个浏览器的上层，因此通过z-index的方式是无法将定位的元素覆盖在键盘之上的。
-
-<p>b. 解决方案:<br>方案一: 出现toast的时候,监听所有控件的事件,出现focus的时候动态计算当前位置,重新设置toast位置.也有使用isScroll.js来实现的,但是性能上确是个问题.</p>
-<p>方案二: 初始化toast的时候,使用$(“:focus”).blur()方法,实现input失去焦点,隐藏软键盘.</p>
-<p><strong>2) input嵌入到过于复杂的布局中,加上比较复杂的css属性引发的问题</strong><br>建议尽可能不要把input嵌入到复杂的布局中去,当使用CSS3某些高级特性时(translate,transform等),以免造成少数Andriod系统计算错误.</p>
-<h3>五. 总结</h3>
-键盘的弹起，完全依赖系统和厂商的实现,我们无法定制键盘的类型,在APP端可能会更好控制一点.
-
-<p>PS: 上次使用脉脉软件时也发现有个input在窗口中飘的bug!!!</p>
-<p>参考链接:<br><a href="http://stackoverflow.com/questions/6287478/mobile-safari-autofocus-text-field" target="_blank">mobile-safari-autofocus-text-field</a><br><a href="http://stackoverflow.com/questions/5771785/how-can-you-autofocus-on-a-form-field-in-iphone-safari" target="_blank">how-can-you-autofocus-on-a-form-field-in-iphone-safari</a></p>
-
+            
             
 
 
@@ -318,13 +283,6 @@ a. 以我们常实现toast为例:
         </div>
     </div>
     <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">标签</span><br/>
-                
-    <a class="tag tag--primary tag--small t-link" href="/tags/web/" rel="tag">web</a>
-
-            </div>
         
         
             <div class="post-actions-wrap">
@@ -335,9 +293,9 @@ a. 以我们常实现toast为例:
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/safari_active_pseudo_classes_invalid.html"
-                    data-tooltip="Safari :active伪类失效问题"
-                    aria-label="上一篇: Safari :active伪类失效问题"
+                    href="/post/2023/0905/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%A6%E7%AD%BE.html"
+                    data-tooltip="2023/0905/如何高效管理浏览器书签"
+                    aria-label="上一篇: 2023/0905/如何高效管理浏览器书签"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -349,9 +307,9 @@ a. 以我们常实现toast为例:
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/click_penetration_on_mobile.html"
-                    data-tooltip="移动端点击穿透知多少"
-                    aria-label="下一篇: 移动端点击穿透知多少"
+                    href="/post/2023/0906/index.html"
+                    data-tooltip="2023/0906/index"
+                    aria-label="下一篇: 2023/0906/index"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -376,7 +334,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -389,7 +347,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -402,7 +360,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -415,7 +373,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/soft_keyboard_and_problems.html&amp;title=前端开发中软键盘及常见问题"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html&amp;title=2023/0907/原生CSS嵌套初探"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -476,9 +434,9 @@ a. 以我们常实现toast为例:
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/safari_active_pseudo_classes_invalid.html"
-                    data-tooltip="Safari :active伪类失效问题"
-                    aria-label="上一篇: Safari :active伪类失效问题"
+                    href="/post/2023/0905/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%A6%E7%AD%BE.html"
+                    data-tooltip="2023/0905/如何高效管理浏览器书签"
+                    aria-label="上一篇: 2023/0905/如何高效管理浏览器书签"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -490,9 +448,9 @@ a. 以我们常实现toast为例:
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/click_penetration_on_mobile.html"
-                    data-tooltip="移动端点击穿透知多少"
-                    aria-label="下一篇: 移动端点击穿透知多少"
+                    href="/post/2023/0906/index.html"
+                    data-tooltip="2023/0906/index"
+                    aria-label="下一篇: 2023/0906/index"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -517,7 +475,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -530,7 +488,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -543,7 +501,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -556,7 +514,7 @@ a. 以我们常实现toast为例:
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/soft_keyboard_and_problems.html&amp;title=前端开发中软键盘及常见问题"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html&amp;title=2023/0907/原生CSS嵌套初探"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -600,7 +558,7 @@ a. 以我们常实现toast为例:
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                         aria-label="分享到 Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
@@ -613,7 +571,7 @@ a. 以我们常实现toast为例:
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                         aria-label="分享到 Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
@@ -626,7 +584,7 @@ a. 以我们常实现toast为例:
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/soft_keyboard_and_problems.html"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
                         aria-label="分享到 Weibo"
                     >
                         <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
@@ -639,7 +597,7 @@ a. 以我们常实现toast为例:
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/soft_keyboard_and_problems.html&amp;title=前端开发中软键盘及常见问题"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0907/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html&amp;title=2023/0907/原生CSS嵌套初探"
                         aria-label="分享到 QQ"
                     >
                         <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
@@ -712,7 +670,7 @@ a. 以我们常实现toast为例:
               repo: 'zuojj.github.io',
               owner: 'zuojj',
               admin: ['zuojj'],
-              id: 'post/soft_keyboard_and_problems.html',
+              id: 'post/2023/0907/原生CSS嵌套初探.html',
               ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
             }).render('gitalk')
           })()

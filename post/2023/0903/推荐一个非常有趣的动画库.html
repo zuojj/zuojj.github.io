@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"1. 基本介绍AutoAnimate 是一个零配置的嵌入式动画实用程序，可为您的 Web 应用程序添加平滑的过渡。您可以将它与 React、Solid、Vue、Svelte 或任何其他 JavaScript 应用程序一起使用。AutoAnimate 的目标是在不影响开发人员的实施时间或性能预算的情况下大幅改善应用程序的用户体验。\n2. 和其他动画库的区别之前的动画库基本都是开发者要在哪里加上动画，需要我们自己决定或者配置才行，而 AutoAnimate 可以帮助我们自动在整个应用添加合适的动画。AutoAnimate 使用一行代码即可实现添加合适的动画，我们不需要在编写时列表组件时考虑到 AutoAnimate。\nAutoAnimate 可以追溯应用到代码库中的任何标记，包括第 3 方代码 - 只需提供父 DOM 节点，然后让 AutoAnimate 完成剩下的工作。\n3. 使用指南3.1 安装123yarn add @formkit/auto-animate ornpm install @formkit/auto-animate\n\n3.2 用法AutoAnimate 本质上是一个 autoAnimate 接受父元素的函数。自动动画将应用于父元素及其直接子元素。当发生以下三个事件之一时，会专门触发动画：\n\n一个子级被添加到 DOM 中。\nDOM 中的子级被删除。\n一个孩子在 DOM 中移动。\n\n3.3 注意事项使用其他类型的过渡仍然可以。例如，如果您仅使用 CSS 进行样式更改（例如悬停效果），则可以使用标准 CSS 过渡来进行此类样式调整。\n\nautoAnimate仅当添加、删除或移动父元素（您传递给的元素）的直接子元素时，才会触发动画。\nposition: relative如果父元素是静态定位的，它会自动接收。编写样式时请记住这一点。\n有时，Flexbox 布局不会立即调整其子布局的大小。具有属性的子级flex-grow: 1会在捕捉到其完整宽度之前等待周围的内容。AutoAnimate 在这些情况下效果不佳，但如果您为元素指定更明确的宽度，它应该会像魅力一样工作。\n\n4. 原理介绍4.1 IntersectionObserver异步观察目标元素与祖先元素或具有顶级文档的视口的相交的变化。\n123456789101112131415161718192021222324252627282930313233function observePosition(el: Element) &#123;  const oldObserver = intersections.get(el)  oldObserver?.disconnect()  let rect = coords.get(el)  let invocations = 0  const buffer = 5  if (!rect) &#123;    rect = getCoords(el)    coords.set(el, rect)  &#125;  const &#123; offsetWidth, offsetHeight &#125; = root  const rootMargins = [    rect.top - buffer,    offsetWidth - (rect.left + buffer + rect.width),    offsetHeight - (rect.top + buffer + rect.height),    rect.left - buffer,  ]  const rootMargin = rootMargins    .map((px) =&gt;`$&#123;-1 * Math.floor(px)&#125;px`)    .join(\" \")  const observer = new IntersectionObserver(    () =&gt; &#123;      ++invocations &gt; 1 &amp;&amp; updatePos(el)    &#125;,    &#123;      root,      threshold: 1,      rootMargin,    &#125;  )  observer.observe(el)  intersections.set(el, observer)&#125;\n\n4.2 MutationObserver监听DOM树的变化，比如增加、删除、移动等DOM操作。\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950function getElements(mutations: MutationRecord[]): Set&lt;Element&gt; | false &#123;  const observedNodes = mutations.reduce((nodes: Node[], mutation) =&gt; &#123;    return [      ...nodes,      ...Array.from(mutation.addedNodes),      ...Array.from(mutation.removedNodes),    ]  &#125;, [])  // Short circuit if _only_ comment nodes are observed  const onlyCommentNodesObserved = observedNodes.every(    (node) =&gt; node.nodeName === \"#comment\"  )  if (onlyCommentNodesObserved) returnfalse  return mutations.reduce((elements: Set&lt;Element&gt; | false, mutation) =&gt; &#123;    // Short circuit if we find a purposefully deleted node.    if (elements === false) returnfalse    if (mutation.target instanceof Element) &#123;      target(mutation.target)      if (!elements.has(mutation.target)) &#123;        elements.add(mutation.target)        for (let i = 0; i &lt; mutation.target.children.length; i++) &#123;          const child = mutation.target.children.item(i)          if (!child) continue          if (DEL in child) returnfalse          target(mutation.target, child)          elements.add(child)        &#125;      &#125;      if (mutation.removedNodes.length) &#123;        for (let i = 0; i &lt; mutation.removedNodes.length; i++) &#123;          const child = mutation.removedNodes[i]          if (DEL in child) returnfalse          if (child instanceof Element) &#123;            elements.add(child)            target(mutation.target, child)            siblings.set(child, [              mutation.previousSibling,              mutation.nextSibling,            ])          &#125;        &#125;      &#125;    &#125;    return elements  &#125;, newSet&lt;Element&gt;())&#125;\n\n4.3 ResizeObserver对 Element 的内容或边框或 SVGElement 的边框的尺寸的更改\n123456if (typeofwindow !== \"undefined\") &#123;  root = document.documentElement  mutations = new MutationObserver(handleMutations)  resize = new ResizeObserver(handleResizes)  resize.observe(root)&#125;\n感兴趣的同学可以点击左下角的“阅读原文”学习和使用。\n","dateCreated":"2023-09-02T20:43:43+08:00","dateModified":"2023-09-02T20:43:43+08:00","datePublished":"2023-09-02T20:43:43+08:00","description":"","headline":"2023/0903/推荐一个非常有趣的动画库","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0903/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%89%E8%B6%A3%E7%9A%84%E5%8A%A8%E7%94%BB%E5%BA%93.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0903/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%89%E8%B6%A3%E7%9A%84%E5%8A%A8%E7%94%BB%E5%BA%93.html"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"1. 基本介绍AutoAnimate 是一个零配置的嵌入式动画实用程序，可为您的 Web 应用程序添加平滑的过渡。您可以将它与 React、Solid、Vue、Svelte 或任何其他 JavaScript 应用程序一起使用。AutoAnimate 的目标是在不影响开发人员的实施时间或性能预算的情况下大幅改善应用程序的用户体验。\n2. 和其他动画库的区别之前的动画库基本都是开发者要在哪里加上动画，需要我们自己决定或者配置才行，而 AutoAnimate 可以帮助我们自动在整个应用添加合适的动画。AutoAnimate 使用一行代码即可实现添加合适的动画，我们不需要在编写时列表组件时考虑到 AutoAnimate。\nAutoAnimate 可以追溯应用到代码库中的任何标记，包括第 3 方代码 - 只需提供父 DOM 节点，然后让 AutoAnimate 完成剩下的工作。\n3. 使用指南3.1 安装123yarn add @formkit/auto-animate ornpm install @formkit/auto-animate\n\n3.2 用法AutoAnimate 本质上是一个 autoAnimate 接受父元素的函数。自动动画将应用于父元素及其直接子元素。当发生以下三个事件之一时，会专门触发动画：\n\n一个子级被添加到 DOM 中。\nDOM 中的子级被删除。\n一个孩子在 DOM 中移动。\n\n3.3 注意事项使用其他类型的过渡仍然可以。例如，如果您仅使用 CSS 进行样式更改（例如悬停效果），则可以使用标准 CSS 过渡来进行此类样式调整。\n\nautoAnimate仅当添加、删除或移动父元素（您传递给的元素）的直接子元素时，才会触发动画。\nposition: relative如果父元素是静态定位的，它会自动接收。编写样式时请记住这一点。\n有时，Flexbox 布局不会立即调整其子布局的大小。具有属性的子级flex-grow: 1会在捕捉到其完整宽度之前等待周围的内容。AutoAnimate 在这些情况下效果不佳，但如果您为元素指定更明确的宽度，它应该会像魅力一样工作。\n\n4. 原理介绍4.1 IntersectionObserver异步观察目标元素与祖先元素或具有顶级文档的视口的相交的变化。\n123456789101112131415161718192021222324252627282930313233function observePosition(el: Element) &#123;  const oldObserver = intersections.get(el)  oldObserver?.disconnect()  let rect = coords.get(el)  let invocations = 0  const buffer = 5  if (!rect) &#123;    rect = getCoords(el)    coords.set(el, rect)  &#125;  const &#123; offsetWidth, offsetHeight &#125; = root  const rootMargins = [    rect.top - buffer,    offsetWidth - (rect.left + buffer + rect.width),    offsetHeight - (rect.top + buffer + rect.height),    rect.left - buffer,  ]  const rootMargin = rootMargins    .map((px) =&gt;`$&#123;-1 * Math.floor(px)&#125;px`)    .join(\" \")  const observer = new IntersectionObserver(    () =&gt; &#123;      ++invocations &gt; 1 &amp;&amp; updatePos(el)    &#125;,    &#123;      root,      threshold: 1,      rootMargin,    &#125;  )  observer.observe(el)  intersections.set(el, observer)&#125;\n\n4.2 MutationObserver监听DOM树的变化，比如增加、删除、移动等DOM操作。\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950function getElements(mutations: MutationRecord[]): Set&lt;Element&gt; | false &#123;  const observedNodes = mutations.reduce((nodes: Node[], mutation) =&gt; &#123;    return [      ...nodes,      ...Array.from(mutation.addedNodes),      ...Array.from(mutation.removedNodes),    ]  &#125;, [])  // Short circuit if _only_ comment nodes are observed  const onlyCommentNodesObserved = observedNodes.every(    (node) =&gt; node.nodeName === \"#comment\"  )  if (onlyCommentNodesObserved) returnfalse  return mutations.reduce((elements: Set&lt;Element&gt; | false, mutation) =&gt; &#123;    // Short circuit if we find a purposefully deleted node.    if (elements === false) returnfalse    if (mutation.target instanceof Element) &#123;      target(mutation.target)      if (!elements.has(mutation.target)) &#123;        elements.add(mutation.target)        for (let i = 0; i &lt; mutation.target.children.length; i++) &#123;          const child = mutation.target.children.item(i)          if (!child) continue          if (DEL in child) returnfalse          target(mutation.target, child)          elements.add(child)        &#125;      &#125;      if (mutation.removedNodes.length) &#123;        for (let i = 0; i &lt; mutation.removedNodes.length; i++) &#123;          const child = mutation.removedNodes[i]          if (DEL in child) returnfalse          if (child instanceof Element) &#123;            elements.add(child)            target(mutation.target, child)            siblings.set(child, [              mutation.previousSibling,              mutation.nextSibling,            ])          &#125;        &#125;      &#125;    &#125;    return elements  &#125;, newSet&lt;Element&gt;())&#125;\n\n4.3 ResizeObserver对 Element 的内容或边框或 SVGElement 的边框的尺寸的更改\n123456if (typeofwindow !== \"undefined\") &#123;  root = document.documentElement  mutations = new MutationObserver(handleMutations)  resize = new ResizeObserver(handleResizes)  resize.observe(root)&#125;\n感兴趣的同学可以点击左下角的“阅读原文”学习和使用。\n","dateCreated":"2023-09-06T11:05:02+08:00","dateModified":"2023-09-06T11:05:02+08:00","datePublished":"2023-09-06T11:05:02+08:00","description":"","headline":"2023/0903/推荐一个非常有趣的动画库","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0903/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%89%E8%B6%A3%E7%9A%84%E5%8A%A8%E7%94%BB%E5%BA%93.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0903/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%89%E8%B6%A3%E7%9A%84%E5%8A%A8%E7%94%BB%E5%BA%93.html"}</script>
     <meta name="description" content="1. 基本介绍AutoAnimate 是一个零配置的嵌入式动画实用程序，可为您的 Web 应用程序添加平滑的过渡。您可以将它与 React、Solid、Vue、Svelte 或任何其他 JavaScript 应用程序一起使用。AutoAnimate 的目标是在不影响开发人员的实施时间或性能预算的情况下大幅改善应用程序的用户体验。 2. 和其他动画库的区别之前的动画库基本都是开发者要在哪里加上动画，">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="2023&#x2F;0903&#x2F;推荐一个非常有趣的动画库">
@@ -23,8 +23,8 @@
 <meta property="og:site_name" content="煦涵驛">
 <meta property="og:description" content="1. 基本介绍AutoAnimate 是一个零配置的嵌入式动画实用程序，可为您的 Web 应用程序添加平滑的过渡。您可以将它与 React、Solid、Vue、Svelte 或任何其他 JavaScript 应用程序一起使用。AutoAnimate 的目标是在不影响开发人员的实施时间或性能预算的情况下大幅改善应用程序的用户体验。 2. 和其他动画库的区别之前的动画库基本都是开发者要在哪里加上动画，">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-02T12:43:43.928Z">
-<meta property="article:modified_time" content="2023-09-02T12:43:43.928Z">
+<meta property="article:published_time" content="2023-09-06T03:05:02.161Z">
+<meta property="article:modified_time" content="2023-09-06T03:05:02.161Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="WEB开发">
 <meta property="article:tag" content="前端开发">
@@ -43,7 +43,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-brzomzmyvizwt4ok3l9tlgmbzshuydyjahc8scm9ndrbvfzp7isjji8q4a58.min.css">
+<link rel="stylesheet" href="/assets/css/style-puejt2jxzgflklsp5djz0b1ydwy5vjjkm6jftyhkimacyynyinpltzbj01ll.min.css">
 
     <!--STYLES END-->
     
@@ -260,9 +260,9 @@
     
     
         <div class="post-meta">
-    <time datetime="2023-09-02T20:43:43+08:00">
+    <time datetime="2023-09-06T11:05:02+08:00">
 	
-		    9月 02, 2023
+		    9月 06, 2023
     	
     </time>
     
@@ -319,9 +319,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0906/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
-                    data-tooltip="2023/0906/原生CSS嵌套初探"
-                    aria-label="上一篇: 2023/0906/原生CSS嵌套初探"
+                    href="/post/2023/0906/%E6%96%B0%E7%89%88Node.js%E5%86%85%E7%BD%AE%E6%94%AF%E6%8C%81.env%E6%96%87%E4%BB%B6.html"
+                    data-tooltip="2023/0906/新版Node.js内置支持.env文件"
+                    aria-label="上一篇: 2023/0906/新版Node.js内置支持.env文件"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -460,9 +460,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0906/%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97%E5%88%9D%E6%8E%A2.html"
-                    data-tooltip="2023/0906/原生CSS嵌套初探"
-                    aria-label="上一篇: 2023/0906/原生CSS嵌套初探"
+                    href="/post/2023/0906/%E6%96%B0%E7%89%88Node.js%E5%86%85%E7%BD%AE%E6%94%AF%E6%8C%81.env%E6%96%87%E4%BB%B6.html"
+                    data-tooltip="2023/0906/新版Node.js内置支持.env文件"
+                    aria-label="上一篇: 2023/0906/新版Node.js内置支持.env文件"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -679,7 +679,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-rsg65mlv7qtfkn3hzu2iabhiybcm1qkiqfzhumtn6iouadhiqvocymaqexb5.min.js"></script>
+<script src="/assets/js/script-afebge0rjz7yzmjqgm6s0iifltiavmxonpkwaxnothzxr2xjivrci78u3xpn.min.js"></script>
 
 <!--SCRIPTS END-->
 
