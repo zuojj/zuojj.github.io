@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"新版Node.js内置支持.env文件随着版本 v20.6.0 的发布，Node.js 现在内置了对.env文件的支持。现在，您可以完全无依赖地将环境变量从.env文件加载到Node.js 应用程序中。process.env 加载.env文件现在非常简单：\n1node --env-file .env\n\n1.什么是.env 文件？.env文件用于配置正在运行的应用程序中存在的环境变量。这个想法来自“The Twelve-Factor App”方法论，该方法论表示将在环境中的部署（例如开发、测试、生产）之间可能发生变化的所有内容存储起来。\n配置不应成为应用程序代码的一部分，也不应签入版本控制。API 凭证或其他机密等内容应单独存储并加载到需要它们的环境中。文件.env可让您管理无法在环境中设置变量的应用程序的配置，例如开发计算机或CI。\n许多不同语言的库都支持使用.env文件将变量加载到环境中，它们通常称为“dotenv”，Node.js常用的NPM包有 cross-env, dotenv.\n2.如何使用 .env 文件？一个.env文件看起来长这样：\n123# 开发环境 .env.developmentNODE_ENV=developmentSECRET_KEY=rv3O62d1gu7s8vWpx\n\n通用我们会将.env文件放置到项目的根目录中，可以自定义文件命名，通过 --env-file 参数指定 .env 文件，待 Node.js 程序启动后，就可以从 process.env 中获取最新的环境变量。\n123456$ node --env-file .env.development  Welcome to Node.js v20.6.0.Type \".help\" for more information.&gt; console.log(process.env.NODE_ENV,  process.env.SECRET_KEY)development rv3O62d1gu7s8vWpx&gt;\n\n3.与 dotenv 对比和dotenv相比，.env 文件支持的功能还相当基础。主要表现如下：\n\n您当前无法使用多行值\n不能使用变量扩展\n您一次只能指定一个文件。Node.js 将仅使用最后传递的 .env 文件，如下示例中，仅使用 .env.production 的变量：\n\n12345$ node --env-file .env.development --env-file .env.productionWelcome to Node.js v20.6.0.Type \".help\" for more information.&gt; console.log(process.env.NODE_ENV,  process.env.SECRET_KEY)production grv3O62d1gu7s8vWpd\n\n\n如果在环境和文件中定义了相同的变量，则环境中的值优先，Node.js 中 .env 的实现并非如此，而是会将环境中的覆盖掉。\n\n随着 Node.js 版本迭代，.env 文件的特性支持还有很多工作要完善，并且可能会添加其中一些功能。您可以点击左下角的“阅读原文”查看 Github 上更多讨论。\n4.Node.js 实现的优势尽管这种实现方式缺少一些功能，但与使用第三方软件包相比，它还是有一些优势。Node.js 会在启动时加载并解析 .env 文件，因此你可以在文件中加入配置 Node.js 本身的环境变量，如 NODE_OPTIONS。\n1NODE_OPTIONS=\"--no-warnings --inspect=127.0.0.1:9229\"\n\n注意：为了避免死循环，不要在 NODE_OPTIONS=”–env-file .env.develpment” 配置你的 .env 文件。\n5.总结大家可以积极去尝试 Node.js 20.6.0 版本带来的新功能，如稳定的测试运行器、模拟计时器和现在的 .env 文件支持，以及许多其他升级、修复和改进。20版本将于10月份成为 Node.js 的 LTS 版本，因此现在是测试这些新功能并开始考虑升级应用程序以利用这些新功能的好时机。\n","dateCreated":"2023-09-06T22:27:12+08:00","dateModified":"2023-09-06T22:27:12+08:00","datePublished":"2023-09-06T22:27:12+08:00","description":"","headline":"2023/0906/新版Node.js内置支持.env文件","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0906/%E6%96%B0%E7%89%88Node.js%E5%86%85%E7%BD%AE%E6%94%AF%E6%8C%81.env%E6%96%87%E4%BB%B6.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0906/%E6%96%B0%E7%89%88Node.js%E5%86%85%E7%BD%AE%E6%94%AF%E6%8C%81.env%E6%96%87%E4%BB%B6.html"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"新版Node.js内置支持.env文件随着版本 v20.6.0 的发布，Node.js 现在内置了对.env文件的支持。现在，您可以完全无依赖地将环境变量从.env文件加载到Node.js 应用程序中。process.env 加载.env文件现在非常简单：\n1node --env-file .env\n\n1.什么是.env 文件？.env文件用于配置正在运行的应用程序中存在的环境变量。这个想法来自“The Twelve-Factor App”方法论，该方法论表示将在环境中的部署（例如开发、测试、生产）之间可能发生变化的所有内容存储起来。\n配置不应成为应用程序代码的一部分，也不应签入版本控制。API 凭证或其他机密等内容应单独存储并加载到需要它们的环境中。文件.env可让您管理无法在环境中设置变量的应用程序的配置，例如开发计算机或CI。\n许多不同语言的库都支持使用.env文件将变量加载到环境中，它们通常称为“dotenv”，Node.js常用的NPM包有 cross-env, dotenv.\n2.如何使用 .env 文件？一个.env文件看起来长这样：\n123# 开发环境 .env.developmentNODE_ENV=developmentSECRET_KEY=rv3O62d1gu7s8vWpx\n\n通用我们会将.env文件放置到项目的根目录中，可以自定义文件命名，通过 --env-file 参数指定 .env 文件，待 Node.js 程序启动后，就可以从 process.env 中获取最新的环境变量。\n123456$ node --env-file .env.development  Welcome to Node.js v20.6.0.Type \".help\" for more information.&gt; console.log(process.env.NODE_ENV,  process.env.SECRET_KEY)development rv3O62d1gu7s8vWpx&gt;\n\n3.与 dotenv 对比和dotenv相比，.env 文件支持的功能还相当基础。主要表现如下：\n\n您当前无法使用多行值\n不能使用变量扩展\n您一次只能指定一个文件。Node.js 将仅使用最后传递的 .env 文件，如下示例中，仅使用 .env.production 的变量：\n\n12345$ node --env-file .env.development --env-file .env.productionWelcome to Node.js v20.6.0.Type \".help\" for more information.&gt; console.log(process.env.NODE_ENV,  process.env.SECRET_KEY)production grv3O62d1gu7s8vWpd\n\n\n如果在环境和文件中定义了相同的变量，则环境中的值优先，Node.js 中 .env 的实现并非如此，而是会将环境中的覆盖掉。\n\n随着 Node.js 版本迭代，.env 文件的特性支持还有很多工作要完善，并且可能会添加其中一些功能。您可以点击左下角的“阅读原文”查看 Github 上更多讨论。\n4.Node.js 实现的优势尽管这种实现方式缺少一些功能，但与使用第三方软件包相比，它还是有一些优势。Node.js 会在启动时加载并解析 .env 文件，因此你可以在文件中加入配置 Node.js 本身的环境变量，如 NODE_OPTIONS。\n1NODE_OPTIONS=\"--no-warnings --inspect=127.0.0.1:9229\"\n\n注意：为了避免死循环，不要在 NODE_OPTIONS=”–env-file .env.develpment” 配置你的 .env 文件。\n5.总结大家可以积极去尝试 Node.js 20.6.0 版本带来的新功能，如稳定的测试运行器、模拟计时器和现在的 .env 文件支持，以及许多其他升级、修复和改进。20版本将于10月份成为 Node.js 的 LTS 版本，因此现在是测试这些新功能并开始考虑升级应用程序以利用这些新功能的好时机。\n","dateCreated":"2023-09-07T23:13:18+08:00","dateModified":"2023-09-07T23:13:18+08:00","datePublished":"2023-09-07T23:13:18+08:00","description":"","headline":"2023/0906/新版Node.js内置支持.env文件","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0906/%E6%96%B0%E7%89%88Node.js%E5%86%85%E7%BD%AE%E6%94%AF%E6%8C%81.env%E6%96%87%E4%BB%B6.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0906/%E6%96%B0%E7%89%88Node.js%E5%86%85%E7%BD%AE%E6%94%AF%E6%8C%81.env%E6%96%87%E4%BB%B6.html"}</script>
     <meta name="description" content="新版Node.js内置支持.env文件随着版本 v20.6.0 的发布，Node.js 现在内置了对.env文件的支持。现在，您可以完全无依赖地将环境变量从.env文件加载到Node.js 应用程序中。process.env 加载.env文件现在非常简单： 1node --env-file .env  1.什么是.env 文件？.env文件用于配置正在运行的应用程序中存在的环境变量。这个想法来自“">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="2023&#x2F;0906&#x2F;新版Node.js内置支持.env文件">
@@ -23,8 +23,8 @@
 <meta property="og:site_name" content="煦涵驛">
 <meta property="og:description" content="新版Node.js内置支持.env文件随着版本 v20.6.0 的发布，Node.js 现在内置了对.env文件的支持。现在，您可以完全无依赖地将环境变量从.env文件加载到Node.js 应用程序中。process.env 加载.env文件现在非常简单： 1node --env-file .env  1.什么是.env 文件？.env文件用于配置正在运行的应用程序中存在的环境变量。这个想法来自“">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-06T14:27:12.596Z">
-<meta property="article:modified_time" content="2023-09-06T14:27:12.596Z">
+<meta property="article:published_time" content="2023-09-07T15:13:18.589Z">
+<meta property="article:modified_time" content="2023-09-07T15:13:18.589Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="WEB开发">
 <meta property="article:tag" content="前端开发">
@@ -43,7 +43,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-lphdq1sif11ppguhj6afaoxgz21aqovvtjnlygm7dzrkwvk08rw9wzwrdik7.min.css">
+<link rel="stylesheet" href="/assets/css/style-athhlbkl2h9o0tjyweq8ul0h4utvjcbpwygudrdazywyt94bvtc6uxmypt2m.min.css">
 
     <!--STYLES END-->
     
@@ -260,9 +260,9 @@
     
     
         <div class="post-meta">
-    <time datetime="2023-09-06T22:27:12+08:00">
+    <time datetime="2023-09-07T23:13:18+08:00">
 	
-		    9月 06, 2023
+		    9月 07, 2023
     	
     </time>
     
@@ -336,9 +336,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0905/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%A6%E7%AD%BE.html"
-                    data-tooltip="2023/0905/研效提升：如何高效管理浏览器书签"
-                    aria-label="下一篇: 2023/0905/研效提升：如何高效管理浏览器书签"
+                    href="/post/2023/0907/CSS%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9A%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97.html"
+                    data-tooltip="2023/0907/CSS新特性：原生CSS嵌套"
+                    aria-label="下一篇: 2023/0907/CSS新特性：原生CSS嵌套"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -477,9 +477,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0905/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%A6%E7%AD%BE.html"
-                    data-tooltip="2023/0905/研效提升：如何高效管理浏览器书签"
-                    aria-label="下一篇: 2023/0905/研效提升：如何高效管理浏览器书签"
+                    href="/post/2023/0907/CSS%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9A%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97.html"
+                    data-tooltip="2023/0907/CSS新特性：原生CSS嵌套"
+                    aria-label="下一篇: 2023/0907/CSS新特性：原生CSS嵌套"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -682,7 +682,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-yvxg64xjfcurz6spkjaiusedku7oijza0keutthxwcziff4vvpcb4zrlu5v1.min.js"></script>
+<script src="/assets/js/script-ah8fu2oihbm9frbz1pxa0jkqer1zb0klgkgmuaenrh4k2naxqcwf4av0zlc2.min.js"></script>
 
 <!--SCRIPTS END-->
 
