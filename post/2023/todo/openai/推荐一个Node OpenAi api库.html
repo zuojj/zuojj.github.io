@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="煦涵驛">
-    <title>2023/0908/推荐一个Node OpenAi api库 - 煦涵驛</title>
+    <title>2023/todo/openai/推荐一个Node OpenAi api库 - 煦涵驛</title>
     <meta name="author" content="煦涵">
     
         <meta name="keywords" content="WEB开发,前端开发,用户体验">
@@ -15,17 +15,17 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"当谈到使用OpenAI API库时，有几个选择可以考虑。以下是我推荐的一个：\nnode-openai\nnode-openai是一个Node.js库，它提供了一个简单的方法来调用OpenAI GPT API。它使用HTTP请求与OpenAI API进行交互，并返回JSON格式的响应。这使得与OpenAI GPT API的交互变得更加容易和简单。\n以下是一个使用node-openai的基本示例：\n1234567891011const OpenAI = require('node-openai');const GPT = new OpenAI('YOUR_API_KEY');GPT.text('hello world', (err, response) =&gt; &#123;  if (err) &#123;    console.error(err);  &#125; else &#123;    console.log(response);  &#125;&#125;);\n在上面的示例中，我们使用node-openai创建了一个新的API实例，并调用了text方法，传入了一个文本查询和一个回调函数。回调函数会在API响应时被执行，并可以处理响应数据。\n与其他库相比，node-openai非常年轻，因此它可能不是最成熟或最稳定的选择。但是，如果您正在寻找一个简单并且易于使用的Node.js库来调用OpenAI GPT API，那么node-openai是一个不错的选择。\n下面是一个demo代码：\n1234567891011const OpenAI = require('node-openai');const GPT = new OpenAI('YOUR_API_KEY');GPT.text('hello world', (err, response) =&gt; &#123;  if (err) &#123;    console.error(err);  &#125; else &#123;    console.log(response);  &#125;&#125;);\n在上面的代码中，我们使用node-openai创建了一个新的API实例，并调用了text方法，传入了一个文本查询和一个回调函数。回调函数会在API响应时被执行，并可以处理响应数据。\n与其他库相比，node-openai非常年轻，因此它可能不是最成熟或最稳定的选择。但是，如果您正在寻找一个简单并且易于使用的Node.js库来调用OpenAI GPT API，那么node-openai是一个不错的选择。\nOpenAI Node API Library\nThis library provides convenient access to the OpenAI REST API from TypeScript or JavaScript.\nIt is generated from our OpenAPI specification with Stainless.\nTo learn how to use the OpenAI API, check out our API Reference and Documentation.\nInstallation123npm install --save openai# oryarn add openai\n\nUsageThe full API of this library can be found in api.md file. The code below shows how to get started using the chat completions API.\n12345678910111213141516import OpenAI from 'openai';const openai = new OpenAI(&#123;  apiKey: 'my api key', // defaults to process.env[\"OPENAI_API_KEY\"]&#125;);async function main() &#123;  const completion = await openai.chat.completions.create(&#123;    messages: [&#123; role: 'user', content: 'Say this is a test' &#125;],    model: 'gpt-3.5-turbo',  &#125;);  console.log(completion.choices);&#125;main();\n\nStreaming ResponsesWe provide support for streaming responses using Server Sent Events (SSE).\n12345678910111213141516import OpenAI from 'openai';const openai = new OpenAI();async function main() &#123;  const stream = await openai.chat.completions.create(&#123;    model: 'gpt-4',    messages: [&#123; role: 'user', content: 'Say this is a test' &#125;],    stream: true,  &#125;);  for await (const part of stream) &#123;    process.stdout.write(part.choices[0]?.delta?.content || '');  &#125;&#125;main();\n\nIf you need to cancel a stream, you can break from the loopor call stream.controller.abort().\nRequest &amp; Response typesThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n123456789101112131415import OpenAI from 'openai';const openai = new OpenAI(&#123;  apiKey: 'my api key', // defaults to process.env[\"OPENAI_API_KEY\"]&#125;);async function main() &#123;  const params: OpenAI.Chat.ChatCompletionCreateParams = &#123;    messages: [&#123; role: 'user', content: 'Say this is a test' &#125;],    model: 'gpt-3.5-turbo',  &#125;;  const completion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);&#125;main();\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n[!IMPORTANT]Previous versions of this SDK used a Configuration class. See the v3 to v4 migration guide.\n\nFile UploadsRequest parameters that correspond to file uploads can be passed in many different forms:\n\nFile (or an object with the same structure)\na fetch Response (or an object with the same structure)\nan fs.ReadStream\nthe return value of our toFile helper\n\n123456789101112131415161718192021222324import fs from 'fs';import fetch from 'node-fetch';import OpenAI, &#123; toFile &#125; from 'openai';const openai = new OpenAI();// If you have access to Node `fs` we recommend using `fs.createReadStream()`:await openai.files.create(&#123; file: fs.createReadStream('input.jsonl'), purpose: 'fine-tune' &#125;);// Or if you have the web `File` API you can pass a `File` instance:await openai.files.create(&#123; file: new File(['my bytes'], 'input.jsonl'), purpose: 'fine-tune' &#125;);// You can also pass a `fetch` `Response`:await openai.files.create(&#123; file: await fetch('https://somesite/input.jsonl'), purpose: 'fine-tune' &#125;);// Finally, if none of the above are convenient, you can use our `toFile` helper:await openai.files.create(&#123;  file: await toFile(Buffer.from('my bytes'), 'input.jsonl'),  purpose: 'fine-tune',&#125;);await openai.files.create(&#123;  file: await toFile(new Uint8Array([0, 1, 2]), 'input.jsonl'),  purpose: 'fine-tune',&#125;);\n\nHandling errorsWhen the library is unable to connect to the API,or if the API returns a non-success status code (i.e., 4xx or 5xx response),a subclass of APIError will be thrown:\n12345678910111213141516async function main() &#123;  const fineTune = await openai.fineTunes    .create(&#123; training_file: 'file-XGinujblHPwGLSztz8cPS8XY' &#125;)    .catch((err) =&gt; &#123;      if (err instanceof OpenAI.APIError) &#123;        console.log(err.status); // 400        console.log(err.name); // BadRequestError        console.log(err.headers); // &#123;server: 'nginx', ...&#125;      &#125; else &#123;        throw err;      &#125;    &#125;);&#125;main();\n\nError codes are as followed:\n\n\n\nStatus Code\nError Type\n\n\n\n400\nBadRequestError\n\n\n401\nAuthenticationError\n\n\n403\nPermissionDeniedError\n\n\n404\nNotFoundError\n\n\n422\nUnprocessableEntityError\n\n\n429\nRateLimitError\n\n\n&gt;=500\nInternalServerError\n\n\nN/A\nAPIConnectionError\n\n\nAzure OpenAIAn example of using this library with Azure OpenAI can be found here.\nPlease note there are subtle differences in API shape &amp; behavior between the Azure OpenAI API and the OpenAI API,so using this library with Azure OpenAI may result in incorrect types, which can lead to bugs.\nSee @azure/openai for an Azure-specific SDK provided by Microsoft.\nRetriesCertain errors will be automatically retried 2 times by default, with a short exponential backoff.Connection errors (for example, due to a network connectivity problem), 409 Conflict, 429 Rate Limit,and &gt;=500 Internal errors will all be retried by default.\nYou can use the maxRetries option to configure or disable this:\n\n123456789// Configure the default for all requests:const openai = new OpenAI(&#123;  maxRetries: 0, // default is 2&#125;);// Or, configure per-request:await openai.chat.completions.create(&#123; messages: [&#123; role: 'user', content: 'How can I get the name of the current day in Node.js?' &#125;], model: 'gpt-3.5-turbo' &#125;, &#123;  maxRetries: 5,&#125;);\n\nTimeoutsRequests time out after 10 minutes by default. You can configure this with a timeout option:\n\n123456789// Configure the default for all requests:const openai = new OpenAI(&#123;  timeout: 20 * 1000, // 20 seconds (default is 10 minutes)&#125;);// Override per-request:await openai.chat.completions.create(&#123; messages: [&#123; role: 'user', content: 'How can I list all files in a directory using Python?' &#125;], model: 'gpt-3.5-turbo' &#125;, &#123;  timeout: 5 * 1000,&#125;);\n\nOn timeout, an APIConnectionTimeoutError is thrown.\nNote that requests which time out will be retried twice by default.\nAuto-paginationList methods in the OpenAI API are paginated.You can use for await … of syntax to iterate through items across all pages:\n12345678async function fetchAllFineTuningJobs(params) &#123;  const allFineTuningJobs = [];  // Automatically fetches more pages as needed.  for await (const job of openai.fineTuning.jobs.list(&#123; limit: 20 &#125;)) &#123;    allFineTuningJobs.push(job);  &#125;  return allFineTuningJobs;&#125;\n\nAlternatively, you can make request a single page at a time:\n12345678910let page = await openai.fineTuning.jobs.list(&#123; limit: 20 &#125;);for (const job of page.data) &#123;  console.log(job);&#125;// Convenience methods are provided for manually paginating:while (page.hasNextPage()) &#123;  page = page.getNextPage();  // ...&#125;\n\nAdvanced UsageAccessing raw Response data (e.g., headers)The “raw” Response returned by fetch() can be accessed through the .asResponse() method on the APIPromise type that all methods return.\nYou can also use the .withResponse() method to get the raw Response along with the parsed data.\n12345678910111213const openai = new OpenAI();const response = await openai.chat.completions  .create(&#123; messages: [&#123; role: 'user', content: 'Say this is a test' &#125;], model: 'gpt-3.5-turbo' &#125;)  .asResponse();console.log(response.headers.get('X-My-Header'));console.log(response.statusText); // access the underlying Response objectconst &#123; data: completions, response: raw &#125; = await openai.chat.completions  .create(&#123; messages: [&#123; role: 'user', content: 'Say this is a test' &#125;], model: 'gpt-3.5-turbo' &#125;)  .withResponse();console.log(raw.headers.get('X-My-Header'));console.log(completions.choices);\n\nConfiguring an HTTP(S) Agent (e.g., for proxies)By default, this library uses a stable agent for all http/https requests to reuse TCP connections, eliminating many TCP &amp; TLS handshakes and shaving around 100ms off most requests.\nIf you would like to disable or customize this behavior, for example to use the API behind a proxy, you can pass an httpAgent which is used for all requests (be they http or https), for example:\n\n12345678910111213import http from 'http';import HttpsProxyAgent from 'https-proxy-agent';// Configure the default for all requests:const openai = new OpenAI(&#123;  httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),&#125;);// Override per-request:await openai.models.list(&#123;  baseURL: 'http://localhost:8080/test-api',  httpAgent: new http.Agent(&#123; keepAlive: false &#125;),&#125;)\n\nSemantic VersioningThis package generally attempts to follow SemVer conventions, though certain backwards-incompatible changes may be released as minor versions:\n\nChanges that only affect static types, without breaking runtime behavior.\nChanges to library internals which are technically public but not intended or documented for external use. (Please open a GitHub issue to let us know if you are relying on such internals).\nChanges that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\nWe are keen for your feedback; please open an issue with questions, bugs, or suggestions.\nRequirementsTypeScript &gt;= 4.5 is supported.\nThe following runtimes are supported:\n\nNode.js 16 LTS or later (non-EOL) versions.\nDeno v1.28.0 or higher, using import OpenAI from &quot;npm:openai&quot;.Deno Deploy is not yet supported.\nCloudflare Workers.\nVercel Edge Runtime.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n","dateCreated":"2023-09-07T23:13:18+08:00","dateModified":"2023-09-07T23:13:18+08:00","datePublished":"2023-09-07T23:13:18+08:00","description":"","headline":"2023/0908/推荐一个Node OpenAi api库","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"当谈到使用OpenAI API库时，有几个选择可以考虑。以下是我推荐的一个：\nnode-openai\nnode-openai是一个Node.js库，它提供了一个简单的方法来调用OpenAI GPT API。它使用HTTP请求与OpenAI API进行交互，并返回JSON格式的响应。这使得与OpenAI GPT API的交互变得更加容易和简单。\n以下是一个使用node-openai的基本示例：\n1234567891011const OpenAI = require('node-openai');const GPT = new OpenAI('YOUR_API_KEY');GPT.text('hello world', (err, response) =&gt; &#123;  if (err) &#123;    console.error(err);  &#125; else &#123;    console.log(response);  &#125;&#125;);\n在上面的示例中，我们使用node-openai创建了一个新的API实例，并调用了text方法，传入了一个文本查询和一个回调函数。回调函数会在API响应时被执行，并可以处理响应数据。\n与其他库相比，node-openai非常年轻，因此它可能不是最成熟或最稳定的选择。但是，如果您正在寻找一个简单并且易于使用的Node.js库来调用OpenAI GPT API，那么node-openai是一个不错的选择。\n下面是一个demo代码：\n1234567891011const OpenAI = require('node-openai');const GPT = new OpenAI('YOUR_API_KEY');GPT.text('hello world', (err, response) =&gt; &#123;  if (err) &#123;    console.error(err);  &#125; else &#123;    console.log(response);  &#125;&#125;);\n在上面的代码中，我们使用node-openai创建了一个新的API实例，并调用了text方法，传入了一个文本查询和一个回调函数。回调函数会在API响应时被执行，并可以处理响应数据。\n与其他库相比，node-openai非常年轻，因此它可能不是最成熟或最稳定的选择。但是，如果您正在寻找一个简单并且易于使用的Node.js库来调用OpenAI GPT API，那么node-openai是一个不错的选择。\nOpenAI Node API Library\nThis library provides convenient access to the OpenAI REST API from TypeScript or JavaScript.\nIt is generated from our OpenAPI specification with Stainless.\nTo learn how to use the OpenAI API, check out our API Reference and Documentation.\nInstallation123npm install --save openai# oryarn add openai\n\nUsageThe full API of this library can be found in api.md file. The code below shows how to get started using the chat completions API.\n12345678910111213141516import OpenAI from 'openai';const openai = new OpenAI(&#123;  apiKey: 'my api key', // defaults to process.env[\"OPENAI_API_KEY\"]&#125;);async function main() &#123;  const completion = await openai.chat.completions.create(&#123;    messages: [&#123; role: 'user', content: 'Say this is a test' &#125;],    model: 'gpt-3.5-turbo',  &#125;);  console.log(completion.choices);&#125;main();\n\nStreaming ResponsesWe provide support for streaming responses using Server Sent Events (SSE).\n12345678910111213141516import OpenAI from 'openai';const openai = new OpenAI();async function main() &#123;  const stream = await openai.chat.completions.create(&#123;    model: 'gpt-4',    messages: [&#123; role: 'user', content: 'Say this is a test' &#125;],    stream: true,  &#125;);  for await (const part of stream) &#123;    process.stdout.write(part.choices[0]?.delta?.content || '');  &#125;&#125;main();\n\nIf you need to cancel a stream, you can break from the loopor call stream.controller.abort().\nRequest &amp; Response typesThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n123456789101112131415import OpenAI from 'openai';const openai = new OpenAI(&#123;  apiKey: 'my api key', // defaults to process.env[\"OPENAI_API_KEY\"]&#125;);async function main() &#123;  const params: OpenAI.Chat.ChatCompletionCreateParams = &#123;    messages: [&#123; role: 'user', content: 'Say this is a test' &#125;],    model: 'gpt-3.5-turbo',  &#125;;  const completion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);&#125;main();\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n[!IMPORTANT]Previous versions of this SDK used a Configuration class. See the v3 to v4 migration guide.\n\nFile UploadsRequest parameters that correspond to file uploads can be passed in many different forms:\n\nFile (or an object with the same structure)\na fetch Response (or an object with the same structure)\nan fs.ReadStream\nthe return value of our toFile helper\n\n123456789101112131415161718192021222324import fs from 'fs';import fetch from 'node-fetch';import OpenAI, &#123; toFile &#125; from 'openai';const openai = new OpenAI();// If you have access to Node `fs` we recommend using `fs.createReadStream()`:await openai.files.create(&#123; file: fs.createReadStream('input.jsonl'), purpose: 'fine-tune' &#125;);// Or if you have the web `File` API you can pass a `File` instance:await openai.files.create(&#123; file: new File(['my bytes'], 'input.jsonl'), purpose: 'fine-tune' &#125;);// You can also pass a `fetch` `Response`:await openai.files.create(&#123; file: await fetch('https://somesite/input.jsonl'), purpose: 'fine-tune' &#125;);// Finally, if none of the above are convenient, you can use our `toFile` helper:await openai.files.create(&#123;  file: await toFile(Buffer.from('my bytes'), 'input.jsonl'),  purpose: 'fine-tune',&#125;);await openai.files.create(&#123;  file: await toFile(new Uint8Array([0, 1, 2]), 'input.jsonl'),  purpose: 'fine-tune',&#125;);\n\nHandling errorsWhen the library is unable to connect to the API,or if the API returns a non-success status code (i.e., 4xx or 5xx response),a subclass of APIError will be thrown:\n12345678910111213141516async function main() &#123;  const fineTune = await openai.fineTunes    .create(&#123; training_file: 'file-XGinujblHPwGLSztz8cPS8XY' &#125;)    .catch((err) =&gt; &#123;      if (err instanceof OpenAI.APIError) &#123;        console.log(err.status); // 400        console.log(err.name); // BadRequestError        console.log(err.headers); // &#123;server: 'nginx', ...&#125;      &#125; else &#123;        throw err;      &#125;    &#125;);&#125;main();\n\nError codes are as followed:\n\n\n\nStatus Code\nError Type\n\n\n\n400\nBadRequestError\n\n\n401\nAuthenticationError\n\n\n403\nPermissionDeniedError\n\n\n404\nNotFoundError\n\n\n422\nUnprocessableEntityError\n\n\n429\nRateLimitError\n\n\n&gt;=500\nInternalServerError\n\n\nN/A\nAPIConnectionError\n\n\nAzure OpenAIAn example of using this library with Azure OpenAI can be found here.\nPlease note there are subtle differences in API shape &amp; behavior between the Azure OpenAI API and the OpenAI API,so using this library with Azure OpenAI may result in incorrect types, which can lead to bugs.\nSee @azure/openai for an Azure-specific SDK provided by Microsoft.\nRetriesCertain errors will be automatically retried 2 times by default, with a short exponential backoff.Connection errors (for example, due to a network connectivity problem), 409 Conflict, 429 Rate Limit,and &gt;=500 Internal errors will all be retried by default.\nYou can use the maxRetries option to configure or disable this:\n\n123456789// Configure the default for all requests:const openai = new OpenAI(&#123;  maxRetries: 0, // default is 2&#125;);// Or, configure per-request:await openai.chat.completions.create(&#123; messages: [&#123; role: 'user', content: 'How can I get the name of the current day in Node.js?' &#125;], model: 'gpt-3.5-turbo' &#125;, &#123;  maxRetries: 5,&#125;);\n\nTimeoutsRequests time out after 10 minutes by default. You can configure this with a timeout option:\n\n123456789// Configure the default for all requests:const openai = new OpenAI(&#123;  timeout: 20 * 1000, // 20 seconds (default is 10 minutes)&#125;);// Override per-request:await openai.chat.completions.create(&#123; messages: [&#123; role: 'user', content: 'How can I list all files in a directory using Python?' &#125;], model: 'gpt-3.5-turbo' &#125;, &#123;  timeout: 5 * 1000,&#125;);\n\nOn timeout, an APIConnectionTimeoutError is thrown.\nNote that requests which time out will be retried twice by default.\nAuto-paginationList methods in the OpenAI API are paginated.You can use for await … of syntax to iterate through items across all pages:\n12345678async function fetchAllFineTuningJobs(params) &#123;  const allFineTuningJobs = [];  // Automatically fetches more pages as needed.  for await (const job of openai.fineTuning.jobs.list(&#123; limit: 20 &#125;)) &#123;    allFineTuningJobs.push(job);  &#125;  return allFineTuningJobs;&#125;\n\nAlternatively, you can make request a single page at a time:\n12345678910let page = await openai.fineTuning.jobs.list(&#123; limit: 20 &#125;);for (const job of page.data) &#123;  console.log(job);&#125;// Convenience methods are provided for manually paginating:while (page.hasNextPage()) &#123;  page = page.getNextPage();  // ...&#125;\n\nAdvanced UsageAccessing raw Response data (e.g., headers)The “raw” Response returned by fetch() can be accessed through the .asResponse() method on the APIPromise type that all methods return.\nYou can also use the .withResponse() method to get the raw Response along with the parsed data.\n12345678910111213const openai = new OpenAI();const response = await openai.chat.completions  .create(&#123; messages: [&#123; role: 'user', content: 'Say this is a test' &#125;], model: 'gpt-3.5-turbo' &#125;)  .asResponse();console.log(response.headers.get('X-My-Header'));console.log(response.statusText); // access the underlying Response objectconst &#123; data: completions, response: raw &#125; = await openai.chat.completions  .create(&#123; messages: [&#123; role: 'user', content: 'Say this is a test' &#125;], model: 'gpt-3.5-turbo' &#125;)  .withResponse();console.log(raw.headers.get('X-My-Header'));console.log(completions.choices);\n\nConfiguring an HTTP(S) Agent (e.g., for proxies)By default, this library uses a stable agent for all http/https requests to reuse TCP connections, eliminating many TCP &amp; TLS handshakes and shaving around 100ms off most requests.\nIf you would like to disable or customize this behavior, for example to use the API behind a proxy, you can pass an httpAgent which is used for all requests (be they http or https), for example:\n\n12345678910111213import http from 'http';import HttpsProxyAgent from 'https-proxy-agent';// Configure the default for all requests:const openai = new OpenAI(&#123;  httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),&#125;);// Override per-request:await openai.models.list(&#123;  baseURL: 'http://localhost:8080/test-api',  httpAgent: new http.Agent(&#123; keepAlive: false &#125;),&#125;)\n\nSemantic VersioningThis package generally attempts to follow SemVer conventions, though certain backwards-incompatible changes may be released as minor versions:\n\nChanges that only affect static types, without breaking runtime behavior.\nChanges to library internals which are technically public but not intended or documented for external use. (Please open a GitHub issue to let us know if you are relying on such internals).\nChanges that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\nWe are keen for your feedback; please open an issue with questions, bugs, or suggestions.\nRequirementsTypeScript &gt;= 4.5 is supported.\nThe following runtimes are supported:\n\nNode.js 16 LTS or later (non-EOL) versions.\nDeno v1.28.0 or higher, using import OpenAI from &quot;npm:openai&quot;.Deno Deploy is not yet supported.\nCloudflare Workers.\nVercel Edge Runtime.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n","dateCreated":"2023-09-08T10:27:29+08:00","dateModified":"2023-09-08T10:27:29+08:00","datePublished":"2023-09-08T10:27:29+08:00","description":"","headline":"2023/todo/openai/推荐一个Node OpenAi api库","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"}</script>
     <meta name="description" content="当谈到使用OpenAI API库时，有几个选择可以考虑。以下是我推荐的一个： node-openai node-openai是一个Node.js库，它提供了一个简单的方法来调用OpenAI GPT API。它使用HTTP请求与OpenAI API进行交互，并返回JSON格式的响应。这使得与OpenAI GPT API的交互变得更加容易和简单。 以下是一个使用node-openai的基本示例： 12">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="2023&#x2F;0908&#x2F;推荐一个Node OpenAi api库">
-<meta property="og:url" content="https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html">
+<meta property="og:title" content="2023&#x2F;todo&#x2F;openai&#x2F;推荐一个Node OpenAi api库">
+<meta property="og:url" content="https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html">
 <meta property="og:site_name" content="煦涵驛">
 <meta property="og:description" content="当谈到使用OpenAI API库时，有几个选择可以考虑。以下是我推荐的一个： node-openai node-openai是一个Node.js库，它提供了一个简单的方法来调用OpenAI GPT API。它使用HTTP请求与OpenAI API进行交互，并返回JSON格式的响应。这使得与OpenAI GPT API的交互变得更加容易和简单。 以下是一个使用node-openai的基本示例： 12">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.shields.io/npm/v/openai.svg">
-<meta property="article:published_time" content="2023-09-07T15:13:18.633Z">
-<meta property="article:modified_time" content="2023-09-07T15:13:18.633Z">
+<meta property="article:published_time" content="2023-09-08T02:27:29.246Z">
+<meta property="article:modified_time" content="2023-09-08T02:27:29.246Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="WEB开发">
 <meta property="article:tag" content="前端开发">
@@ -45,7 +45,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-athhlbkl2h9o0tjyweq8ul0h4utvjcbpwygudrdazywyt94bvtc6uxmypt2m.min.css">
+<link rel="stylesheet" href="/assets/css/style-s3qttgqrtgd57gnemxc89qfxwz8jaeotbs4numpbnmrx9z1rsgnwsd3dkbua.min.css">
 
     <!--STYLES END-->
     
@@ -257,14 +257,14 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            2023/0908/推荐一个Node OpenAi api库
+            2023/todo/openai/推荐一个Node OpenAi api库
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -436,9 +436,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0906/index.html"
-                    data-tooltip="2023/0906/index"
-                    aria-label="下一篇: 2023/0906/index"
+                    href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    data-tooltip="2023/0908/模块化2"
+                    aria-label="下一篇: 2023/0908/模块化2"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -463,7 +463,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -476,7 +476,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -489,7 +489,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -502,7 +502,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html&amp;title=2023/0908/推荐一个Node OpenAi api库"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html&amp;title=2023/todo/openai/推荐一个Node OpenAi api库"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -574,9 +574,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0906/index.html"
-                    data-tooltip="2023/0906/index"
-                    aria-label="下一篇: 2023/0906/index"
+                    href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    data-tooltip="2023/0908/模块化2"
+                    aria-label="下一篇: 2023/0908/模块化2"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -601,7 +601,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                     title="分享到 Facebook"
                     aria-label="分享到 Facebook"
                 >
@@ -614,7 +614,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                     title="分享到 Twitter"
                     aria-label="分享到 Twitter"
                 >
@@ -627,7 +627,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                     title="分享到 Weibo"
                     aria-label="分享到 Weibo"
                 >
@@ -640,7 +640,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html&amp;title=2023/0908/推荐一个Node OpenAi api库"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html&amp;title=2023/todo/openai/推荐一个Node OpenAi api库"
                     title="分享到 QQ"
                     aria-label="分享到 QQ"
                 >
@@ -684,7 +684,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                         aria-label="分享到 Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
@@ -697,7 +697,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                         aria-label="分享到 Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
@@ -710,7 +710,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
                         aria-label="分享到 Weibo"
                     >
                         <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
@@ -723,7 +723,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html&amp;title=2023/0908/推荐一个Node OpenAi api库"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html&amp;title=2023/todo/openai/推荐一个Node OpenAi api库"
                         aria-label="分享到 QQ"
                     >
                         <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
@@ -779,7 +779,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ah8fu2oihbm9frbz1pxa0jkqer1zb0klgkgmuaenrh4k2naxqcwf4av0zlc2.min.js"></script>
+<script src="/assets/js/script-l4ckxdv6tbjuxqwojpoduttbowmwffe9xttrtxbjaohwrzhqzj3ocb4fmrwh.min.js"></script>
 
 <!--SCRIPTS END-->
 
@@ -796,7 +796,7 @@
               repo: 'zuojj.github.io',
               owner: 'zuojj',
               admin: ['zuojj'],
-              id: 'post/2023/0908/推荐一个Node OpenAi api库.html',
+              id: 'post/2023/todo/openai/推荐一个Node OpenAi api库.html',
               ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
             }).render('gitalk')
           })()

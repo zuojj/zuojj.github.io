@@ -1,0 +1,824 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="煦涵驛">
+    <title>2023/0908/模块化2 - 煦涵驛</title>
+    <meta name="author" content="煦涵">
+    
+        <meta name="keywords" content="WEB开发,前端开发,用户体验">
+    
+    
+        <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"前言在JavaScript发展初期就是为了实现简单的页面交互逻辑，寥寥数语即可；如今CPU、浏览器性能得到了极大的提升，很多页面逻辑迁移到了客户端（表单验证等），随着web2.0时代的到来，Ajax技术得到广泛应用，jQuery等前端库层出不穷，前端代码日益膨胀，此时在JS方面就会考虑使用模块化规范去管理。本文内容主要有理解模块化，为什么要模块化，模块化的优缺点以及模块化规范,并且介绍下开发中最流行的CommonJS, AMD, ES6、CMD规范。本文试图站在小白的角度，用通俗易懂的笔调介绍这些枯燥无味的概念，希望诸君阅读后，对模块化编程有个全新的认识和理解！建议下载本文源代码，自己动手敲一遍，请猛戳GitHub个人博客(全集)\n一、模块化的理解1.什么是模块?\n将一个复杂的程序依据一定的规则(规范)封装成几个块(文件), 并进行组合在一起块的内部数据与实现是私有的, 只是向外部暴露一些接口(方法)与外部其它模块通信\n2.模块化的进化过程\n全局function模式 : 将不同的功能封装成不同的全局函数\n编码: 将不同的功能封装成不同的全局函数问题: 污染全局命名空间, 容易引起命名冲突或数据不安全，而且模块成员之间看不出直接关系\n复制代码function m1(){  //…}function m2(){  //…}\nnamespace模式 : 简单对象封装\n作用: 减少了全局变量，解决命名冲突问题: 数据不安全(外部可以直接修改模块内部的数据)\n复制代码let myModule = {  data: ‘www.baidu.com&#39;,  foo() {    console.log(foo() ${this.data})  },  bar() {    console.log(bar() ${this.data})  }}myModule.data = ‘other data’ //能直接修改模块内部的数据myModule.foo() // foo() other data这样的写法会暴露所有模块成员，内部状态可以被外部改写。\nIIFE模式：匿名函数自调用(闭包)\n作用: 数据是私有的, 外部只能通过暴露的方法操作编码: 将数据和行为封装到一个函数内部, 通过给window添加属性来向外暴露接口问题: 如果当前这个模块依赖另一个模块怎么办?\n复制代码// index.html文件\n\n\n    myModule.foo()\n    myModule.bar()\n    console.log(myModule.data) //undefined 不能访问模块内部数据\n    myModule.data = 'xxxx' //不是修改的模块内部的data\n    myModule.foo() //没有改变\n\n复制代码// module.js文件(function(window) {  let data = ‘www.baidu.com&#39;  //操作数据的函数  function foo() {    //用于暴露有函数    console.log(foo() ${data})  }  function bar() {    //用于暴露有函数    console.log(bar() ${data})    otherFun() //内部调用  }  function otherFun() {    //内部私有的函数    console.log(‘otherFun()’)  }  //暴露行为  window.myModule = { foo, bar } //ES6写法})(window)最后得到的结果：\nIIFE模式增强 : 引入依赖\n这就是现代模块实现的基石复制代码// module.js文件(function(window, $) {  let data = ‘www.baidu.com&#39;  //操作数据的函数  function foo() {    //用于暴露有函数    console.log(foo() ${data})    $(‘body’).css(‘background’, ‘red’)  }  function bar() {    //用于暴露有函数    console.log(bar() ${data})    otherFun() //内部调用  }  function otherFun() {    //内部私有的函数    console.log(‘otherFun()’)  }  //暴露行为  window.myModule = { foo, bar }})(window, jQuery)复制代码 // index.html文件            myModule.foo()  上例子通过jquery方法将页面的背景颜色改成红色，所以必须先引入jQuery库，就把这个库当作参数传入。这样做除了保证模块的独立性，还使得模块之间的依赖关系变得明显。3. 模块化的好处\n避免命名冲突(减少命名空间污染)更好的分离, 按需加载更高复用性高可维护性\n\n引入多个后出现出现问题\n\n请求过多\n首先我们要依赖多个模块，那样就会发送多个请求，导致请求过多\n依赖模糊\n我们不知道他们的具体依赖关系是什么，也就是说很容易因为不了解他们之间的依赖关系导致加载先后顺序出错。\n难以维护\n以上两种原因就导致了很难维护，很可能出现牵一发而动全身的情况导致项目出现严重的问题。模块化固然有多个好处，然而一个页面需要引入多个js文件，就会出现以上这些问题。而这些问题可以通过模块化规范来解决，下面介绍开发中最流行的commonjs, AMD, ES6, CMD规范。二、模块化规范1.CommonJS(1)概述Node 应用由模块组成，采用 CommonJS 模块规范。每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。在服务器端，模块的加载是运行时同步加载的；在浏览器端，模块需要提前编译打包处理。(2)特点\n所有代码都运行在模块作用域，不会污染全局作用域。模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。模块加载的顺序，按照其在代码中出现的顺序。\n(3)基本语法\n暴露模块：module.exports = value或exports.xxx = value引入模块：require(xxx),如果是第三方模块，xxx为模块名；如果是自定义模块，xxx为模块文件路径\n此处我们有个疑问：CommonJS暴露的模块到底是什么? CommonJS规范规定，每个模块内部，module变量代表当前模块。这个变量是一个对象，它的exports属性（即module.exports）是对外的接口。加载某个模块，其实是加载该模块的module.exports属性。复制代码// example.jsvar x = 5;var addX = function (value) {  return value + x;};module.exports.x = x;module.exports.addX = addX;上面代码通过module.exports输出变量x和函数addX。复制代码var example = require('./example.js');//如果参数字符串以“./”开头，则表示加载的是一个位于相对路径console.log(example.x); // 5console.log(example.addX(1)); // 6require命令用于加载模块文件。require命令的基本功能是，读入并执行一个JavaScript文件，然后返回该模块的exports对象。如果没有发现指定模块，会报错。(4)模块的加载机制CommonJS模块的加载机制是，输入的是被输出的值的拷贝。也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。这点与ES6模块化有重大差异（下文会介绍），请看下面这个例子：复制代码// lib.jsvar counter = 3;function incCounter() {  counter++;}module.exports = {  counter: counter,  incCounter: incCounter,};\n上面代码输出内部变量counter和改写这个变量的内部方法incCounter。复制代码// main.jsvar counter = require('./lib').counter;var incCounter = require('./lib').incCounter;\nconsole.log(counter);  // 3incCounter();console.log(counter); // 3上面代码说明，counter输出以后，lib.js模块内部的变化就影响不到counter了。这是因为counter是一个原始类型的值，会被缓存。除非写成一个函数，才能得到内部变动后的值。(5)服务器端实现①下载安装node.js②创建项目结构注意：用npm init 自动生成package.json时，package name(包名)不能有中文和大写复制代码|-modules  |-module1.js  |-module2.js  |-module3.js|-app.js|-package.json  {    \"name\": \"commonJS-node\",    \"version\": \"1.0.0\"  }③下载第三方模块npm install uniq --save // 用于数组去重④定义模块代码复制代码//module1.jsmodule.exports = {  msg: 'module1',  foo() {    console.log(this.msg)  }}复制代码//module2.jsmodule.exports = function() {  console.log('module2')}复制代码//module3.jsexports.foo = function() {  console.log('foo() module3')}exports.arr = [1, 2, 3, 3, 2]复制代码// app.js文件// 引入第三方库，应该放置在最前面let uniq = require('uniq')let module1 = require('./modules/module1')let module2 = require('./modules/module2')let module3 = require('./modules/module3')\nmodule1.foo() //module1module2() //module2module3.foo() //foo() module3console.log(uniq(module3.arr)) //[ 1, 2, 3 ]⑤通过node运行app.js命令行输入node app.js，运行JS文件(6)浏览器端实现(借助Browserify)①创建项目结构复制代码|-js  |-dist //打包生成文件的目录  |-src //源码所在的目录    |-module1.js    |-module2.js    |-module3.js    |-app.js //应用主源文件|-index.html //运行于浏览器上|-package.json  {    \"name\": \"browserify-test\",    \"version\": \"1.0.0\"  }②下载browserify\n全局: npm install browserify -g局部: npm install browserify --save-dev\n③定义模块代码(同服务器端)注意：index.html文件要运行在浏览器上，需要借助browserify将app.js文件打包编译，如果直接在index.html引入app.js就会报错！④打包处理js根目录下运行browserify js/src/app.js -o js/dist/bundle.js⑤页面使用引入在index.html文件中引入2.AMDCommonJS规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。AMD规范则是非同步加载模块，允许指定回调函数。由于Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以CommonJS规范比较适用。但是，如果是浏览器环境，要从服务器端加载模块，这时就必须采用非同步模式，因此浏览器端一般采用AMD规范。此外AMD规范比CommonJS规范在浏览器端实现要来着早。(1)AMD规范基本语法定义暴露模块:复制代码//定义没有依赖的模块define(function(){   return 模块})复制代码//定义有依赖的模块define([‘module1’, ‘module2’], function(m1, m2){   return 模块})引入使用模块:复制代码require([‘module1’, ‘module2’], function(m1, m2){   使用m1/m2})(2)未使用AMD规范与使用require.js通过比较两者的实现方法，来说明使用AMD规范的好处。\n未使用AMD规范\n复制代码// dataService.js文件(function (window) {  let msg = ‘www.baidu.com&#39;  function getMsg() {    return msg.toUpperCase()  }  window.dataService = {getMsg}})(window)复制代码// alerter.js文件(function (window, dataService) {  let name = ‘Tom’  function showMsg() {    alert(dataService.getMsg() + ‘, ‘ + name)  }  window.alerter = {showMsg}})(window, dataService)复制代码// main.js文件(function (alerter) {  alerter.showMsg()})(alerter)复制代码// index.html文件\nModular Demo 1: 未使用AMD(require.js)\n\n\n\n最后得到如下结果：\n\n这种方式缺点很明显：首先会发送多个请求，其次引入的js文件顺序不能搞错，否则会报错！\n使用require.js\nRequireJS是一个工具库，主要用于客户端的模块管理。它的模块管理遵守AMD规范，RequireJS的基本思想是，通过define方法，将代码定义为模块；通过require方法，实现代码的模块加载。接下来介绍AMD规范在浏览器实现的步骤：①下载require.js, 并引入\n官网: http://www.requirejs.cn/github : https://github.com/requirejs/requirejs\n然后将require.js导入项目: js/libs/require.js②创建项目结构复制代码|-js  |-libs    |-require.js  |-modules    |-alerter.js    |-dataService.js  |-main.js|-index.html③定义require.js的模块代码复制代码// dataService.js文件// 定义没有依赖的模块define(function() {  let msg = ‘www.baidu.com&#39;  function getMsg() {    return msg.toUpperCase()  }  return { getMsg } // 暴露模块})复制代码//alerter.js文件// 定义有依赖的模块define([‘dataService’], function(dataService) {  let name = ‘Tom’  function showMsg() {    alert(dataService.getMsg() + ‘, ‘ + name)  }  // 暴露模块  return { showMsg }})复制代码// main.js文件(function() {  require.config({    baseUrl: ‘js/‘, //基本路径 出发点在根目录下    paths: {      //映射: 模块标识名: 路径      alerter: ‘./modules/alerter’, //此处不能写成alerter.js,会报错      dataService: ‘./modules/dataService’    }  })  require([‘alerter’], function(alerter) {    alerter.showMsg()  })})()复制代码// index.html文件\n\n  \n    Modular Demo\n  \n  \n    \n    \n  \n\n④页面引入require.js模块:\n在index.html引入 \n此外在项目中如何引入第三方库？只需在上面代码的基础稍作修改：\n复制代码// alerter.js文件\ndefine(['dataService', 'jquery'], function(dataService, $) {\n  let name = 'Tom'\n  function showMsg() {\n    alert(dataService.getMsg() + ', ' + name)\n  }\n  $('body').css('background', 'green')\n  // 暴露模块\n  return { showMsg }\n})\n复制代码// main.js文件\n(function() {\n  require.config({\n    baseUrl: 'js/', //基本路径 出发点在根目录下\n    paths: {\n      //自定义模块\n      alerter: './modules/alerter', //此处不能写成alerter.js,会报错\n      dataService: './modules/dataService',\n      // 第三方库模块\n      jquery: './libs/jquery-1.10.1' //注意：写成jQuery会报错\n    }\n  })\n  require(['alerter'], function(alerter) {\n    alerter.showMsg()\n  })\n})()\n上例是在alerter.js文件中引入jQuery第三方库，main.js文件也要有相应的路径配置。\n小结：通过两者的比较，可以得出AMD模块定义的方法非常清晰，不会污染全局环境，能够清楚地显示依赖关系。AMD模式可以用于浏览器环境，并且允许非同步加载模块，也可以根据需要动态加载模块。\n3.CMD\nCMD规范专门用于浏览器端，模块的加载是异步的，模块使用时才会加载执行。CMD规范整合了CommonJS和AMD规范的特点。在 Sea.js 中，所有 JavaScript 模块都遵循 CMD模块定义规范。\n(1)CMD规范基本语法\n定义暴露模块：\n复制代码//定义没有依赖的模块\ndefine(function(require, exports, module){\n  exports.xxx = value\n  module.exports = value\n})\n复制代码//定义有依赖的模块\ndefine(function(require, exports, module){\n  //引入依赖模块(同步)\n  var module2 = require('./module2')\n  //引入依赖模块(异步)\n    require.async('./module3', function (m3) {\n    })\n  //暴露模块\n  exports.xxx = value\n})\n引入使用模块：\n复制代码define(function (require) {\n  var m1 = require('./module1')\n  var m4 = require('./module4')\n  m1.show()\n  m4.show()\n})\n(2)sea.js简单使用教程\n①下载sea.js, 并引入\n\n官网: seajs.org/github : github.com/seajs/seajs\n然后将sea.js导入项目: js/libs/sea.js②创建项目结构复制代码|-js  |-libs    |-sea.js  |-modules    |-module1.js    |-module2.js    |-module3.js    |-module4.js    |-main.js|-index.html③定义sea.js的模块代码复制代码// module1.js文件define(function (require, exports, module) {  //内部变量数据  var data = ‘atguigu.com’  //内部函数  function show() {    console.log(‘module1 show() ‘ + data)  }  //向外暴露  exports.show = show})复制代码// module2.js文件define(function (require, exports, module) {  module.exports = {    msg: ‘I Will Back’  }})复制代码// module3.js文件define(function(require, exports, module) {  const API_KEY = ‘abc123’  exports.API_KEY = API_KEY})复制代码// module4.js文件define(function (require, exports, module) {  //引入依赖模块(同步)  var module2 = require(‘./module2’)  function show() {    console.log(‘module4 show() ‘ + module2.msg)  }  exports.show = show  //引入依赖模块(异步)  require.async(‘./module3’, function (m3) {    console.log(‘异步引入依赖模块3  ‘ + m3.API_KEY)  })})复制代码// main.js文件define(function (require) {  var m1 = require(‘./module1’)  var m4 = require(‘./module4’)  m1.show()  m4.show()})④在index.html中引入复制代码\n\n  seajs.use('./js/modules/main')\n\n最后得到结果如下：\n4.ES6模块化ES6 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS 和 AMD 模块，都只能在运行时确定这些东西。比如，CommonJS 模块就是对象，输入时必须查找对象属性。(1)ES6模块化语法export命令用于规定模块的对外接口，import命令用于输入其他模块提供的功能。复制代码/** 定义模块 math.js /var basicNum = 0;var add = function (a, b) {    return a + b;};export { basicNum, add };/ 引用模块 **/import { basicNum, add } from ‘./math’;function test(ele) {    ele.textContent = add(99 + basicNum);}如上例所示，使用import命令的时候，用户需要知道所要加载的变量名或函数名，否则无法加载。为了给用户提供方便，让他们不用阅读文档就能加载模块，就要用到export default命令，为模块指定默认输出。复制代码// export-default.jsexport default function () {  console.log(‘foo’);}复制代码// import-default.jsimport customName from ‘./export-default’;customName(); // ‘foo’模块默认输出, 其他模块加载该模块时，import命令可以为该匿名函数指定任意名字。(2)ES6 模块与 CommonJS 模块的差异它们有两个重大差异：① CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。② CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。第二个差异是因为 CommonJS 加载的是一个对象（即module.exports属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。下面重点解释第一个差异，我们还是举上面那个CommonJS模块的加载机制例子:复制代码// lib.jsexport let counter = 3;export function incCounter() {  counter++;}// main.jsimport { counter, incCounter } from ‘./lib’;console.log(counter); // 3incCounter();console.log(counter); // 4ES6 模块的运行机制与 CommonJS 不一样。ES6 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。(3) ES6-Babel-Browserify使用教程简单来说就一句话：使用Babel将ES6编译为ES5代码，使用Browserify编译打包js。①定义package.json文件复制代码 {   “name” : “es6-babel-browserify”,   “version” : “1.0.0” }②安装babel-cli, babel-preset-es2015和browserify\nnpm install babel-cli browserify -gnpm install babel-preset-es2015 –save-devpreset 预设(将es6转换成es5的所有插件打包)\n③定义.babelrc文件复制代码  {    “presets”: [“es2015”]  }④定义模块代码复制代码//module1.js文件// 分别暴露export function foo() {  console.log(‘foo() module1’)}export function bar() {  console.log(‘bar() module1’)}复制代码//module2.js文件// 统一暴露function fun1() {  console.log(‘fun1() module2’)}function fun2() {  console.log(‘fun2() module2’)}export { fun1, fun2 }复制代码//module3.js文件// 默认暴露 可以暴露任意数据类项，暴露什么数据，接收到就是什么数据export default () =&gt; {  console.log(‘默认暴露’)}复制代码// app.js文件import { foo, bar } from ‘./module1’import { fun1, fun2 } from ‘./module2’import module3 from ‘./module3’foo()bar()fun1()fun2()module3()⑤ 编译并在index.html中引入\n使用Babel将ES6编译为ES5代码(但包含CommonJS语法) : babel js/src -d js/lib使用Browserify编译js : browserify js/lib/app.js -o js/lib/bundle.js\n然后在index.html文件中引入复制代码 最后得到如下结果：\n此外第三方库(以jQuery为例)如何引入呢？首先安装依赖npm install jquery@1然后在app.js文件中引入复制代码//app.js文件import { foo, bar } from ‘./module1’import { fun1, fun2 } from ‘./module2’import module3 from ‘./module3’import $ from ‘jquery’\nfoo()bar()fun1()fun2()module3()$(‘body’).css(‘background’, ‘green’)三、总结\nCommonJS规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了AMD CMD解决方案。AMD规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，AMD规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。CMD规范与AMD规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在Node.js中运行。不过，依赖SPM 打包，模块的加载逻辑偏重ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案。\n作者：浪里行舟链接：https://juejin.cn/post/6844903744518389768来源：稀土掘金著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。\n","dateCreated":"2023-09-08T10:27:29+08:00","dateModified":"2023-09-08T10:27:29+08:00","datePublished":"2023-09-08T10:27:29+08:00","description":"","headline":"2023/0908/模块化2","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"}</script>
+    <meta name="description" content="前言在JavaScript发展初期就是为了实现简单的页面交互逻辑，寥寥数语即可；如今CPU、浏览器性能得到了极大的提升，很多页面逻辑迁移到了客户端（表单验证等），随着web2.0时代的到来，Ajax技术得到广泛应用，jQuery等前端库层出不穷，前端代码日益膨胀，此时在JS方面就会考虑使用模块化规范去管理。本文内容主要有理解模块化，为什么要模块化，模块化的优缺点以及模块化规范,并且介绍下开发中最流">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="2023&#x2F;0908&#x2F;模块化2">
+<meta property="og:url" content="https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html">
+<meta property="og:site_name" content="煦涵驛">
+<meta property="og:description" content="前言在JavaScript发展初期就是为了实现简单的页面交互逻辑，寥寥数语即可；如今CPU、浏览器性能得到了极大的提升，很多页面逻辑迁移到了客户端（表单验证等），随着web2.0时代的到来，Ajax技术得到广泛应用，jQuery等前端库层出不穷，前端代码日益膨胀，此时在JS方面就会考虑使用模块化规范去管理。本文内容主要有理解模块化，为什么要模块化，模块化的优缺点以及模块化规范,并且介绍下开发中最流">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-08T02:27:29.202Z">
+<meta property="article:modified_time" content="2023-09-08T02:27:29.202Z">
+<meta property="article:author" content="煦涵">
+<meta property="article:tag" content="WEB开发">
+<meta property="article:tag" content="前端开发">
+<meta property="article:tag" content="用户体验">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@https:&#x2F;&#x2F;twitter.com&#x2F;zuojj">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://zuojj.com/assets/images/android-icon-192x192.png"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-s3qttgqrtgd57gnemxc89qfxwz8jaeotbs4numpbnmrx9z1rsgnwsd3dkbua.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159301267-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-159301267-1');
+    </script>
+
+
+    
+
+    
+        
+            
+<link rel="stylesheet" href="/assets/css/gitalk.css">
+
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/%20"
+            aria-label=""
+        >
+            煦涵驛
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+                </a>
+                <h4 class="sidebar-profile-name">煦涵</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>因为热爱，所以坚持。</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/zuojj"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:zuojj.com@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            2023/0908/模块化2
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2023-09-08T10:27:29+08:00">
+	
+		    9月 08, 2023
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>前言<br>在JavaScript发展初期就是为了实现简单的页面交互逻辑，寥寥数语即可；如今CPU、浏览器性能得到了极大的提升，很多页面逻辑迁移到了客户端（表单验证等），随着web2.0时代的到来，Ajax技术得到广泛应用，jQuery等前端库层出不穷，前端代码日益膨胀，此时在JS方面就会考虑使用模块化规范去管理。<br>本文内容主要有理解模块化，为什么要模块化，模块化的优缺点以及模块化规范,并且介绍下开发中最流行的CommonJS, AMD, ES6、CMD规范。本文试图站在小白的角度，用通俗易懂的笔调介绍这些枯燥无味的概念，希望诸君阅读后，对模块化编程有个全新的认识和理解！<br>建议下载本文源代码，自己动手敲一遍，请猛戳GitHub个人博客(全集)</p>
+<p>一、模块化的理解<br>1.什么是模块?</p>
+<p>将一个复杂的程序依据一定的规则(规范)封装成几个块(文件), 并进行组合在一起<br>块的内部数据与实现是私有的, 只是向外部暴露一些接口(方法)与外部其它模块通信</p>
+<p>2.模块化的进化过程</p>
+<p>全局function模式 : 将不同的功能封装成不同的全局函数</p>
+<p>编码: 将不同的功能封装成不同的全局函数<br>问题: 污染全局命名空间, 容易引起命名冲突或数据不安全，而且模块成员之间看不出直接关系</p>
+<p>复制代码function m1(){<br>  //…<br>}<br>function m2(){<br>  //…<br>}</p>
+<p>namespace模式 : 简单对象封装</p>
+<p>作用: 减少了全局变量，解决命名冲突<br>问题: 数据不安全(外部可以直接修改模块内部的数据)</p>
+<p>复制代码let myModule = {<br>  data: ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a>,<br>  foo() {<br>    console.log(<code>foo() ${this.data}</code>)<br>  },<br>  bar() {<br>    console.log(<code>bar() ${this.data}</code>)<br>  }<br>}<br>myModule.data = ‘other data’ //能直接修改模块内部的数据<br>myModule.foo() // foo() other data<br>这样的写法会暴露所有模块成员，内部状态可以被外部改写。</p>
+<p>IIFE模式：匿名函数自调用(闭包)</p>
+<p>作用: 数据是私有的, 外部只能通过暴露的方法操作<br>编码: 将数据和行为封装到一个函数内部, 通过给window添加属性来向外暴露接口<br>问题: 如果当前这个模块依赖另一个模块怎么办?</p>
+<p>复制代码// index.html文件</p>
+<script type="text/javascript" src="module.js"></script>
+<script type="text/javascript">
+    myModule.foo()
+    myModule.bar()
+    console.log(myModule.data) //undefined 不能访问模块内部数据
+    myModule.data = 'xxxx' //不是修改的模块内部的data
+    myModule.foo() //没有改变
+</script>
+<p>复制代码// module.js文件<br>(function(window) {<br>  let data = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  //操作数据的函数<br>  function foo() {<br>    //用于暴露有函数<br>    console.log(<code>foo() ${data}</code>)<br>  }<br>  function bar() {<br>    //用于暴露有函数<br>    console.log(<code>bar() ${data}</code>)<br>    otherFun() //内部调用<br>  }<br>  function otherFun() {<br>    //内部私有的函数<br>    console.log(‘otherFun()’)<br>  }<br>  //暴露行为<br>  window.myModule = { foo, bar } //ES6写法<br>})(window)<br>最后得到的结果：</p>
+<p>IIFE模式增强 : 引入依赖</p>
+<p>这就是现代模块实现的基石<br>复制代码// module.js文件<br>(function(window, $) {<br>  let data = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  //操作数据的函数<br>  function foo() {<br>    //用于暴露有函数<br>    console.log(<code>foo() ${data}</code>)<br>    $(‘body’).css(‘background’, ‘red’)<br>  }<br>  function bar() {<br>    //用于暴露有函数<br>    console.log(<code>bar() ${data}</code>)<br>    otherFun() //内部调用<br>  }<br>  function otherFun() {<br>    //内部私有的函数<br>    console.log(‘otherFun()’)<br>  }<br>  //暴露行为<br>  window.myModule = { foo, bar }<br>})(window, jQuery)<br>复制代码 // index.html文件<br>  <!-- 引入的js必须有一定顺序 --><br>  <script type="text/javascript" src="jquery-1.10.1.js"></script><br>  <script type="text/javascript" src="module.js"></script><br>  <script type="text/javascript"><br>    myModule.foo()<br>  </script><br>上例子通过jquery方法将页面的背景颜色改成红色，所以必须先引入jQuery库，就把这个库当作参数传入。这样做除了保证模块的独立性，还使得模块之间的依赖关系变得明显。<br>3. 模块化的好处</p>
+<p>避免命名冲突(减少命名空间污染)<br>更好的分离, 按需加载<br>更高复用性<br>高可维护性</p>
+<ol start="4">
+<li>引入多个<script>后出现出现问题</li>
+</ol>
+<p>请求过多</p>
+<p>首先我们要依赖多个模块，那样就会发送多个请求，导致请求过多</p>
+<p>依赖模糊</p>
+<p>我们不知道他们的具体依赖关系是什么，也就是说很容易因为不了解他们之间的依赖关系导致加载先后顺序出错。</p>
+<p>难以维护</p>
+<p>以上两种原因就导致了很难维护，很可能出现牵一发而动全身的情况导致项目出现严重的问题。<br>模块化固然有多个好处，然而一个页面需要引入多个js文件，就会出现以上这些问题。而这些问题可以通过模块化规范来解决，下面介绍开发中最流行的commonjs, AMD, ES6, CMD规范。<br>二、模块化规范<br>1.CommonJS<br>(1)概述<br>Node 应用由模块组成，采用 CommonJS 模块规范。每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。在服务器端，模块的加载是运行时同步加载的；在浏览器端，模块需要提前编译打包处理。<br>(2)特点</p>
+<p>所有代码都运行在模块作用域，不会污染全局作用域。<br>模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。<br>模块加载的顺序，按照其在代码中出现的顺序。</p>
+<p>(3)基本语法</p>
+<p>暴露模块：module.exports = value或exports.xxx = value<br>引入模块：require(xxx),如果是第三方模块，xxx为模块名；如果是自定义模块，xxx为模块文件路径</p>
+<p>此处我们有个疑问：CommonJS暴露的模块到底是什么? CommonJS规范规定，每个模块内部，module变量代表当前模块。这个变量是一个对象，它的exports属性（即module.exports）是对外的接口。加载某个模块，其实是加载该模块的module.exports属性。<br>复制代码// example.js<br>var x = 5;<br>var addX = function (value) {<br>  return value + x;<br>};<br>module.exports.x = x;<br>module.exports.addX = addX;<br>上面代码通过module.exports输出变量x和函数addX。<br>复制代码var example = require('./example.js');//如果参数字符串以“./”开头，则表示加载的是一个位于相对路径<br>console.log(example.x); // 5<br>console.log(example.addX(1)); // 6<br>require命令用于加载模块文件。require命令的基本功能是，读入并执行一个JavaScript文件，然后返回该模块的exports对象。如果没有发现指定模块，会报错。<br>(4)模块的加载机制<br>CommonJS模块的加载机制是，输入的是被输出的值的拷贝。也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。这点与ES6模块化有重大差异（下文会介绍），请看下面这个例子：<br>复制代码// lib.js<br>var counter = 3;<br>function incCounter() {<br>  counter++;<br>}<br>module.exports = {<br>  counter: counter,<br>  incCounter: incCounter,<br>};</p>
+<p>上面代码输出内部变量counter和改写这个变量的内部方法incCounter。<br>复制代码// main.js<br>var counter = require('./lib').counter;<br>var incCounter = require('./lib').incCounter;</p>
+<p>console.log(counter);  // 3<br>incCounter();<br>console.log(counter); // 3<br>上面代码说明，counter输出以后，lib.js模块内部的变化就影响不到counter了。这是因为counter是一个原始类型的值，会被缓存。除非写成一个函数，才能得到内部变动后的值。<br>(5)服务器端实现<br>①下载安装node.js<br>②创建项目结构<br>注意：用npm init 自动生成package.json时，package name(包名)不能有中文和大写<br>复制代码|-modules<br>  |-module1.js<br>  |-module2.js<br>  |-module3.js<br>|-app.js<br>|-package.json<br>  {<br>    "name": "commonJS-node",<br>    "version": "1.0.0"<br>  }<br>③下载第三方模块<br>npm install uniq --save // 用于数组去重<br>④定义模块代码<br>复制代码//module1.js<br>module.exports = {<br>  msg: 'module1',<br>  foo() {<br>    console.log(this.msg)<br>  }<br>}<br>复制代码//module2.js<br>module.exports = function() {<br>  console.log('module2')<br>}<br>复制代码//module3.js<br>exports.foo = function() {<br>  console.log('foo() module3')<br>}<br>exports.arr = [1, 2, 3, 3, 2]<br>复制代码// app.js文件<br>// 引入第三方库，应该放置在最前面<br>let uniq = require('uniq')<br>let module1 = require('./modules/module1')<br>let module2 = require('./modules/module2')<br>let module3 = require('./modules/module3')</p>
+<p>module1.foo() //module1<br>module2() //module2<br>module3.foo() //foo() module3<br>console.log(uniq(module3.arr)) //[ 1, 2, 3 ]<br>⑤通过node运行app.js<br>命令行输入node app.js，运行JS文件<br>(6)浏览器端实现(借助Browserify)<br>①创建项目结构<br>复制代码|-js<br>  |-dist //打包生成文件的目录<br>  |-src //源码所在的目录<br>    |-module1.js<br>    |-module2.js<br>    |-module3.js<br>    |-app.js //应用主源文件<br>|-index.html //运行于浏览器上<br>|-package.json<br>  {<br>    "name": "browserify-test",<br>    "version": "1.0.0"<br>  }<br>②下载browserify</p>
+<p>全局: npm install browserify -g<br>局部: npm install browserify --save-dev</p>
+<p>③定义模块代码(同服务器端)<br>注意：index.html文件要运行在浏览器上，需要借助browserify将app.js文件打包编译，如果直接在index.html引入app.js就会报错！<br>④打包处理js<br>根目录下运行browserify js/src/app.js -o js/dist/bundle.js<br>⑤页面使用引入<br>在index.html文件中引入<script type="text/javascript" src="js/dist/bundle.js"></script><br>2.AMD<br>CommonJS规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。AMD规范则是非同步加载模块，允许指定回调函数。由于Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以CommonJS规范比较适用。但是，如果是浏览器环境，要从服务器端加载模块，这时就必须采用非同步模式，因此浏览器端一般采用AMD规范。此外AMD规范比CommonJS规范在浏览器端实现要来着早。<br>(1)AMD规范基本语法<br>定义暴露模块:<br>复制代码//定义没有依赖的模块<br>define(function(){<br>   return 模块<br>})<br>复制代码//定义有依赖的模块<br>define([‘module1’, ‘module2’], function(m1, m2){<br>   return 模块<br>})<br>引入使用模块:<br>复制代码require([‘module1’, ‘module2’], function(m1, m2){<br>   使用m1/m2<br>})<br>(2)未使用AMD规范与使用require.js<br>通过比较两者的实现方法，来说明使用AMD规范的好处。</p>
+<p>未使用AMD规范</p>
+<p>复制代码// dataService.js文件<br>(function (window) {<br>  let msg = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  function getMsg() {<br>    return msg.toUpperCase()<br>  }<br>  window.dataService = {getMsg}<br>})(window)<br>复制代码// alerter.js文件<br>(function (window, dataService) {<br>  let name = ‘Tom’<br>  function showMsg() {<br>    alert(dataService.getMsg() + ‘, ‘ + name)<br>  }<br>  window.alerter = {showMsg}<br>})(window, dataService)<br>复制代码// main.js文件<br>(function (alerter) {<br>  alerter.showMsg()<br>})(alerter)<br>复制代码// index.html文件</p>
+<div><h1>Modular Demo 1: 未使用AMD(require.js)</h1></div>
+<script type="text/javascript" src="js/modules/dataService.js"></script>
+<script type="text/javascript" src="js/modules/alerter.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+最后得到如下结果：
+
+<p>这种方式缺点很明显：首先会发送多个请求，其次引入的js文件顺序不能搞错，否则会报错！</p>
+<p>使用require.js</p>
+<p>RequireJS是一个工具库，主要用于客户端的模块管理。它的模块管理遵守AMD规范，RequireJS的基本思想是，通过define方法，将代码定义为模块；通过require方法，实现代码的模块加载。<br>接下来介绍AMD规范在浏览器实现的步骤：<br>①下载require.js, 并引入</p>
+<p>官网: <a href="http://www.requirejs.cn/" target="_blank" rel="noopener">http://www.requirejs.cn/</a><br>github : <a href="https://github.com/requirejs/requirejs" target="_blank" rel="noopener">https://github.com/requirejs/requirejs</a></p>
+<p>然后将require.js导入项目: js/libs/require.js<br>②创建项目结构<br>复制代码|-js<br>  |-libs<br>    |-require.js<br>  |-modules<br>    |-alerter.js<br>    |-dataService.js<br>  |-main.js<br>|-index.html<br>③定义require.js的模块代码<br>复制代码// dataService.js文件<br>// 定义没有依赖的模块<br>define(function() {<br>  let msg = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  function getMsg() {<br>    return msg.toUpperCase()<br>  }<br>  return { getMsg } // 暴露模块<br>})<br>复制代码//alerter.js文件<br>// 定义有依赖的模块<br>define([‘dataService’], function(dataService) {<br>  let name = ‘Tom’<br>  function showMsg() {<br>    alert(dataService.getMsg() + ‘, ‘ + name)<br>  }<br>  // 暴露模块<br>  return { showMsg }<br>})<br>复制代码// main.js文件<br>(function() {<br>  require.config({<br>    baseUrl: ‘js/‘, //基本路径 出发点在根目录下<br>    paths: {<br>      //映射: 模块标识名: 路径<br>      alerter: ‘./modules/alerter’, //此处不能写成alerter.js,会报错<br>      dataService: ‘./modules/dataService’<br>    }<br>  })<br>  require([‘alerter’], function(alerter) {<br>    alerter.showMsg()<br>  })<br>})()<br>复制代码// index.html文件<br><!DOCTYPE html></p>
+<html>
+  <head>
+    <title>Modular Demo</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+  <body>
+    <!-- 引入require.js并指定js主文件的入口 -->
+    <script data-main="js/main" src="js/libs/require.js"></script>
+  </body>
+</html>
+④页面引入require.js模块:
+在index.html引入 <script data-main="js/main" src="js/libs/require.js"></script>
+此外在项目中如何引入第三方库？只需在上面代码的基础稍作修改：
+复制代码// alerter.js文件
+define(['dataService', 'jquery'], function(dataService, $) {
+  let name = 'Tom'
+  function showMsg() {
+    alert(dataService.getMsg() + ', ' + name)
+  }
+  $('body').css('background', 'green')
+  // 暴露模块
+  return { showMsg }
+})
+复制代码// main.js文件
+(function() {
+  require.config({
+    baseUrl: 'js/', //基本路径 出发点在根目录下
+    paths: {
+      //自定义模块
+      alerter: './modules/alerter', //此处不能写成alerter.js,会报错
+      dataService: './modules/dataService',
+      // 第三方库模块
+      jquery: './libs/jquery-1.10.1' //注意：写成jQuery会报错
+    }
+  })
+  require(['alerter'], function(alerter) {
+    alerter.showMsg()
+  })
+})()
+上例是在alerter.js文件中引入jQuery第三方库，main.js文件也要有相应的路径配置。
+小结：通过两者的比较，可以得出AMD模块定义的方法非常清晰，不会污染全局环境，能够清楚地显示依赖关系。AMD模式可以用于浏览器环境，并且允许非同步加载模块，也可以根据需要动态加载模块。
+3.CMD
+CMD规范专门用于浏览器端，模块的加载是异步的，模块使用时才会加载执行。CMD规范整合了CommonJS和AMD规范的特点。在 Sea.js 中，所有 JavaScript 模块都遵循 CMD模块定义规范。
+(1)CMD规范基本语法
+定义暴露模块：
+复制代码//定义没有依赖的模块
+define(function(require, exports, module){
+  exports.xxx = value
+  module.exports = value
+})
+复制代码//定义有依赖的模块
+define(function(require, exports, module){
+  //引入依赖模块(同步)
+  var module2 = require('./module2')
+  //引入依赖模块(异步)
+    require.async('./module3', function (m3) {
+    })
+  //暴露模块
+  exports.xxx = value
+})
+引入使用模块：
+复制代码define(function (require) {
+  var m1 = require('./module1')
+  var m4 = require('./module4')
+  m1.show()
+  m4.show()
+})
+(2)sea.js简单使用教程
+①下载sea.js, 并引入
+
+<p>官网: seajs.org/<br>github : github.com/seajs/seajs</p>
+<p>然后将sea.js导入项目: js/libs/sea.js<br>②创建项目结构<br>复制代码|-js<br>  |-libs<br>    |-sea.js<br>  |-modules<br>    |-module1.js<br>    |-module2.js<br>    |-module3.js<br>    |-module4.js<br>    |-main.js<br>|-index.html<br>③定义sea.js的模块代码<br>复制代码// module1.js文件<br>define(function (require, exports, module) {<br>  //内部变量数据<br>  var data = ‘atguigu.com’<br>  //内部函数<br>  function show() {<br>    console.log(‘module1 show() ‘ + data)<br>  }<br>  //向外暴露<br>  exports.show = show<br>})<br>复制代码// module2.js文件<br>define(function (require, exports, module) {<br>  module.exports = {<br>    msg: ‘I Will Back’<br>  }<br>})<br>复制代码// module3.js文件<br>define(function(require, exports, module) {<br>  const API_KEY = ‘abc123’<br>  exports.API_KEY = API_KEY<br>})<br>复制代码// module4.js文件<br>define(function (require, exports, module) {<br>  //引入依赖模块(同步)<br>  var module2 = require(‘./module2’)<br>  function show() {<br>    console.log(‘module4 show() ‘ + module2.msg)<br>  }<br>  exports.show = show<br>  //引入依赖模块(异步)<br>  require.async(‘./module3’, function (m3) {<br>    console.log(‘异步引入依赖模块3  ‘ + m3.API_KEY)<br>  })<br>})<br>复制代码// main.js文件<br>define(function (require) {<br>  var m1 = require(‘./module1’)<br>  var m4 = require(‘./module4’)<br>  m1.show()<br>  m4.show()<br>})<br>④在index.html中引入<br>复制代码<script type="text/javascript" src="js/libs/sea.js"></script></p>
+<script type="text/javascript">
+  seajs.use('./js/modules/main')
+</script>
+<p>最后得到结果如下：</p>
+<p>4.ES6模块化<br>ES6 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS 和 AMD 模块，都只能在运行时确定这些东西。比如，CommonJS 模块就是对象，输入时必须查找对象属性。<br>(1)ES6模块化语法<br>export命令用于规定模块的对外接口，import命令用于输入其他模块提供的功能。<br>复制代码/** 定义模块 math.js <strong>/<br>var basicNum = 0;<br>var add = function (a, b) {<br>    return a + b;<br>};<br>export { basicNum, add };<br>/</strong> 引用模块 **/<br>import { basicNum, add } from ‘./math’;<br>function test(ele) {<br>    ele.textContent = add(99 + basicNum);<br>}<br>如上例所示，使用import命令的时候，用户需要知道所要加载的变量名或函数名，否则无法加载。为了给用户提供方便，让他们不用阅读文档就能加载模块，就要用到export default命令，为模块指定默认输出。<br>复制代码// export-default.js<br>export default function () {<br>  console.log(‘foo’);<br>}<br>复制代码// import-default.js<br>import customName from ‘./export-default’;<br>customName(); // ‘foo’<br>模块默认输出, 其他模块加载该模块时，import命令可以为该匿名函数指定任意名字。<br>(2)ES6 模块与 CommonJS 模块的差异<br>它们有两个重大差异：<br>① CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。<br>② CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。<br>第二个差异是因为 CommonJS 加载的是一个对象（即module.exports属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。<br>下面重点解释第一个差异，我们还是举上面那个CommonJS模块的加载机制例子:<br>复制代码// lib.js<br>export let counter = 3;<br>export function incCounter() {<br>  counter++;<br>}<br>// main.js<br>import { counter, incCounter } from ‘./lib’;<br>console.log(counter); // 3<br>incCounter();<br>console.log(counter); // 4<br>ES6 模块的运行机制与 CommonJS 不一样。ES6 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。<br>(3) ES6-Babel-Browserify使用教程<br>简单来说就一句话：使用Babel将ES6编译为ES5代码，使用Browserify编译打包js。<br>①定义package.json文件<br>复制代码 {<br>   “name” : “es6-babel-browserify”,<br>   “version” : “1.0.0”<br> }<br>②安装babel-cli, babel-preset-es2015和browserify</p>
+<p>npm install babel-cli browserify -g<br>npm install babel-preset-es2015 –save-dev<br>preset 预设(将es6转换成es5的所有插件打包)</p>
+<p>③定义.babelrc文件<br>复制代码  {<br>    “presets”: [“es2015”]<br>  }<br>④定义模块代码<br>复制代码//module1.js文件<br>// 分别暴露<br>export function foo() {<br>  console.log(‘foo() module1’)<br>}<br>export function bar() {<br>  console.log(‘bar() module1’)<br>}<br>复制代码//module2.js文件<br>// 统一暴露<br>function fun1() {<br>  console.log(‘fun1() module2’)<br>}<br>function fun2() {<br>  console.log(‘fun2() module2’)<br>}<br>export { fun1, fun2 }<br>复制代码//module3.js文件<br>// 默认暴露 可以暴露任意数据类项，暴露什么数据，接收到就是什么数据<br>export default () =&gt; {<br>  console.log(‘默认暴露’)<br>}<br>复制代码// app.js文件<br>import { foo, bar } from ‘./module1’<br>import { fun1, fun2 } from ‘./module2’<br>import module3 from ‘./module3’<br>foo()<br>bar()<br>fun1()<br>fun2()<br>module3()<br>⑤ 编译并在index.html中引入</p>
+<p>使用Babel将ES6编译为ES5代码(但包含CommonJS语法) : babel js/src -d js/lib<br>使用Browserify编译js : browserify js/lib/app.js -o js/lib/bundle.js</p>
+<p>然后在index.html文件中引入<br>复制代码 <script type="text/javascript" src="js/lib/bundle.js"></script><br>最后得到如下结果：</p>
+<p>此外第三方库(以jQuery为例)如何引入呢？<br>首先安装依赖npm install jquery@1<br>然后在app.js文件中引入<br>复制代码//app.js文件<br>import { foo, bar } from ‘./module1’<br>import { fun1, fun2 } from ‘./module2’<br>import module3 from ‘./module3’<br>import $ from ‘jquery’</p>
+<p>foo()<br>bar()<br>fun1()<br>fun2()<br>module3()<br>$(‘body’).css(‘background’, ‘green’)<br>三、总结</p>
+<p>CommonJS规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了AMD CMD解决方案。<br>AMD规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，AMD规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。<br>CMD规范与AMD规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在Node.js中运行。不过，依赖SPM 打包，模块的加载逻辑偏重<br>ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案。</p>
+<p>作者：浪里行舟<br>链接：<a href="https://juejin.cn/post/6844903744518389768" target="_blank" rel="noopener">https://juejin.cn/post/6844903744518389768</a><br>来源：稀土掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+            
+
+
+            <h3>转载申请</h3>
+            <p>本作品采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名 4.0 国际许可协议</a>进行许可，转载时请注明原文链接，文章内图片请保留全部内容。</p>
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    data-tooltip="2023/todo/openai/推荐一个Node OpenAi api库"
+                    aria-label="上一篇: 2023/todo/openai/推荐一个Node OpenAi api库"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%963.html"
+                    data-tooltip="2023/0908/模块化3"
+                    aria-label="下一篇: 2023/0908/模块化3"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html&amp;title=2023/0908/模块化2"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="gitalk"></div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 煦涵. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                    data-tooltip="2023/todo/openai/推荐一个Node OpenAi api库"
+                    aria-label="上一篇: 2023/todo/openai/推荐一个Node OpenAi api库"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%963.html"
+                    data-tooltip="2023/0908/模块化3"
+                    aria-label="下一篇: 2023/0908/模块化3"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Diesen Beitrag teilen"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    title="分享到 Facebook"
+                    aria-label="分享到 Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    title="分享到 Twitter"
+                    aria-label="分享到 Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                    title="分享到 Weibo"
+                    aria-label="分享到 Weibo"
+                >
+                    <i class="fab fa-weibo" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html&amp;title=2023/0908/模块化2"
+                    title="分享到 QQ"
+                    aria-label="分享到 QQ"
+                >
+                    <i class="fab fa-qq" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#gitalk"
+                        aria-label="Kommentieren"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                        aria-label="分享到 Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                        aria-label="分享到 Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://service.weibo.com/share/share.php?&amp;title=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                        aria-label="分享到 Weibo"
+                    >
+                        <i class="fab fa-weibo" aria-hidden="true"></i><span>分享到 Weibo</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="http://connect.qq.com/widget/shareqq/index.html?url=https://zuojj.com/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html&amp;title=2023/0908/模块化2"
+                        aria-label="分享到 QQ"
+                    >
+                        <i class="fab fa-qq" aria-hidden="true"></i><span>分享到 QQ</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/android-icon-192x192.png" alt="作者的图片" onerror="this.style.display='none'"/>
+        
+            <h4 id="about-card-name">煦涵</h4>
+        
+            <div id="about-card-bio"><p>因为热爱，所以坚持。</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-l4ckxdv6tbjuxqwojpoduttbowmwffe9xttrtxbjaohwrzhqzj3ocb4fmrwh.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+        
+<script src="/assets/js/gitalk.js"></script>
+
+        <script type="text/javascript">
+          (function() {
+            new Gitalk({
+              clientID: 'c7c1ad823b46b771570d',
+              clientSecret: '46d251bb9ed9d97efcf23a00db098bf7f7400a31',
+              repo: 'zuojj.github.io',
+              owner: 'zuojj',
+              admin: ['zuojj'],
+              id: 'post/2023/0908/模块化2.html',
+              ...{"language":"en","perPage":10,"distractionFreeMode":false,"enableHotKey":true,"pagerDirection":"first"}
+            }).render('gitalk')
+          })()
+        </script>
+    
+
+
+
+
+    </body>
+</html>

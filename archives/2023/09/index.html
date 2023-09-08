@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-athhlbkl2h9o0tjyweq8ul0h4utvjcbpwygudrdazywyt94bvtc6uxmypt2m.min.css">
+<link rel="stylesheet" href="/assets/css/style-s3qttgqrtgd57gnemxc89qfxwz8jaeotbs4numpbnmrx9z1rsgnwsd3dkbua.min.css">
 
     <!--STYLES END-->
     
@@ -252,17 +252,17 @@
                     
                         <a
                             class="link-unstyled"
-                            href="/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
-                            aria-label=": 2023/0908/推荐一个Node OpenAi api库"
+                            href="/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html"
+                            aria-label=": 2023/todo/openai/推荐一个Node OpenAi api库"
                         >
-                            2023/0908/推荐一个Node OpenAi api库
+                            2023/todo/openai/推荐一个Node OpenAi api库
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -410,7 +410,621 @@
                     
                         <p>
                             <a
-                                href="/post/2023/0908/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html#post-footer"
+                                href="/post/2023/todo/openai/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AANode%20OpenAi%20api%E5%BA%93.html#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                评论和共享
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html"
+                            aria-label=": 2023/0908/模块化2"
+                        >
+                            2023/0908/模块化2
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-09-08T10:27:29+08:00">
+	
+		    9月 08, 2023
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>前言<br>在JavaScript发展初期就是为了实现简单的页面交互逻辑，寥寥数语即可；如今CPU、浏览器性能得到了极大的提升，很多页面逻辑迁移到了客户端（表单验证等），随着web2.0时代的到来，Ajax技术得到广泛应用，jQuery等前端库层出不穷，前端代码日益膨胀，此时在JS方面就会考虑使用模块化规范去管理。<br>本文内容主要有理解模块化，为什么要模块化，模块化的优缺点以及模块化规范,并且介绍下开发中最流行的CommonJS, AMD, ES6、CMD规范。本文试图站在小白的角度，用通俗易懂的笔调介绍这些枯燥无味的概念，希望诸君阅读后，对模块化编程有个全新的认识和理解！<br>建议下载本文源代码，自己动手敲一遍，请猛戳GitHub个人博客(全集)</p>
+<p>一、模块化的理解<br>1.什么是模块?</p>
+<p>将一个复杂的程序依据一定的规则(规范)封装成几个块(文件), 并进行组合在一起<br>块的内部数据与实现是私有的, 只是向外部暴露一些接口(方法)与外部其它模块通信</p>
+<p>2.模块化的进化过程</p>
+<p>全局function模式 : 将不同的功能封装成不同的全局函数</p>
+<p>编码: 将不同的功能封装成不同的全局函数<br>问题: 污染全局命名空间, 容易引起命名冲突或数据不安全，而且模块成员之间看不出直接关系</p>
+<p>复制代码function m1(){<br>  //…<br>}<br>function m2(){<br>  //…<br>}</p>
+<p>namespace模式 : 简单对象封装</p>
+<p>作用: 减少了全局变量，解决命名冲突<br>问题: 数据不安全(外部可以直接修改模块内部的数据)</p>
+<p>复制代码let myModule = {<br>  data: ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a>,<br>  foo() {<br>    console.log(<code>foo() ${this.data}</code>)<br>  },<br>  bar() {<br>    console.log(<code>bar() ${this.data}</code>)<br>  }<br>}<br>myModule.data = ‘other data’ //能直接修改模块内部的数据<br>myModule.foo() // foo() other data<br>这样的写法会暴露所有模块成员，内部状态可以被外部改写。</p>
+<p>IIFE模式：匿名函数自调用(闭包)</p>
+<p>作用: 数据是私有的, 外部只能通过暴露的方法操作<br>编码: 将数据和行为封装到一个函数内部, 通过给window添加属性来向外暴露接口<br>问题: 如果当前这个模块依赖另一个模块怎么办?</p>
+<p>复制代码// index.html文件</p>
+<script type="text/javascript" src="module.js"></script>
+<script type="text/javascript">
+    myModule.foo()
+    myModule.bar()
+    console.log(myModule.data) //undefined 不能访问模块内部数据
+    myModule.data = 'xxxx' //不是修改的模块内部的data
+    myModule.foo() //没有改变
+</script>
+<p>复制代码// module.js文件<br>(function(window) {<br>  let data = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  //操作数据的函数<br>  function foo() {<br>    //用于暴露有函数<br>    console.log(<code>foo() ${data}</code>)<br>  }<br>  function bar() {<br>    //用于暴露有函数<br>    console.log(<code>bar() ${data}</code>)<br>    otherFun() //内部调用<br>  }<br>  function otherFun() {<br>    //内部私有的函数<br>    console.log(‘otherFun()’)<br>  }<br>  //暴露行为<br>  window.myModule = { foo, bar } //ES6写法<br>})(window)<br>最后得到的结果：</p>
+<p>IIFE模式增强 : 引入依赖</p>
+<p>这就是现代模块实现的基石<br>复制代码// module.js文件<br>(function(window, $) {<br>  let data = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  //操作数据的函数<br>  function foo() {<br>    //用于暴露有函数<br>    console.log(<code>foo() ${data}</code>)<br>    $(‘body’).css(‘background’, ‘red’)<br>  }<br>  function bar() {<br>    //用于暴露有函数<br>    console.log(<code>bar() ${data}</code>)<br>    otherFun() //内部调用<br>  }<br>  function otherFun() {<br>    //内部私有的函数<br>    console.log(‘otherFun()’)<br>  }<br>  //暴露行为<br>  window.myModule = { foo, bar }<br>})(window, jQuery)<br>复制代码 // index.html文件<br>  <!-- 引入的js必须有一定顺序 --><br>  <script type="text/javascript" src="jquery-1.10.1.js"></script><br>  <script type="text/javascript" src="module.js"></script><br>  <script type="text/javascript"><br>    myModule.foo()<br>  </script><br>上例子通过jquery方法将页面的背景颜色改成红色，所以必须先引入jQuery库，就把这个库当作参数传入。这样做除了保证模块的独立性，还使得模块之间的依赖关系变得明显。<br>3. 模块化的好处</p>
+<p>避免命名冲突(减少命名空间污染)<br>更好的分离, 按需加载<br>更高复用性<br>高可维护性</p>
+<ol start="4">
+<li>引入多个<script>后出现出现问题</li>
+</ol>
+<p>请求过多</p>
+<p>首先我们要依赖多个模块，那样就会发送多个请求，导致请求过多</p>
+<p>依赖模糊</p>
+<p>我们不知道他们的具体依赖关系是什么，也就是说很容易因为不了解他们之间的依赖关系导致加载先后顺序出错。</p>
+<p>难以维护</p>
+<p>以上两种原因就导致了很难维护，很可能出现牵一发而动全身的情况导致项目出现严重的问题。<br>模块化固然有多个好处，然而一个页面需要引入多个js文件，就会出现以上这些问题。而这些问题可以通过模块化规范来解决，下面介绍开发中最流行的commonjs, AMD, ES6, CMD规范。<br>二、模块化规范<br>1.CommonJS<br>(1)概述<br>Node 应用由模块组成，采用 CommonJS 模块规范。每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。在服务器端，模块的加载是运行时同步加载的；在浏览器端，模块需要提前编译打包处理。<br>(2)特点</p>
+<p>所有代码都运行在模块作用域，不会污染全局作用域。<br>模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。<br>模块加载的顺序，按照其在代码中出现的顺序。</p>
+<p>(3)基本语法</p>
+<p>暴露模块：module.exports = value或exports.xxx = value<br>引入模块：require(xxx),如果是第三方模块，xxx为模块名；如果是自定义模块，xxx为模块文件路径</p>
+<p>此处我们有个疑问：CommonJS暴露的模块到底是什么? CommonJS规范规定，每个模块内部，module变量代表当前模块。这个变量是一个对象，它的exports属性（即module.exports）是对外的接口。加载某个模块，其实是加载该模块的module.exports属性。<br>复制代码// example.js<br>var x = 5;<br>var addX = function (value) {<br>  return value + x;<br>};<br>module.exports.x = x;<br>module.exports.addX = addX;<br>上面代码通过module.exports输出变量x和函数addX。<br>复制代码var example = require('./example.js');//如果参数字符串以“./”开头，则表示加载的是一个位于相对路径<br>console.log(example.x); // 5<br>console.log(example.addX(1)); // 6<br>require命令用于加载模块文件。require命令的基本功能是，读入并执行一个JavaScript文件，然后返回该模块的exports对象。如果没有发现指定模块，会报错。<br>(4)模块的加载机制<br>CommonJS模块的加载机制是，输入的是被输出的值的拷贝。也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。这点与ES6模块化有重大差异（下文会介绍），请看下面这个例子：<br>复制代码// lib.js<br>var counter = 3;<br>function incCounter() {<br>  counter++;<br>}<br>module.exports = {<br>  counter: counter,<br>  incCounter: incCounter,<br>};</p>
+<p>上面代码输出内部变量counter和改写这个变量的内部方法incCounter。<br>复制代码// main.js<br>var counter = require('./lib').counter;<br>var incCounter = require('./lib').incCounter;</p>
+<p>console.log(counter);  // 3<br>incCounter();<br>console.log(counter); // 3<br>上面代码说明，counter输出以后，lib.js模块内部的变化就影响不到counter了。这是因为counter是一个原始类型的值，会被缓存。除非写成一个函数，才能得到内部变动后的值。<br>(5)服务器端实现<br>①下载安装node.js<br>②创建项目结构<br>注意：用npm init 自动生成package.json时，package name(包名)不能有中文和大写<br>复制代码|-modules<br>  |-module1.js<br>  |-module2.js<br>  |-module3.js<br>|-app.js<br>|-package.json<br>  {<br>    "name": "commonJS-node",<br>    "version": "1.0.0"<br>  }<br>③下载第三方模块<br>npm install uniq --save // 用于数组去重<br>④定义模块代码<br>复制代码//module1.js<br>module.exports = {<br>  msg: 'module1',<br>  foo() {<br>    console.log(this.msg)<br>  }<br>}<br>复制代码//module2.js<br>module.exports = function() {<br>  console.log('module2')<br>}<br>复制代码//module3.js<br>exports.foo = function() {<br>  console.log('foo() module3')<br>}<br>exports.arr = [1, 2, 3, 3, 2]<br>复制代码// app.js文件<br>// 引入第三方库，应该放置在最前面<br>let uniq = require('uniq')<br>let module1 = require('./modules/module1')<br>let module2 = require('./modules/module2')<br>let module3 = require('./modules/module3')</p>
+<p>module1.foo() //module1<br>module2() //module2<br>module3.foo() //foo() module3<br>console.log(uniq(module3.arr)) //[ 1, 2, 3 ]<br>⑤通过node运行app.js<br>命令行输入node app.js，运行JS文件<br>(6)浏览器端实现(借助Browserify)<br>①创建项目结构<br>复制代码|-js<br>  |-dist //打包生成文件的目录<br>  |-src //源码所在的目录<br>    |-module1.js<br>    |-module2.js<br>    |-module3.js<br>    |-app.js //应用主源文件<br>|-index.html //运行于浏览器上<br>|-package.json<br>  {<br>    "name": "browserify-test",<br>    "version": "1.0.0"<br>  }<br>②下载browserify</p>
+<p>全局: npm install browserify -g<br>局部: npm install browserify --save-dev</p>
+<p>③定义模块代码(同服务器端)<br>注意：index.html文件要运行在浏览器上，需要借助browserify将app.js文件打包编译，如果直接在index.html引入app.js就会报错！<br>④打包处理js<br>根目录下运行browserify js/src/app.js -o js/dist/bundle.js<br>⑤页面使用引入<br>在index.html文件中引入<script type="text/javascript" src="js/dist/bundle.js"></script><br>2.AMD<br>CommonJS规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。AMD规范则是非同步加载模块，允许指定回调函数。由于Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以CommonJS规范比较适用。但是，如果是浏览器环境，要从服务器端加载模块，这时就必须采用非同步模式，因此浏览器端一般采用AMD规范。此外AMD规范比CommonJS规范在浏览器端实现要来着早。<br>(1)AMD规范基本语法<br>定义暴露模块:<br>复制代码//定义没有依赖的模块<br>define(function(){<br>   return 模块<br>})<br>复制代码//定义有依赖的模块<br>define([‘module1’, ‘module2’], function(m1, m2){<br>   return 模块<br>})<br>引入使用模块:<br>复制代码require([‘module1’, ‘module2’], function(m1, m2){<br>   使用m1/m2<br>})<br>(2)未使用AMD规范与使用require.js<br>通过比较两者的实现方法，来说明使用AMD规范的好处。</p>
+<p>未使用AMD规范</p>
+<p>复制代码// dataService.js文件<br>(function (window) {<br>  let msg = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  function getMsg() {<br>    return msg.toUpperCase()<br>  }<br>  window.dataService = {getMsg}<br>})(window)<br>复制代码// alerter.js文件<br>(function (window, dataService) {<br>  let name = ‘Tom’<br>  function showMsg() {<br>    alert(dataService.getMsg() + ‘, ‘ + name)<br>  }<br>  window.alerter = {showMsg}<br>})(window, dataService)<br>复制代码// main.js文件<br>(function (alerter) {<br>  alerter.showMsg()<br>})(alerter)<br>复制代码// index.html文件</p>
+<div><h1>Modular Demo 1: 未使用AMD(require.js)</h1></div>
+<script type="text/javascript" src="js/modules/dataService.js"></script>
+<script type="text/javascript" src="js/modules/alerter.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+最后得到如下结果：
+
+<p>这种方式缺点很明显：首先会发送多个请求，其次引入的js文件顺序不能搞错，否则会报错！</p>
+<p>使用require.js</p>
+<p>RequireJS是一个工具库，主要用于客户端的模块管理。它的模块管理遵守AMD规范，RequireJS的基本思想是，通过define方法，将代码定义为模块；通过require方法，实现代码的模块加载。<br>接下来介绍AMD规范在浏览器实现的步骤：<br>①下载require.js, 并引入</p>
+<p>官网: <a href="http://www.requirejs.cn/" target="_blank" rel="noopener">http://www.requirejs.cn/</a><br>github : <a href="https://github.com/requirejs/requirejs" target="_blank" rel="noopener">https://github.com/requirejs/requirejs</a></p>
+<p>然后将require.js导入项目: js/libs/require.js<br>②创建项目结构<br>复制代码|-js<br>  |-libs<br>    |-require.js<br>  |-modules<br>    |-alerter.js<br>    |-dataService.js<br>  |-main.js<br>|-index.html<br>③定义require.js的模块代码<br>复制代码// dataService.js文件<br>// 定义没有依赖的模块<br>define(function() {<br>  let msg = ‘<a href="http://www.baidu.com&#39;" target="_blank" rel="noopener">www.baidu.com&#39;</a><br>  function getMsg() {<br>    return msg.toUpperCase()<br>  }<br>  return { getMsg } // 暴露模块<br>})<br>复制代码//alerter.js文件<br>// 定义有依赖的模块<br>define([‘dataService’], function(dataService) {<br>  let name = ‘Tom’<br>  function showMsg() {<br>    alert(dataService.getMsg() + ‘, ‘ + name)<br>  }<br>  // 暴露模块<br>  return { showMsg }<br>})<br>复制代码// main.js文件<br>(function() {<br>  require.config({<br>    baseUrl: ‘js/‘, //基本路径 出发点在根目录下<br>    paths: {<br>      //映射: 模块标识名: 路径<br>      alerter: ‘./modules/alerter’, //此处不能写成alerter.js,会报错<br>      dataService: ‘./modules/dataService’<br>    }<br>  })<br>  require([‘alerter’], function(alerter) {<br>    alerter.showMsg()<br>  })<br>})()<br>复制代码// index.html文件<br><!DOCTYPE html></p>
+<html>
+  <head>
+    <title>Modular Demo</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+  <body>
+    <!-- 引入require.js并指定js主文件的入口 -->
+    <script data-main="js/main" src="js/libs/require.js"></script>
+  </body>
+</html>
+④页面引入require.js模块:
+在index.html引入 <script data-main="js/main" src="js/libs/require.js"></script>
+此外在项目中如何引入第三方库？只需在上面代码的基础稍作修改：
+复制代码// alerter.js文件
+define(['dataService', 'jquery'], function(dataService, $) {
+  let name = 'Tom'
+  function showMsg() {
+    alert(dataService.getMsg() + ', ' + name)
+  }
+  $('body').css('background', 'green')
+  // 暴露模块
+  return { showMsg }
+})
+复制代码// main.js文件
+(function() {
+  require.config({
+    baseUrl: 'js/', //基本路径 出发点在根目录下
+    paths: {
+      //自定义模块
+      alerter: './modules/alerter', //此处不能写成alerter.js,会报错
+      dataService: './modules/dataService',
+      // 第三方库模块
+      jquery: './libs/jquery-1.10.1' //注意：写成jQuery会报错
+    }
+  })
+  require(['alerter'], function(alerter) {
+    alerter.showMsg()
+  })
+})()
+上例是在alerter.js文件中引入jQuery第三方库，main.js文件也要有相应的路径配置。
+小结：通过两者的比较，可以得出AMD模块定义的方法非常清晰，不会污染全局环境，能够清楚地显示依赖关系。AMD模式可以用于浏览器环境，并且允许非同步加载模块，也可以根据需要动态加载模块。
+3.CMD
+CMD规范专门用于浏览器端，模块的加载是异步的，模块使用时才会加载执行。CMD规范整合了CommonJS和AMD规范的特点。在 Sea.js 中，所有 JavaScript 模块都遵循 CMD模块定义规范。
+(1)CMD规范基本语法
+定义暴露模块：
+复制代码//定义没有依赖的模块
+define(function(require, exports, module){
+  exports.xxx = value
+  module.exports = value
+})
+复制代码//定义有依赖的模块
+define(function(require, exports, module){
+  //引入依赖模块(同步)
+  var module2 = require('./module2')
+  //引入依赖模块(异步)
+    require.async('./module3', function (m3) {
+    })
+  //暴露模块
+  exports.xxx = value
+})
+引入使用模块：
+复制代码define(function (require) {
+  var m1 = require('./module1')
+  var m4 = require('./module4')
+  m1.show()
+  m4.show()
+})
+(2)sea.js简单使用教程
+①下载sea.js, 并引入
+
+<p>官网: seajs.org/<br>github : github.com/seajs/seajs</p>
+<p>然后将sea.js导入项目: js/libs/sea.js<br>②创建项目结构<br>复制代码|-js<br>  |-libs<br>    |-sea.js<br>  |-modules<br>    |-module1.js<br>    |-module2.js<br>    |-module3.js<br>    |-module4.js<br>    |-main.js<br>|-index.html<br>③定义sea.js的模块代码<br>复制代码// module1.js文件<br>define(function (require, exports, module) {<br>  //内部变量数据<br>  var data = ‘atguigu.com’<br>  //内部函数<br>  function show() {<br>    console.log(‘module1 show() ‘ + data)<br>  }<br>  //向外暴露<br>  exports.show = show<br>})<br>复制代码// module2.js文件<br>define(function (require, exports, module) {<br>  module.exports = {<br>    msg: ‘I Will Back’<br>  }<br>})<br>复制代码// module3.js文件<br>define(function(require, exports, module) {<br>  const API_KEY = ‘abc123’<br>  exports.API_KEY = API_KEY<br>})<br>复制代码// module4.js文件<br>define(function (require, exports, module) {<br>  //引入依赖模块(同步)<br>  var module2 = require(‘./module2’)<br>  function show() {<br>    console.log(‘module4 show() ‘ + module2.msg)<br>  }<br>  exports.show = show<br>  //引入依赖模块(异步)<br>  require.async(‘./module3’, function (m3) {<br>    console.log(‘异步引入依赖模块3  ‘ + m3.API_KEY)<br>  })<br>})<br>复制代码// main.js文件<br>define(function (require) {<br>  var m1 = require(‘./module1’)<br>  var m4 = require(‘./module4’)<br>  m1.show()<br>  m4.show()<br>})<br>④在index.html中引入<br>复制代码<script type="text/javascript" src="js/libs/sea.js"></script></p>
+<script type="text/javascript">
+  seajs.use('./js/modules/main')
+</script>
+<p>最后得到结果如下：</p>
+<p>4.ES6模块化<br>ES6 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS 和 AMD 模块，都只能在运行时确定这些东西。比如，CommonJS 模块就是对象，输入时必须查找对象属性。<br>(1)ES6模块化语法<br>export命令用于规定模块的对外接口，import命令用于输入其他模块提供的功能。<br>复制代码/** 定义模块 math.js <strong>/<br>var basicNum = 0;<br>var add = function (a, b) {<br>    return a + b;<br>};<br>export { basicNum, add };<br>/</strong> 引用模块 **/<br>import { basicNum, add } from ‘./math’;<br>function test(ele) {<br>    ele.textContent = add(99 + basicNum);<br>}<br>如上例所示，使用import命令的时候，用户需要知道所要加载的变量名或函数名，否则无法加载。为了给用户提供方便，让他们不用阅读文档就能加载模块，就要用到export default命令，为模块指定默认输出。<br>复制代码// export-default.js<br>export default function () {<br>  console.log(‘foo’);<br>}<br>复制代码// import-default.js<br>import customName from ‘./export-default’;<br>customName(); // ‘foo’<br>模块默认输出, 其他模块加载该模块时，import命令可以为该匿名函数指定任意名字。<br>(2)ES6 模块与 CommonJS 模块的差异<br>它们有两个重大差异：<br>① CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。<br>② CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。<br>第二个差异是因为 CommonJS 加载的是一个对象（即module.exports属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。<br>下面重点解释第一个差异，我们还是举上面那个CommonJS模块的加载机制例子:<br>复制代码// lib.js<br>export let counter = 3;<br>export function incCounter() {<br>  counter++;<br>}<br>// main.js<br>import { counter, incCounter } from ‘./lib’;<br>console.log(counter); // 3<br>incCounter();<br>console.log(counter); // 4<br>ES6 模块的运行机制与 CommonJS 不一样。ES6 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。<br>(3) ES6-Babel-Browserify使用教程<br>简单来说就一句话：使用Babel将ES6编译为ES5代码，使用Browserify编译打包js。<br>①定义package.json文件<br>复制代码 {<br>   “name” : “es6-babel-browserify”,<br>   “version” : “1.0.0”<br> }<br>②安装babel-cli, babel-preset-es2015和browserify</p>
+<p>npm install babel-cli browserify -g<br>npm install babel-preset-es2015 –save-dev<br>preset 预设(将es6转换成es5的所有插件打包)</p>
+<p>③定义.babelrc文件<br>复制代码  {<br>    “presets”: [“es2015”]<br>  }<br>④定义模块代码<br>复制代码//module1.js文件<br>// 分别暴露<br>export function foo() {<br>  console.log(‘foo() module1’)<br>}<br>export function bar() {<br>  console.log(‘bar() module1’)<br>}<br>复制代码//module2.js文件<br>// 统一暴露<br>function fun1() {<br>  console.log(‘fun1() module2’)<br>}<br>function fun2() {<br>  console.log(‘fun2() module2’)<br>}<br>export { fun1, fun2 }<br>复制代码//module3.js文件<br>// 默认暴露 可以暴露任意数据类项，暴露什么数据，接收到就是什么数据<br>export default () =&gt; {<br>  console.log(‘默认暴露’)<br>}<br>复制代码// app.js文件<br>import { foo, bar } from ‘./module1’<br>import { fun1, fun2 } from ‘./module2’<br>import module3 from ‘./module3’<br>foo()<br>bar()<br>fun1()<br>fun2()<br>module3()<br>⑤ 编译并在index.html中引入</p>
+<p>使用Babel将ES6编译为ES5代码(但包含CommonJS语法) : babel js/src -d js/lib<br>使用Browserify编译js : browserify js/lib/app.js -o js/lib/bundle.js</p>
+<p>然后在index.html文件中引入<br>复制代码 <script type="text/javascript" src="js/lib/bundle.js"></script><br>最后得到如下结果：</p>
+<p>此外第三方库(以jQuery为例)如何引入呢？<br>首先安装依赖npm install jquery@1<br>然后在app.js文件中引入<br>复制代码//app.js文件<br>import { foo, bar } from ‘./module1’<br>import { fun1, fun2 } from ‘./module2’<br>import module3 from ‘./module3’<br>import $ from ‘jquery’</p>
+<p>foo()<br>bar()<br>fun1()<br>fun2()<br>module3()<br>$(‘body’).css(‘background’, ‘green’)<br>三、总结</p>
+<p>CommonJS规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了AMD CMD解决方案。<br>AMD规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，AMD规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。<br>CMD规范与AMD规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在Node.js中运行。不过，依赖SPM 打包，模块的加载逻辑偏重<br>ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案。</p>
+<p>作者：浪里行舟<br>链接：<a href="https://juejin.cn/post/6844903744518389768" target="_blank" rel="noopener">https://juejin.cn/post/6844903744518389768</a><br>来源：稀土掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%962.html#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                评论和共享
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%963.html"
+                            aria-label=": 2023/0908/模块化3"
+                        >
+                            2023/0908/模块化3
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-09-08T10:27:29+08:00">
+	
+		    9月 08, 2023
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>这是一篇关于前端模块化的文章，但这里并不讲新技术，而是谈一谈——历史</p>
+<p>夫以铜为镜，可以正衣冠；以史为镜，可以知兴替 ——《旧唐书·魏徵传》<br>前言<br>也许在谈论具体的内容之前，我们需要谈论一下关键词的定义。 什么是”模块”？在不同的语境下模块有不同的含义。</p>
+<p>但在本文中，我们从广义的角度出发，将它解释为两个方面</p>
+<p>外部的模块: 指代引入前端工程的某个外部的包(package),可能由多个JS文件组成，但会通过入口暴露给我们项目调用<br>内部的模块: 指代我们自己的工程项目中编码的最小单元： 即单个的JS文件<br>模块化已经发展了有十余年了，不同的工具和轮子层出不穷，但总结起来，它们解决的问题主要有三个</p>
+<p>外部模块的管理<br>内部模块的组织<br>模块源码到目标代码的编译和转换<br>时间线<br>下面是最各大工具或框架的诞生时间，不知不觉，模块化的发展已有十年之久了。</p>
+<p> 生态             诞生时间<br> Node.js          2009年<br> NPM              2010年<br> requireJS(AMD)   2010年<br> seaJS(CMD)       2011年<br> broswerify       2011年<br> webpack          2012年<br> grunt            2012年<br> gulp             2013年<br> react            2013年<br> vue              2014年<br> angular          2016年<br> redux            2015年<br> vite             2020年<br> snowpack         2020年<br>外部模块的管理<br>在模块化的过程中，首先要解决的就是外部模块的管理问题。</p>
+<p>Node.js和NPM的发布</p>
+<p>时间倒回到2009年，一个叫莱恩(Ryan Dahl)的精神小伙创立了一个能够运行JavaScript的服务器环境——Node.js，并在一年之后，发布了Node.js自带的模块管理工具npm，npm的全称是node package manager，也就是Node包管理器。</p>
+<p>Node的出现给JavaScript的带来了许多改变：</p>
+<p>一方面, Node使JavaScript不局限于前端，同时还成为了一门后端语言。更重要的是: 经过10年的发展，Node.js已经完全融入到了前端开发流程中。我们用它创建静态资源服务器，实现热重载和跨域代理等功能，同时还用它源代码中的特殊写法做编译转换处理(JSX/Sass/TypeScript)，将代码翻译成浏览器可以理解的格式(ES5/CSS)。到今天，即使我们不用Node.js独立开发程序后台，它作为开发工具的重要性也不会改变</p>
+<p>另一方面, Node.js自带的JS模块管理工具npm，从根本上改变了前端使用外部模块的方式，如果要打个比方的话，就好比从原始社会进入了现代社会</p>
+<p>NPM时代以前的外部模块使用方式</p>
+<p>在一开始没有npm的时候，如果我们需要在项目里使用某个外部模块，我们可能会去官网直接把文件下载下来放到项目中，同时在入口html中通过script标签引用它。</p>
+<p>每引用一个外部模块，我们都要重复这个过程</p>
+<p>需要用到jQuery，去 jQuery 官网下载 jQuery库，导入到项目中<br>需要用到lodash,去lodash官网下载lodash库<br>需要用到某个BootStrap，去BootStrap官网官网下载BootStrap库，导入到项目中<br>…<br>除了这些全局的UI库或工具库，我们可能还会使用到很多实现细节功能的辅助模块，如果都按这种方式使用未免过于粗暴，而且给我们带来许多麻烦</p>
+<p>使用上缺乏便利性<br>难以跟踪各个外部模块的来源<br>没有统一的版本管理机制<br>而npm的出现改变了这种情况</p>
+<p>NPM时代以后外部模块的使用方式</p>
+<p>我们上面说过，NPM在2010年伴随着Node.js的新版本一起发布，是一个Node自带的模块管理工具。</p>
+<p>从概念上看它由以下两个部分组成</p>
+<p>NPM是一个远程的JavaScript代码仓库，所有的开发者都可以向这里提交可共享的模块，并给其他开发者下载和使用<br>NPM还包含一个命令行工具，开发者通过运行npm publish命令把自己写的模块发布到NPM仓库上去，通过运行npm install [模块名]，可以将别人的模块下载到自己项目根目录中一个叫node_modules的子目录下</p>
+<p>每次npm install的时候，都会在package.json这个文件中更新模块和对应的版本信息。</p>
+<p>// package.json<br>{<br>  …<br>  “dependencies”: {<br>    “bootstrap”: “^4.5.2”,<br>    “jquery”: “^3.5.1”<br>  }<br>}<br>于是乎，包括jQuery等知名模块开发者的前端工程师们，都通过npm publish的方式把自己的模块发布到NPM上去了。前端开发者们真正有了一个属于自己的社区和平台，如万千漂泊游船归于港湾，而NPM也名声渐噪</p>
+<p>早在2019年6月，NPM平台上的模块数量就超过了100万，而到写下这篇文章的时候，NPM模块数量已超过了140万</p>
+<p>NPM的出现实际上是一个必然，前端工程的复杂化要求我们必须要有这么一个集中的JS库管理平台。但为什么它会是NPM呢？这和后来Node.js的火热有很大关系，因为NPM是Node.js内置的包管理器，所以跟随着Node得到了开发者的追捧。</p>
+<p>综上所述，NPM解决了外部模块的管理问题。</p>
+<p>内部模块的组织<br>在模块化的过程中，还需要解决的是内部模块的组织问题。</p>
+<p>模块化第一阶段：原生JS组织阶段<br>在最原始的时代，我们是通过下面这种方式组织我们的模块代码的，将不同的JS文件在html中一一引入。每个文件代表一个模块</p>
+<p>// index.html　</p>
+<script src="./a.js"></script> 　　
+<script src="./b.js"></script> 　　
+<script src="./c.js"></script> 　　
+<script src="./d.js"></script> 　　　               
+<p>并通过模块模式去组织代码：如下所示，我们通过一个“立即调用的函数表达式”(IIFE)去组织模块</p>
+<p>将每个模块包裹在一个函数作用域里面执行，这样就可以最大程度地避免污染全局执行环境<br>通过执行匿名函数得到模块输出，可以暴露给下面的其他模块使用</p>
+<script>
+  var module1 = (function(){
+    var x = 1  
+    return { a: x };
+  })();
+</script>
+<script>
+  var module2 = (function(){
+   var a = module1.a;   
+   return { b: a };
+ })();
+</script>              
+<p>但这种使用方式仍然比较粗暴</p>
+<p>随着项目扩大，html文件中会包含大量script标签。<br>script标签的先后顺序并不能很好地契合模块间的依赖关系。在复杂应用中，模块的依赖关系通常树状或网状的，如a.js依赖于b.js和c.js，b.js依赖于b1.js和b2.js。相对复杂的依赖关系难以用script标签的先后顺序组织。<br>让代码的逻辑关系难以理解，也不便于维护，容易出现某个脚本加载时依赖的变量尚未加载而导致的错误。<br>因为对script标签顺序的要求而使用同步加载，但这却容易导致加载时页面卡死的问题<br>仍然会因为全局变量污染全局环境，导致命名冲突<br>我们需要针对这些问题提出解决方案，而AMD和CMD就是为解决这些问题而提出的规范</p>
+<p>模块化的第二阶段：在线处理阶段<br>模块化规范的野蛮生长</p>
+<p>10多年以前，前端模块化刚刚开始，正处在野蛮生长的阶段。这个过程中诞生了诸多模块化规范: AMD/CMD/CommonJS/ES6 Module。没错，前端并没有一开始就形成统一的模块化规范，而是多个规范同时多向发展。直到某一类规范占据社区主流之时，模块化规范野蛮生长的过程才宣告结束。</p>
+<p>首先开始在前端流行的模块化规范是AMD/CMD, 以及实践这两种规范的require.js和Sea.js, AMD和CMD可看作是”在线处理”模块的方案，也就是等到用户浏览web页面下载了对应的require.js和sea.js文件之后，才开始进行模块依赖分析，确定加载顺序和执行顺序。模块组织过程在线上进行。</p>
+<p>AMD &amp;&amp; CMD<br>AMD和CMD只是一种设计规范，而不是一种实现。<br>AMD<br>我们先来说下AMD，它的全称是Asynchronous Module Definition，即“异步模块定义”。它是一种组织前端模块的方式</p>
+<p>AMD的理念可以用如下两个API概括： define和require</p>
+<p>define方法用于定义一个模块，它接收两个参数：</p>
+<p>第一个参数是一个数组，表示这个模块所依赖的其他模块<br>第二个参数是一个方法，这个方法通过入参的方式将所依赖模块的输出依次取出，并在方法内使用，同时将返回值传递给依赖它的其他模块使用。<br>// module0.js<br>define([‘Module1’, ‘Module2’], function (module1, module2) {<br>    var result1 = module1.exec();<br>    var result2 = module2.exec();<br>    return {<br>      result1: result1,<br>      result2: result2<br>    }<br>});<br>require用于真正执行模块，通常AMD框架会以require方法作为入口，进行依赖关系分析并依次有序地进行加载</p>
+<p>// 入口文件<br>require([‘math’], function (math) {<br>　 math.sqrt(15)<br>});<br>define &amp;&amp; require的区别</p>
+<p>可以看到define和require在依赖模块声明和接收方面是一样的，它们的区别在于define能自定义模块而require不能，require的作用是执行模块加载。</p>
+<p>通过AMD规范组织后的JS文件看起来像下面这样</p>
+<p>depModule.js</p>
+<p>define(function () {<br>  return printSth: function () {<br>    alert(“some thing”)<br>  }<br>});<br>app.js</p>
+<p>define([‘depModule’], function (mod) {<br>  mod.printSth();<br>});<br>index.html</p>
+<p>// amd.js意为某个实现了AMD规范的库</p>
+<script src="...amd.js"></script>
+<script>
+  require(['app'], function (app) {
+    // ...入口文件
+  })
+</script>
+<p>我们可以看到，AMD规范去除了纯粹用script标签顺序组织模块带来的问题</p>
+<p>通过依赖数组的方式声明依赖关系，具体依赖加载交给具体的AMD框架处理<br>避免声明全局变量带来的环境污染和变量冲突问题<br>正如AMD其名所言(Asynchronous), 模块是异步加载的，防止JS加载阻塞页面渲染<br>遵循AMD规范实现的模块加载器</p>
+<p>我们前面说过，AMD只是一个倡议的规范，那么它有哪些实现呢？</p>
+<p>根据史料记载，AMD的实现主要有两个: requireJS和curl.js, 其中requireJS在2010年推出，是AMD的主流框架</p>
+<p>官网: <a href="https://requirejs.org/" target="_blank" rel="noopener">https://requirejs.org/</a><br>CMD<br>CMD是除AMD以外的另外一种模块组织规范。CMD即Common Module Definition，意为“通用模块定义”。</p>
+<p>和AMD不同的是，CMD没有提供前置的依赖数组，而是接收一个factory函数，这个factory函数包括3个参数</p>
+<p>require: 一个方法标识符，调用它可以动态的获取一个依赖模块的输出<br>exports: 一个对象，用于对其他模块提供输出接口，例如:exports.name = “xxx”<br>module: 一个对象，存储了当前模块相关的一些属性和方法，其中module.exports属性等同于上面的exports<br>如下所示</p>
+<p>// CMD<br>define(function (requie, exports, module) {<br>    //依赖就近书写<br>    var module1 = require(‘Module1’);<br>    var result1 = module1.exec();<br>    module.exports = {<br>      result1: result1,<br>    }<br>});</p>
+<p>// AMD<br>define([‘Module1’], function (module1) {<br>    var result1 = module1.exec();<br>    return {<br>      result1: result1,<br>    }<br>}); </p>
+<p>CMD &amp;&amp; AMD的区别</p>
+<p>从上面的代码比较中我们可以得出AMD规范和CMD规范的区别</p>
+<p>一方面，在依赖的处理上</p>
+<p>AMD推崇依赖前置，即通过依赖数组的方式提前声明当前模块的依赖<br>CMD推崇依赖就近，在编程需要用到的时候通过调用require方法动态引入<br>另一方面，在本模块的对外输出上</p>
+<p>AMD推崇通过返回值的方式对外输出<br>CMD推崇通过给module.exports赋值的方式对外输出<br>遵循CMD规范实现的模块加载器</p>
+<p>sea.js是遵循CMD规范实现的模块加载器，又或者更准确的说法是: CMD正是在sea.js推广的过程中逐步确立的规范，并不是CMD诞生了sea.js。相反，是sea.js诞生了CMD</p>
+<p>CMD和AMD并不是互斥的，require.js和sea.js也并不是完全不同，实际上，通过阅读API文档我们会发现，CMD后期规范容纳了AMD的一些写法。</p>
+<p>AMD &amp;&amp; CMD背后的实现原理</p>
+<p>下面以sea.js为例</p>
+<p>1.解析define方法内的require调用</p>
+<p>我们之前说过,sea.js属于CMD, 所以它的依赖是就近获取的，</p>
+<p>所以sea.js会多做一项工作：也就是对define接收方法体内require调用的解析。</p>
+<p>先定义parseDependencies方法: 通过正则匹配获取字符串中的require中的参数并存储到数组中返回</p>
+<p>var REQUIRE_RE = /“(?:\“|[^”])*”|’(?:\‘|[^’])<em>‘|/\</em>[\S\s]<em>?*/|/(?:\/|[^/\r\n])+/(?=[^/])|//.</em>|.\s<em>require|(?:^|[^$])\brequire\s*(\s</em>([“‘])(.+?)\1\s*)/g<br>var SLASH_RE = /\\/g</p>
+<p>function parseDependencies(code) {<br>  var ret = []<br>  code.replace(SLASH_RE, “”)<br>      .replace(REQUIRE_RE, function(m, m1, m2) {<br>        if (m2) {<br>          ret.push(m2)<br>        }<br>      })</p>
+<p>  return ret<br>}</p>
+<p>然后通过toString将define接收的方法转化为字符串，然后调用parseDependencies解析。这样我们就获取到了一个define方法里面所有的依赖模块的数组</p>
+<p>// Parse dependencies according to the module factory code<br>if (!isArray(deps) &amp;&amp; isFunction(factory)) {<br>    deps =  parseDependencies(factory.toString())<br>}           </p>
+<ol start="2">
+<li>然后Sea.js执行的时候，会从入口开始遍历依赖模块，并依次将它们加载到浏览器中，加载方法如下所示。</li>
+</ol>
+<p>function request(url, callback, charset, crossorigin) {<br>  var node = doc.createElement(“script”)<br>  addOnload(node, callback, url) // 添加回调，回调函数在 3 中<br>  node.async = true //异步<br>  node.src = url<br>  head.appendChild(node)<br>}<br>而且在每个依赖加载完后都会通过回调的方式调用3中的onload方法</p>
+<p>3.在onload方法中，sea.js会设置一个计数变量remain，用来计算依赖是否加载完毕。每加载完一个模块就执行remain - 1操作，并通过remain === 0 判断依赖是否全部加载完毕。</p>
+<p>如果全部加载完毕就执行4中的mod.callback方法</p>
+<p>Module.prototype.onload = function() {<br>  var mod = this<br>  mod.status = STATUS.LOADED<br>  for (var i = 0, len = (mod._entry || []).length; i &lt; len; i++) {<br>    var entry = mod._entry[i]<br>    if (–entry.remain === 0) {<br>      entry.callback()<br>    }<br>  }<br>  delete mod._entry<br>}<br>大概因为require.js出来比较早的原因，所以没有用Promise.all一类的API</p>
+<p>4.当判断entry.remain === 0时，也即依赖模块全部加载完毕时，会调用一开始callback方法，去依次执行加载完毕的依赖模块，并将输出传递给use方法回调</p>
+<p>// sea.js的use方法类似于AMD规范中的require方法,用于执行入口函数<br>Module.use = function (ids, callback, uri) {<br>  var mod = Module.get(uri, isArray(ids) ? ids : [ids])<br>  mod.callback = function() {<br>    var exports = []<br>    var uris = mod.resolve();<br>    // 依次执行加载完毕的依赖模块，并将输出传递给use方法回调<br>    for (var i = 0, len = uris.length; i &lt; len; i++) {<br>      exports[i] = cachedMods[uris[i]].exec()<br>   }<br>   // 执行use方法回调<br>   if (callback) {<br>      callback.apply(global, exports)<br>   }<br>  }<br>}</p>
+<p>参考资料： <a href="https://segmentfault.com/a/1190000016001572" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016001572</a>               </p>
+<p>ES6的模块化风格<br>关于AMD/CMD的介绍到此为止，后面的事情我们都知道了，伴随着babel等编译工具和webpack等自动化工具的出现，AMD/CMD逐渐湮没在历史的浪潮当中，然后大家都习惯于用CommonJS和ES6的模块化方式编写代码了。</p>
+<p>这一切是怎么发生的呢？ 请看</p>
+<p>CommonJS &amp;&amp; ES6<br>CommonJS是Node.js使用的模块化方式，而import/export则是ES6提出的模块化规范。它们的语法规则如下。</p>
+<p>// ES6<br>import { foo } from ‘./foo’; // 输入<br>export const bar = 1;        // 输出</p>
+<p>// CommonJS<br>const foo = require(‘./foo’); // 输入<br>module.exports = { 。         // 输出<br>    bar:1<br>}<br>实际上我们能感觉到，这种模块化方式用起来比CMD/AMD方便。</p>
+<p>但在最开始的时候，我们却不能在前端页面中使用它们，因为浏览器并不能理解这种语法。</p>
+<p>但后来，编译工具babel的出现让这变成了可能</p>
+<p>babel的出现和ES6模块化的推广<br>在2014年十月，babel1.7发布。babel是一个JavaScript 编译器，它让我们能够使用符合开发需求的编程风格去编写代码，然后通过babel的编译转化成对浏览器兼容良好的JavaScript。</p>
+<p>Bablel的出现改变了我们的前端开发观点。它让我们意识到：对前端项目来说，开发的代码和生产的前端代码可以是不一样的，也应该是不一样的。</p>
+<p>在开发的时候，我们追求的是编程的便捷性和可阅读性。<br>而在生产中，我们追求的是代码对各种浏览器的兼容性。<br>babel编译器让我们能做到这一点。在babel出现之前的AMD/CMD时代，开发和生产的代码并没有明显的区分性，开发是怎样的生产出来后也就是怎样的。</p>
+<p>而babel则将开发和生产这两个流程分开了，同时让我们可以用ES6中的import/export进行模块化开发。</p>
+<p>至此，AMD/CMD的时代宣告结束，ES6编程的时代到来</p>
+<p>Babel的工作原理<br>Babel的工作流程可概括为三个阶段</p>
+<p>Parse(解析): 通过词法分析和语法分析，将源代码解析成抽象语法树(AST)<br>Transform(转换)：对解析出来的抽象语法树做中间转换处理<br>Generate(生成)：用经过转换后的抽象语法树生成新的代码</p>
+<p>模块化的第三阶段：预处理阶段<br>现在时间来到了2013年左右，AMD/CMD的浪潮已经逐渐退去，模块化的新阶段——预编译阶段开始了。</p>
+<p>一开始的CMD/AMD方案，可看作是“在线编译”模块的方案，也就是等到用户浏览web页面下载了js文件之后，才开始进行模块依赖分析，确定加载顺序和执行顺序。但这样却不可避免的带来了一些问题</p>
+<p>在线组织模块的方式会延长前端页面的加载时间，影响用户体验。<br>加载过程中发出了海量的http请求，降低了页面性能。<br>于是开发者们想了对应的方法去解决这些问题：</p>
+<p>开发一个工具，让它把组织模块的工作提前做好，在代码部署上线前就完成，从而节约页面加载时间<br>使用工具进行代码合并，把多个script的代码合并到少数几个script里，减少http请求的数量。</p>
+<p>在这样的背景下，一系列模块预处理的工具如雨后春笋般出现了。</p>
+<p>典型的代表是2011年出现的broswerify 和2012年发明的webpack。</p>
+<p>它们一开始的定位是类似的，都是通过预先打包的方式，把前端项目里面的多个文件打包成单个文件或少数几个文件，这样的话就可以压缩首次页面访问时的http请求数量，从而提高性能。</p>
+<p>当然后面的事情我们都知道了，webpack因为发展得更好而占据了主流的前端社区，而broswerify则渐渐消失在红尘之中。</p>
+<p>broswerify<br>以broswerify为例，我们可以通过npm安装它</p>
+<p>npm install -g browserify<br>broswerify允许我们通过CommonJS的规范编写代码，例如下面的入口文件main.js</p>
+<p>// main.js<br>var a = require(‘./a.js’);<br>var b = require(‘./b.js’);<br>…<br>然后我们可以用broswerify携带的命令行工具处理main.js，它会自动分析依赖关系并进行打包,打包后会生成集合文件bundle.js。</p>
+<p>browserify main.js -o bundle.js           </p>
+<p>webpack<br>webpack是自broswerify出现一年以后，后来居上并占据主流的打包工具。webpack内部使用babel进行解析，所以ES6和CommonJS等模块化方式是可以在webpack中自由使用的。</p>
+<p>通过安装webpack这一npm模块便可使用webpack工具</p>
+<p>npm install –save-dev webpack<br>它要求我们编写一份名为webpack.config.js的配置文件，并以entry字段和output字段分别表示打包的入口和输出路径</p>
+<p>// webpack.config.js<br>const path = require(‘path’);</p>
+<p>module.exports = {<br>  entry: ‘./src/index.js’,<br>  output: {<br>    path: path.resolve(__dirname, ‘dist’),<br>    filename: ‘bundle.js’<br>  }<br>};<br>打包完毕后，我们的index.html只需要加载bundle.js就可以了。</p>
+<!doctype html>
+<html>
+  <head>
+    ...
+  <meta name="generator" content="Hexo 4.2.1"></head>
+  <body>
+    ...
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>        
+
+
+<p>打包工具面临的问题 &amp;&amp; 解决方案<br>代码打包当然不是一本万利的，它们也面临着一些副作用带来的问题，其中最主要的就是打包后代码体积过大的问题</p>
+<p>代码打包的初衷是减少类似CMD框架造成的加载脚本(http请求)数量过多的问题，但也带来了打包后单个script脚本体积过大的问题：如此一来，首屏加载会消耗很长时间并拖慢速度，可谓是物极必反。</p>
+<p>webpack于是引入了代码拆分的功能(Code Splitting)来解决这个问题, 从全部打包后退一步：可以打包成多个包</p>
+<p>虽然允许拆多个包了，但包的总数仍然比较少，比CMD等方案加载的包少很多<br>Code Splitting有可分为两个方面的作用：</p>
+<p>一是实现第三方库和业务代码的分离：业务代码更新频率快，而第三方库代码更新频率是比较慢的。分离之后可利用浏览器缓存机制加载第三方库，从而加快页面访问速度<br>二是实现按需加载: 例如我们经常通过前端路由分割不同页面，除了首页外的很多页面(路由)可能访问频率较低，我们可将其从首次加载的资源中去掉，而等到相应的触发时刻再去加载它们。这样就减少了首屏资源的体积，提高了页面加载速度。<br>A.实现第三方库和业务代码的分离</p>
+<p>这种代码拆分可通过webpack独特的插件机制完成。plugins字段是是一个数组，可接收不同的plugins实例，从而给webpack打包程序附加不同的功能，CommonsChunkPlugin就是一个实现代码拆分的插件。</p>
+<p>// webpack.config.js<br>module.exports = {<br>  plugins: [<br>    new webpack.optimize.CommonsChunkPlugin({<br>      name: ‘commons’,        // the commons chunk name<br>      filename: ‘commons.js’, // the filename of the commons chunk)<br>      minChunks: 3,           // Modules must be shared between 3 entries<br>    });<br>  ]<br>};<br>通过上面的配置，webpack在执行打包的时候会把被引用超过3次的依赖文件视为”公共文件”，并单独打包到commons.js中，而不是打包到主入口文件里。</p>
+<p>对于React，Redux,lodash这些第三方库，因为引用次数远远超过3次，当然也是会被打包到common.js中去的。</p>
+<p>B.实现按需加载</p>
+<p>正如其字面意思，按需加载就是等到需要的时候才加载一部分模块。并不选择将其代码打包到首次加载的入口bundle中，而是等待触发的时机，届时才通过动态脚本插入的方式进行加载: 即创建script元素，添加脚本链接并通过appendChild加入到html元素中</p>
+<p>例如我们需要实现一个功能，在点击某个按钮的时候，使用某个模块的功能。这时我们可以使用ES6的import语句动态导入，webpack会支持import的功能并实现按需加载</p>
+<p>button.addEventListener(‘click’,function(){<br>  import(‘./a.js’).then(data =&gt; {<br>    // use data<br>  })<br>});<br>模块化的第四阶段：自动化构建阶段<br>正当打包工具方兴未艾的时候，另外一个发展浪潮也几乎在同步发生着。</p>
+<p>它就是 —— 全方位的自动化构建工具的发展。</p>
+<p>什么叫自动化构建工具呢？ 简单的说就是： 我们需要这样一个工具，专门为开发过程服务，尽可能满足我们开发的需求，提高开发的效率。</p>
+<p>前面说过，在模块化的过程中，我们渐渐有了“开发流程”和“生产流程”的区分，而自动化构建工具就是在开发流程中给开发者最大的自由度和便捷性，同时在生产流程中能保证浏览器兼容性和良好性能的工具。而所有的功能已经由插件直接提供，所以被称作“自动化” 构建工具。</p>
+<p>在这时，我们已经不再满足于“打包”这个功能了，我们渴望做更多的事情：</p>
+<p>开发时使用丰富且方便的JS新特性，如用ES6，typescript编程，由自动化构建工具转化成浏览器兼容的ES5格式的JS代码<br>用Sass，less编写阅读性和扩展性良好的样式代码，由自动化构建工具转化成浏览器兼容的CSS代码<br>提供开发时SourceMap功能，也即提供生产代码(如ES5)到源代码(typescript)的映射，方便开发调试<br>提供生产时代码压缩功能，压缩js和css，删除注释，替换变量名(长变短)，减少代码加载体积<br>提供开发热重载功能(Hot Module Reload), 也即在编辑器保存代码的时候自动刷新浏览调试页面。<br>当然也还包括基本的模块打包功能<br>其他…..<br>自动化构建工具的代表性工具有三个，分别是</p>
+<p>2012年出现的webpack<br>2012年出现的grunt<br>2013年出现的gulp<br>下图中，左中右分别是gulp, grunt和webpack</p>
+<p>这一次，webpack并没有止步于成为一个单纯的打包工具，而是参与到自动化构建的浪潮里，并且成为了最后的赢家。而grunt和gulp则像过去的Sea.js,Require.js等工具一样。逐渐地从热潮中隐退，静静地待在前端社区里的一方僻静的角落里</p>
+<p>gulp &amp;&amp; webpack<br>因为篇幅关系，我们下面只来介绍下gulp和webpack这两个自动化构建工具。</p>
+<p>gulp和webpack的区别</p>
+<p>对于使用者来说，gulp和webpack最大的区别也许在它们的使用风格上</p>
+<p>gulp是编程式的自动化构建工具<br>webpack是配置式的自动化构建工具<br>下面我们以less代码的编译为例，展示Gulp和webpack的区别</p>
+<p>Gulp</p>
+<p>Gulp基本的风格是编程式的, 它是一种基于流即Node.js 封装起来的 stream 模块的自动化构建工具，一般先通过gulp.src将匹配的文件转化成stream(流)的形式，然后通过一连串的pipe方法进行链式的加工处理处理，对后通过dest方法输出到指定路径。</p>
+<p>// gulpfile.js<br>const { src, dest } = require(‘gulp’);<br>const less = require(‘gulp-less’);<br>const minifyCSS = require(‘gulp-csso’);</p>
+<p>function css() {<br>  return src(‘client/templates/*.less’)<br>    .pipe(less())<br>    .pipe(minifyCSS())<br>    .pipe(dest(‘build/css’))<br>}               </p>
+<p>Webpack</p>
+<p>webpack的基本风格则是配置式的，它通过loader机制实现文件的编译转化。通过配置一组loader数组，每个loader会被链式调用，处理当前文件代码后输出给下一个loader, 全部处理完毕后进行输出</p>
+<p>// webpack.config.js<br>module.exports = {<br>  module: {<br>    rules: [<br>      {<br>        test: /.less$/, // 正则匹配less文件<br>        use: [<br>          { loader: ‘style-loader’ }, // creates style nodes from JS strings<br>          { loader: ‘css-loader’ },   // translates CSS into CommonJS<br>          { loader: ‘less-loader’ },  // compiles Less to CSS<br>        ],<br>      },<br>    ],<br>  },<br>};       </p>
+<p>gulp和webpack的共同点</p>
+<p>gulp和webpack并没有自己完成所有的功能，而是搭建起一个平台，吸引世界各地的开发者们贡献插件，并构建起来一个繁荣的生态。</p>
+<p>从提供的功能上看，gulp和webpack在很多方面是类似的,这从它们的相关生态上也可以看得出来</p>
+<p>Gulp</p>
+<p>gulp-uglify : 压缩js文件<br>gulp-less : 编译less<br>gulp-sass：编译sass<br>gulp-livereload : 实时自动编译刷新<br>gulp-load-plugins：打包插件<br>Webpack</p>
+<p>uglifyjs-webpack-plugin: 压缩js文件<br>less-loader: 编译less<br>sass-loader： 编译sass<br>devServer.hot配置为true: 实时自动编译刷新<br>….</p>
+<p>Gulp的没落和webpack的兴起</p>
+<p>经过了七八年的发展，webpack逐渐取代了gulp成为前端开发者的主流自动化构建工具。</p>
+<p>究其原因</p>
+<p>一方面，是因为gulp是编程式的，webpack是配置式的，webpack用起来更加简单方便，上手难度相对低一些，所以得到众多开发者的喜欢<br>另一方面，从2014年React,Vue等SPA应用的热潮兴起后，webpack和它们的结合性更好，所以也助长了webpack生态的繁荣</p>
+<p>模块化的故事，到这里就先告一段落了。</p>
+<p>十年征程，前端模块化终于从呱呱坠地到长大成人,</p>
+<p>自动构建工具的新趋势：bundleless<br>webpack之所以在诞生之初采用集中打包方式进行开发，有几个方面的原因</p>
+<p>一是浏览器的兼容性还不够良好，还没提供对ES6的足够支持(import|export)，需要把每个JS文件打包成单一bundle中的闭包的方式实现模块化<br>二是为了合并请求，减少HTTP/1.1下过多并发请求带来的性能问题<br>而发展到今天，过去的这些问题已经得到了很大的缓解，因为</p>
+<p>主流现代浏览器已经能充分支持ES6了,import和export随心使用<br>HTTP2.0普及后并发请求的性能问题没有那么突出了<br>bundleless就是把开发中拖慢速度的打包工作给去掉，从而获得更快的开发速度。代表性工具是vite和snowpack</p>
+<p>vite: 尤雨溪开发的bundleless工具，能很好的配合Vue框架的开发，github上star为11k<br>snowpack: 另一个bundleless工具，目前框架生态更广泛一些，支持React/Vue/Svelte，github上star为11.9k<br>具体的内容介绍可看之前写的一篇文章，这里暂不多介绍了</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%963.html#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                评论和共享
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%964.html"
+                            aria-label=": 2023/0908/模块化4"
+                        >
+                            2023/0908/模块化4
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-09-08T10:27:29+08:00">
+	
+		    9月 08, 2023
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>这次是前端精读期刊与大家第一次正式碰面，我们每周会精读并分析若干篇精品好文，试图讨论出结论性观点。没错，我们试图通过观点的碰撞，争做无主观精品好文的意见领袖。</p>
+<p>我是这一期的主持人 —— <a href="https://github.com/ascoders" target="_blank" rel="noopener">黄子毅</a></p>
+<p>本期精读的文章是：<a href="https://github.com/myshov/history-of-javascript/tree/master/4_evolution_of_js_modularity" target="_blank" rel="noopener">evolutionOfJsModularity</a>。</p>
+<p>懒得看文章？没关系，稍后会附上文章内容概述，同时，更希望能通过阅读这一期的精读，穿插着深入阅读原文。</p>
+<h1 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a>1 引言</h1><img src="https://img.alicdn.com/imgextra/i4/O1CN01mvDKCM1owPSsLDBmI_!!6000000005289-2-tps-475-297.png" alt="logo" width="500" />
+
+<blockquote>
+<p>如今，Javascript 模块化规范非常方便、自然，但这个新规范仅执行了 2 年，就在 4 年前，js 的模块化还停留在运行时支持，10 年前，通过后端模版定义、注释定义模块依赖。对经历过来的人来说，历史的模块化方式还停留在脑海中，反而新上手的同学会更快接受现代的模块化规范。</p>
+</blockquote>
+<p>但为什么要了解 Javascript 模块化发展的历史呢？因为凡事都有两面性，了解 Javascript 模块化规范，有利于我们思考出更好的模块化方案，纵观历史，从 1999 年开始，模块化方案最多维持两年，就出现了新的替代方案，比原有的模块化更清晰、强壮，我们不能被现代模块化方式限制住思维，因为现在的 ES2015 模块化方案距离发布也仅仅过了两年。</p>
+<h1 id="2-内容概要"><a href="#2-内容概要" class="headerlink" title="2 内容概要"></a>2 内容概要</h1><p><strong>直接定义依赖 (1999)</strong>: 由于当时 js 文件非常简单，模块化方式非常简单粗暴 —— 通过全局方法定义、引用模块。这种定义方式与现在的 commonjs 非常神似，区别是 commonjs 以文件作为模块，而这种方法可以在任何文件中定义模块，模块不与文件关联。</p>
+<p><strong>闭包模块化模式 (2003)</strong>: 用闭包方式解决了变量污染问题，闭包内返回模块对象，只需对外暴露一个全局变量。</p>
+<p><strong>模版依赖定义 (2006)</strong>: 这时候开始流行后端模版语法，通过后端语法聚合 js 文件，从而实现依赖加载，说实话，现在 go 语言等模版语法也很流行这种方式，写后端代码的时候不觉得，回头看看，还是挂在可维护性上。</p>
+<p><strong>注释依赖定义 (2006)</strong>: 几乎和模版依赖定义同时出现，与 1999 年方案不同的，不仅仅是模块定义方式，而是终于以文件为单位定义模块了，通过 <a href="https://github.com/bevacqua/lazyjs" target="_blank" rel="noopener">lazyjs</a> 加载文件，同时读取文件注释，继续递归加载剩下的文件。</p>
+<p><strong>外部依赖定义 (2007)</strong>: 这种定义方式在 cocos2d-js 开发中普遍使用，其核心思想是将依赖抽出单独文件定义，这种方式不利于项目管理，毕竟依赖抽到代码之外，我是不是得两头找呢？所以才有通过 webpack 打包为一个文件的方式暴力替换为 commonjs 的方式出现。</p>
+<p><strong>Sandbox 模式 (2009)</strong>: 这种模块化方式很简单，暴力，将所有模块塞到一个 <code>sandbox</code> 变量中，硬伤是无法解决命名冲突问题，毕竟都塞到一个 <code>sandbox</code> 对象里，而 <code>Sandbox</code> 对象也需要定义在全局，存在被覆盖的风险。模块化需要保证全局变量尽量干净，目前为止的模块化方案都没有很好的做到这一点。</p>
+<p><strong>依赖注入 (2009)</strong>: 就是大家熟知的 angular1.0，依赖注入的思想现在已广泛运用在 react、vue 等流行框架中。但依赖注入和解决模块化问题还差得远。</p>
+<p><strong>CommonJS (2009)</strong>: 真正解决模块化问题，从 node 端逐渐发力到前端，前端需要使用构建工具模拟。</p>
+<p><strong>Amd (2009)</strong>: 都是同一时期的产物，这个方案主要解决前端动态加载依赖，相比 commonJs，体积更小，按需加载。</p>
+<p><strong>Umd (2011)</strong>: 兼容了 CommonJS 与 Amd，其核心思想是，如果在 commonjs 环境（存在 <code>module.exports</code>，不存在 <code>define</code>），将函数执行结果交给 <code>module.exports</code> 实现 Commonjs，否则用 Amd 环境的 <code>define</code>，实现 Amd。</p>
+<p><strong>Labeled Modules (2012)</strong>: 和 Commonjs 很像了，没什么硬伤，但生不逢时，碰上 Commonjs 与 Amd，那只有被人遗忘的份了。</p>
+<p><strong>YModules (2013)</strong>: 既然都出了 Commonjs Amd，文章还列出了此方案，一定有其独到之处。其核心思想在于使用 <code>provide</code> 取代 <code>return</code>，可以控制模块结束时机，处理异步结果；拿到第二个参数 <code>module</code>，修改其他模块的定义（虽然很有拓展性，但用在项目里是个搅屎棍）。</p>
+<p><strong>ES2015 Modules (2015)</strong>: 就是我们现在的模块化方案，还没有被浏览器实现，大部分项目已通过 <code>babel</code> 或 <code>typescript</code> 提前体验。</p>
+<h1 id="3-精读"><a href="#3-精读" class="headerlink" title="3 精读"></a>3 精读</h1><p>本次提出独到观点的同学有：<a href="https://github.com/arcthur" target="_blank" rel="noopener">流形</a>，<a href="https://github.com/ascoders" target="_blank" rel="noopener">黄子毅</a>，<a href="https://github.com/javie007" target="_blank" rel="noopener">苏里约</a>，<a href="https://github.com/camsong" target="_blank" rel="noopener">camsong</a>，<a href="https://github.com/jasonslyvia" target="_blank" rel="noopener">杨森</a>，<a href="https://github.com/BlackGanglion" target="_blank" rel="noopener">淡苍</a>，<a href="https://github.com/fanhc019" target="_blank" rel="noopener">留影</a>，精读由此归纳。</p>
+<h3 id="从语言层面到文件层面的模块化"><a href="#从语言层面到文件层面的模块化" class="headerlink" title="从语言层面到文件层面的模块化"></a>从语言层面到文件层面的模块化</h3><blockquote>
+<p>从 1999 年开始，模块化探索都是基于语言层面的优化，真正的革命从 2009 年 CommonJS 的引入开始，前端开始大量使用预编译。</p>
+</blockquote>
+<p>这篇文章所提供的模块化历史的方案都是逻辑模块化，<strong>从 CommonJS 方案开始前端把服务端的解决方案搬过来之后，算是看到标准物理与逻辑统一的模块化</strong>。但之后前端工程不得不引入模块化构建这一步。正是这一步给前端开发无疑带来了诸多的不便，尤其是现在我们开发过程中经常为了优化这个工具带了很多额外的成本。</p>
+<p>从 CommonJS 之前其实都只是封装，并没有一套模块化规范，这个就有些像类与包的概念。我在 10 年左右用的最多的还是 YUI2，YUI2 是用 namespace 来做模块化的，但有很多问题没有解决，比如多版本共存，因此后来 YUI3 出来了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">YUI().use(<span class="string">'node'</span>, <span class="string">'event'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">Y</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// The Node and Event modules are loaded and ready to use.</span></span><br><span class="line">    <span class="comment">// Your code goes here!</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>YUI3 的 sandbox 像极了差不多同时出现的 AMD 规范，但早期 yahoo 在前端圈的影响力还是很大的，而 requirejs 到 2011 年才诞生，因此圈子不是用着 YUI 要不就自己封装一套 sandbox，内部使用 jQuery。</p>
+<p>为什么模块化方案这么晚才成型，可能早期应用的复杂度都在后端，前端都是非常简单逻辑。后来 Ajax 火了之后，web app 概念的开始流行，前端的复杂度也呈指数级上涨，到今天几乎和后端接近一个量级。<strong>工程发展到一定阶段，要出现的必然会出现。</strong>
+　</p>
+<h3 id="前端三剑客的模块化展望"><a href="#前端三剑客的模块化展望" class="headerlink" title="前端三剑客的模块化展望"></a>前端三剑客的模块化展望</h3><blockquote>
+<p>从 js 模块化发展史，我们还看到了 css html 模块化方面的严重落后，如今依赖编译工具的模块化增强在未来会被标准所替代。</p>
+</blockquote>
+<p>原生支持的模块化，<strong>解决 html 与 css 模块化问题正是以后的方向。</strong></p>
+<p>再回到 JS 模块化这个主题，开头也说到是为了构建 scope，实则提供了业务规范标准的输入输出的方式。但文章中的 JS 的模块化还不等于前端工程的模块化，Web 界面是由 HTML、CSS 和 JS 三种语言实现，不论是 CommonJS 还是 AMD 包括之后的方案都无法解决 CSS 与 HTML 模块化的问题。</p>
+<p>对于 CSS 本身它就是 global scope，因此开发样式可以说是喜忧参半。近几年也涌现把 HTML、CSS 和 JS 合并作模块化的方案，其中 react/css-modules 和 vue 都为人熟知。当然，这一点还是非常依赖于 webpack/rollup 等构建工具，让我们意识到在 browser 端还有很多本质的问题需要推进。</p>
+<p>对于 css 模块化，目前不依赖预编译的方式是 <code>styled-component</code>，通过 js 动态创建 class。而目前 css 也引入了<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_variables" target="_blank" rel="noopener">与 js 通信的机制 与 原生变量支持</a>。未来 css 模块化也很可能是运行时的，所以目前比较看好 <code>styled-component</code> 的方向。</p>
+<p>对于 html 模块化，小尤最近爆出与 chrome 小组调研 html Modules，如果 html 得到了浏览器，编辑器的模块化支持，未来可能会取代 jsx 成为最强大的模块化、模板语言。</p>
+<p>对于 js 模块化，最近出现的 <code>&lt;script type=&quot;module&quot;&gt;</code> 方式，虽然还没有得到浏览器原生支持，但也是我比较看好的未来趋势，这样就连 webpack 的拆包都不需要了，直接把源代码传到服务器，配合 http2.0 完美抛开预编译的枷锁。</p>
+<p>上述三种方案都不依赖预编译，分别实现了 html、css、js 模块化，相信这就是未来。</p>
+<h3 id="模块化标准推进速度仍然缓慢"><a href="#模块化标准推进速度仍然缓慢" class="headerlink" title="模块化标准推进速度仍然缓慢"></a>模块化标准推进速度仍然缓慢</h3><blockquote>
+<p>2015 年提出的标准，在 17 年依然没有得到实现，即便在 nodejs 端。</p>
+</blockquote>
+<p>这几年 TC39 对语言终于重视起来了，慢慢有动作了，但针对模块标准制定的速度，与落实都非常缓慢，与 javascript 越来越流行的趋势逐渐脱节。nodejs 至今也没有实现 ES2015 模块化规范，所有 jser 都处在构建工具的阴影下。</p>
+<h3 id="Http-2-0-对-js-模块化的推动"><a href="#Http-2-0-对-js-模块化的推动" class="headerlink" title="Http 2.0 对 js 模块化的推动"></a>Http 2.0 对 js 模块化的推动</h3><blockquote>
+<p>js 模块化定义的再美好，浏览器端的支持粒度永远是瓶颈，http 2.0 正是考虑到了这个因素，大力支持了 ES 2015 模块化规范。</p>
+</blockquote>
+<p>幸运的是，模块化构建将来可能不再需要。随着 HTTP/2 流行起来，请求和响应可以并行，一次连接允许多个请求，对于前端来说宣告不再需要在开发和上线时再做编译这个动作。</p>
+<p>几年前，模块化几乎是每个流行库必造的轮子（YUI、Dojo、Angular），大牛们自己爽的同时其实造成了社区的分裂，很难积累。有了 ES2015 Modules 之后，JS 开发者终于可以像 Java 开始者十年前一样使用一致的方式愉快的互相引用模块。</p>
+<p>不过 ES2015 Modules 也只是解决了开发的问题，由于浏览器的特殊性，还是要经过繁琐打包的过程，等 Import，Export 和 HTTP 2.0 被主流浏览器支持，那时候才是彻底的模块化。</p>
+<h3 id="Http-2-0-后就不需要构建工具了吗？"><a href="#Http-2-0-后就不需要构建工具了吗？" class="headerlink" title="Http 2.0 后就不需要构建工具了吗？"></a>Http 2.0 后就不需要构建工具了吗？</h3><blockquote>
+<p>看到大家基本都提到了 HTTP/2，对这项技术解决前端模块化及资源打包等工程问题抱有非常大的期待。很多人也认为 HTTP/2 普及后，基本就没有 Webpack 什么事情了。</p>
+</blockquote>
+<p>不过 Webpack 作者 @sokra 在他的文章 <a href="https://medium.com/webpack/webpack-http-2-7083ec3f3ce6#.zdo4juvgo" target="_blank" rel="noopener">webpack &amp; HTTP/2</a> 里提到了一个新的 Webpack 插件 <code>AggressiveSplittingPlugin</code>。简单的说，这款插件就是为了充分利用 HTTP/2 的文件缓存能力，将你的业务代码自动拆分成若干个数十 KB 的小文件。后续若其中任意一个文件发生变化，可以保证其他的小 chunk 不需要重新下载。</p>
+<p>可见，<strong>即使不断的有新技术出现，也依然需要配套的工具来将前端工程问题解决方案推向极致。</strong></p>
+<h3 id="模块化是大型项目的银弹吗？"><a href="#模块化是大型项目的银弹吗？" class="headerlink" title="模块化是大型项目的银弹吗？"></a>模块化是大型项目的银弹吗？</h3><blockquote>
+<p>只要遵循了最新模块化规范，就可以使项目具有最好的可维护性吗？ Js 模块化的目的是支持前端日益上升的复杂度，但绝不是唯一的解决方案。</p>
+</blockquote>
+<p>分析下 JavaScript 为什么没有模块化，为什么又需要模块化：这个 95 年被设计出来的时候，语言的开发者根本没有想到它会如此的大放异彩，也没有将它设计成一种模块化语言。按照文中的说法，99 年也就是 4 年后开始出现了模块化的需求。如果只有几行代码用模块化是扯，初始的 web 开发业务逻辑都写在 server 端，js 的作用小之又小。而现在 spa 都出现了，几乎所有的渲染逻辑都在前端，如果还是没有模块化的组织，开发过程会越来越难，维护也是更痛苦。</p>
+<p>文中已经详细说明了模块化的发展和优劣，这里不准备做过多的讨论。我想说的是，<strong>在模块化之后还有一个模块间耦合的问题，如果模块间耦合度大也会降低代码的可重用性或者说复用性</strong>。所以也出现了降低耦合的观察者模式或者发布/订阅模式。这对于提升代码重用，复用性和避免单点故障等都很重要。说到这里，还想顺便提一下最近流行起来的响应式编程（RxJS），响应式编程中有一个很核心的概念就是 observable，也就是 Rx 中的流（stream）。它可以被 subscribe，其实也就是观察者设计模式。</p>
+<h3 id="补充阅读"><a href="#补充阅读" class="headerlink" title="补充阅读"></a>补充阅读</h3><ul>
+<li><a href="https://huangxuan.me/2015/07/09/js-module-7day/" target="_blank" rel="noopener">JavaScript 模块化七日谈</a></li>
+<li><a href="https://yuguo.us/weblog/javascript-module-development-history/" target="_blank" rel="noopener">JavaScript 模块化编程简史（2009-2016）</a></li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>未来前端复杂度不断增加已成定论，随着后端成熟，自然会将焦点转移到前端领域，而且服务化、用户体验越来越重要，前端体验早不是当初能看就行，任何网页的异常、视觉的差异，或文案的模糊，都会导致用户流失，支付中断。前端对公司营收的影响，渐渐与后端服务宕机同等严重，所以前端会越来越重，异常监控，性能检测，工具链，可视化等等都是这几年大家逐渐重视起来的。</p>
+<p>我们早已不能将 javascript 早期玩具性质的模块化方案用于现代越来越重要的系统中，前端界必然出现同等重量级的模块化管理方案，感谢 TC39 制定的 ES2015 模块化规范，我们已经离不开它，哪怕所有人必须使用 babel。</p>
+<p>话说回来，标准推进的太慢，我们还是把编译工具当作常态，抱着哪怕支持了 ES2015 所有特性，babel 依然还有用的心态，将预编译进行到底。一句话，模块化仍在路上。js 模块化的矛头已经对准了 css 与 html，这两位元老也该向前卫的 js 学习学习了。</p>
+<p>未来 css、html 的模块化会自立门户，还是赋予 js 更强的能力，让两者的模块化依附于 js 的能力呢？目前 html 有自立门户的苗头（htmlModules），而 css 迟迟没有改变，社区出现的 <code>styled-component</code> 已经用 js 将 css 模块化得很好了，最新 css 规范也支持了与 js 的变量通信，难道希望依附于 js 吗？这里希望得到大家更广泛的讨论。</p>
+<p>我也认同，毕竟压缩、混淆、md5、或者利用 <a href="https://www.thepolyglotdeveloper.com/2015/03/create-a-random-nonce-string-using-javascript/" target="_blank" rel="noopener">nonce</a> 属性对 script 标签加密，都离不开本地构建工具。</p>
+<p>据说 http2 的优化中，有个最佳文件大小与数量的比例，那么还是脱离不了构建工具，前端未来会越来越复杂，同时也越来越美好。</p>
+<p>至此，对于 javascript 模块化讨论已接近尾声，对其优缺点也基本达成了一致。前端复杂度不断提高，促使着模块化的改进，代理（浏览器、node） 的支持程度，与前端特殊性（流量、缓存）可能前端永远也离不开构建工具，新的标准会让这些工作做的更好，同时取代、增强部分特征，前端的未来是更加美好的，复杂度也更高。</p>
+<p><strong>如果你想参与讨论，请<a href="https://github.com/dt-fe/weekly" target="_blank" rel="noopener">点击这里</a>，每周都有新的主题，每周五发布。</strong></p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%964.html#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                评论和共享
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/post/2023/0908/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96.html"
+                            aria-label=": 2023/0908/前端模块化"
+                        >
+                            2023/0908/前端模块化
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-09-08T10:27:29+08:00">
+	
+		    9月 08, 2023
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/post/2023/0908/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96.html#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >
@@ -441,9 +1055,9 @@
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -494,9 +1108,9 @@ console.log(NODE_ENV, SERVER_NAME);
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -574,9 +1188,9 @@ console.log(NODE_ENV, SERVER_NAME);
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -687,6 +1301,130 @@ console.log(NODE_ENV, SERVER_NAME);
                     
                         <a
                             class="link-unstyled"
+                            href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%961.html"
+                            aria-label=": 2023/0908/模块化1"
+                        >
+                            2023/0908/模块化1
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-09-08T10:27:29+08:00">
+	
+		    9月 08, 2023
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>前言<br>在上古时期，曾经的 Web 开发者们，应该会因为在一个庞大的 JavaScript 文件中寻找一个小小的函数而感到绝望？或者因为修改一个变量而不得不查找整个代码库？</p>
+<p>当下的前端开发中，webpack，rollup，vite 等构建打包工具大家应该都用的飞起了。它们都基于一个非常重要的概念 - 前端模块化。</p>
+<p>在这篇文章中，我们将聊聊前端模块化的发展历程以及主流的一些方案。</p>
+<p>什么是模块化<br>前端模块化是指将一个大型的前端应用程序分解为小的、独立的模块，每个模块都有自己的功能和接口，可以被其他模块使用。前端模块化的出现是为了解决前端开发中代码复杂度和可维护性的问题。在前端模块化的架构下，开发人员可以更加专注于各自的模块开发，提高了代码的复用性和可维护性。</p>
+<p>为什么需要前端模块化<br>在传统的前端开发中，所有的代码都是写在同一个文件中，这样做的问题在于：</p>
+<p>可维护性差：当应用程序变得越来越大时，代码变得越来越难以维护。<br>可重用性差：相同的代码可能会被多次复制和粘贴到不同的文件中，这样会导致代码冗余，增加了代码量。<br>可测试性差：在传统的前端开发中，很难对代码进行单元测试。<br>可扩展性差：在传统的前端开发中，很难对应用程序进行扩展。<br>前端模块化的演进历程<br>全局 function 模式<br>将不同功能封装成不同的函数</p>
+<p>function fetchData() {<br>    …<br>}<br>function handleData() {<br>   …<br>}<br>缺陷：这个是将方法挂在 window 下，会污染全局命名空间，容易引起命名冲突且数据不安全等问题。</p>
+<p>全局 namespace 模式<br>既然全局 function 模式下，会有命名冲突等问题，那么我们可以通过对象来封装模块</p>
+<p>var myModule = {<br> fetchData() {<br>    …<br>},<br> handleData() {<br>   …<br>}<br>};<br>缺陷：这个方案确实减少了全局变量，解决命名冲突的问题，但是外部可以直接修改模块内部的数据。</p>
+<p>IIFE 模式，通过自执行函数创建闭包<br>function(global) {<br>   var data = 1</p>
+<p>   function fetchData() {<br>        …<br>   }<br>   function handleData() {<br>       …<br>   }<br>   window.myModule = {fetchData, handleData}<br>}(window)<br>缺陷：这个方案下，数据是私有的，外部只能通过暴露的方法操作，但无法解决模块间相互依赖问题。</p>
+<p>IIFE 模式增强，传入自定义依赖<br>我们可以通过传入依赖的方式来解决模块间引用的问题</p>
+<p>function(global, otherModule) {<br>   var data = 1</p>
+<p>   function fetchData() {<br>        …<br>   }<br>   function handleData() {<br>       …<br>   }<br>   window.myModule = {fetchData, handleData, otherApi: otherModule.api}<br>}(window, window.other_module)<br>缺陷：但仍然有以下几个缺点</p>
+<p>多依赖传入时，代码阅读困难<br>无法支持大规模模块化开发<br>无特定语法支持，代码简陋<br>经过以上过程的演进，我们确实可以实现前端模块化开发了，但是仍然有几个问题，一是请求过多，我们都是通过 script 标签来引入各个模块文件的，依赖多个模块，那样就会发送多个请求。二是依赖模糊，很容易因为不了解模块之间的依赖关系导致加载先后顺序出错，模块之间的依赖关系比较难以管理，也没有明确的接口和规范。因此模块化规范应运而生。</p>
+<p>模块化规范<br>CommonJS</p>
+<ol>
+<li><p>概述<br>CommonJS 是一个 JavaScript 模块化规范，它最初是为了解决 JavaScript 在服务器端的模块化问题而提出的。是 NodeJS 的默认模块饭规范，该规范定义了模块的基本结构、模块的加载方式以及模块的导出和导入方式等内容。</p>
+</li>
+<li><p>模块的基本结构<br>在 CommonJS 规范中，一个模块就是一个文件。每个文件都是一个独立的模块，文件内部定义的变量、函数和类等只在该文件内部有效。</p>
+</li>
+</ol>
+<p>每个模块都有自己的作用域，模块内部的变量、函数和类等只在该模块内部有效。如果想在其他模块中使用该模块内部的变量、函数和类等，需要将其导出。</p>
+<ol start="3">
+<li>模块的加载方式<br>在 CommonJS 规范中，模块的加载方式是同步的。也就是说，当一个模块被引入时，会立即执行该模块内部的代码，并将该模块导出的内容返回给引入该模块的代码。</li>
+</ol>
+<p>模块可以多次加载，第一次加载时会运行模块，模块输出结果会被缓存，再次加载时，会从缓存结果中直接读取模块输出结果。模块加载的顺序，按照其在代码中出现的顺序。模块输出的值是值的拷贝，类似 IIFE 方案中的内部变量。</p>
+<p>这种同步加载方式可以保证模块内部的代码执行完毕后再执行外部代码，从而避免了异步加载所带来的一些问题。但同时也会影响页面加载速度，因此在浏览器端使用时需要注意。</p>
+<ol start="4">
+<li>模块的导出和导入方式<br>在 CommonJS 规范中，一个模块可以通过module.exports 或者 exports 对象来导出内容。module.exports 是真正的导出对象，而 exports 对象只是对 module.exports 的一个引用。</li>
+</ol>
+<p>一个模块可以导出多个内容，可以通过 module.exports 或者 exports 对象分别导出。例如：</p>
+<p>// 导出一个变量<br>module.exports.name = ‘Tom’;</p>
+<p>// 导出一个函数<br>exports.sayHello = function() {<br>  console.log(‘Hello!’);<br>};<br>在另一个模块中，可以通过 require 函数来引入其他模块，并访问其导出的内容。例如：</p>
+<p>// 引入其他模块<br>var moduleA = require(‘./moduleA’);</p>
+<p>// 访问其他模块导出的变量<br>console.log(moduleA.name);</p>
+<p>// 访问其他模块导出的函数<br>moduleA.sayHello();<br>5. 特点<br>CommonJS 模块由 JS 运行时实现。<br>CommonJS 模块输出的是值的拷贝，本质上导出的就是 exports 属性。<br>CommonJS 是可以动态加载的，对每一个加载都存在缓存，可以有效的解决循环引用问题。<br>CommonJS 模块同步加载并执行模块文件。<br>ES6 模块化</p>
+<ol>
+<li>概述<br>在 ES6 之前，JavaScript 并没有原生支持模块化，因此开发者们需要使用一些第三方库或者自己实现一些模块化方案来解决代码复用和管理问题。但是这些方案都有一些问题，比如命名冲突、依赖管理等。ES6 引入了 ESModule 模块化规范来解决这些问题。</li>
+</ol>
+<p>ESModule 模块化规范是一种静态的模块化方案，它允许开发者将代码分割成小的、独立的模块，每个模块都有自己的作用域。ESModule 规范是基于文件的，每个文件都是一个独立的模块。</p>
+<p>ESModule 的模块解析规则是基于 URL 解析规则的。当我们使用 import 语句导入一个模块时，模块加载器会根据 import 语句中指定的路径解析出对应的 URL，并将其作为唯一标识符来加载对应的模块文件。在浏览器中，URL 解析规则是基于当前页面的 URL 进行解析；在 Node.js 中，URL 解析规则是基于当前运行脚本的路径进行解析。</p>
+<ol start="2">
+<li>模块的加载方式<br>ESModule 规范是基于文件的，每个文件都是一个独立的模块。在浏览器中，可以使用<script type="module">标签来加载 ESModule 模块。在 Node.js 中，可以使用 import 关键字来加载 ESModule 模块。</li>
+</ol>
+<!-- 在浏览器中加载ESModule模块 -->
+<script type="module" src="./module.js"></script>
+<p>// 在Node.js中加载ESModule模块<br>import { name } from './module';<br>3. 模块的导出和导入方式<br>在 ESModule 中，使用 export 关键字将变量或者函数导出，使用 import 关键字导入其他模块中导出的变量或者函数。导出和导入方式有以下几种：</p>
+<p>命名导出和命名导入<br>命名导出和命名导入是最常见的一种方式。可以将多个变量或者函数命名导出，也可以将多个变量或者函数命名导入。</p>
+<p>// module.js<br>export const name = '张三';<br>export function sayHello() {<br>  console.log('Hello');<br>}</p>
+<p>// app.js<br>import { name, sayHello } from './module';<br>默认导出和默认导入<br>默认导出和默认导入是一种简单的方式，可以将一个变量或者函数作为默认导出，也可以将一个变量或者函数作为默认导入。</p>
+<p>// module.js<br>export default 'Hello World';</p>
+<p>// app.js<br>import message from './module';<br>混合命名和默认导出<br>混合命名和默认导出也是一种常见的方式，可以将多个变量或者函数命名导出，同时将一个变量或者函数作为默认导出。</p>
+<p>// module.js<br>export const name = '张三';<br>export function sayHello() {<br>  console.log('Hello');<br>}<br>export default 'Hello World';</p>
+<p>// app.js<br>import message, { name, sayHello } from './module';<br>4. 特点：<br>ES6 Module 静态的，不能放在块级作用域内，代码发生在编译时。<br>ES6 模块输出的是值的引用，如果一个模块修改了另一个模块导出的值，那么这个修改会影响到原始模块。<br>ES6 Module 可以导出多个属性和方法，可以单个导入导出，混合导入导出。<br>ES6 模块提前加载并执行模块文件，<br>AMD</p>
+<ol>
+<li><p>概述<br>AMD 是 Asynchronous Module Definition 的缩写，即异步模块定义。它是由 RequireJS 的作者 James Burke 提出的一种模块化规范。AMD 规范的主要特点是：异步加载、提前执行。</p>
+</li>
+<li><p>基本语法<br>在 AMD 规范中，一个模块通常由以下几个部分组成：</p>
+</li>
+</ol>
+<p>define(id?, dependencies?, factory);<br>其中：</p>
+<p>id：可选参数，表示模块标识符，一般为字符串类型。<br>dependencies：可选参数，表示当前模块所依赖的其他模块。它是一个数组类型，每个元素表示一个依赖模块的标识符。<br>factory：必需参数，表示当前模块的工厂函数。它是一个函数类型，用于定义当前模块的行为。<br>一个典型的 AMD 模块定义如下所示：</p>
+<p>define('module1', ['module2', 'module3'], function(module2, module3) {<br>  // 模块1的代码逻辑<br>  return {<br>    // 暴露给外部的接口<br>  };<br>});<br>AMD 规范采用异步加载方式，它通过require函数来加载一个或多个模块。require函数接受一个数组类型的参数，每个元素表示一个待加载的模块标识符。当所有依赖模块加载完成后，require函数才会执行回调函数。</p>
+<p>require(['module1', 'module2'], function(module1, module2) {<br>  // 所有依赖模块加载完成后执行的回调函数<br>});<br>AMD 模式可以用于浏览器环境，并且允许非同步加载模块，也可以根据需要动态加载模块。</p>
+<p>CMD</p>
+<ol>
+<li><p>概述<br>CMD 是 Common Module Definition 的缩写，即通用模块定义。CMD 规范的主要特点是：按需加载、延迟执行。</p>
+</li>
+<li><p>基本语法<br>//定义没有依赖的模块<br>define(function(require, exports, module){<br>exports.xxx = value<br>module.exports = value<br>})<br>//定义有依赖的模块<br>define(function(require, exports, module){<br> //引入依赖模块(同步)<br> var module2 = require('./module2')<br> //引入依赖模块(异步)<br> require.async('./module3', function (m3) {<br>})<br> //暴露模块<br> exports.xxx = value<br>})</p>
+<p>// 引入该模块<br>define(function (require) {<br>var m1 = require('./module1')<br>var m4 = require('./module4')<br>m1.show()<br>m4.show()<br>})<br>CMD 规范专门用于浏览器端，模块的加载是异步的，模块使用时才会加载执行。CMD 规范整合了 CommonJS 和 AMD 规范的特点。</p>
+</li>
+</ol>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%961.html#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                评论和共享
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/post/2023/0904/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B8%B8%E7%94%A8%E7%9A%84VSCode%E6%8F%92%E4%BB%B6%E9%9B%86%E9%94%A6.html"
                             aria-label=": 2023/0904/研效提升：前端开发常用的VSCode插件集锦"
                         >
@@ -695,9 +1433,9 @@ console.log(NODE_ENV, SERVER_NAME);
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -729,266 +1467,22 @@ console.log(NODE_ENV, SERVER_NAME);
         
     </article>
     
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/post/2023/0903/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%89%E8%B6%A3%E7%9A%84%E5%8A%A8%E7%94%BB%E5%BA%93.html"
-                            aria-label=": 2023/0903/推荐一个非常有趣的动画库"
-                        >
-                            2023/0903/推荐一个非常有趣的动画库
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
-	
-		    9月 07, 2023
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h2 id="1-基本介绍"><a href="#1-基本介绍" class="headerlink" title="1. 基本介绍"></a>1. 基本介绍</h2><p>AutoAnimate 是一个零配置的嵌入式动画实用程序，可为您的 Web 应用程序添加平滑的过渡。您可以将它与 React、Solid、Vue、Svelte 或任何其他 JavaScript 应用程序一起使用。<br>AutoAnimate 的目标是在不影响开发人员的实施时间或性能预算的情况下大幅改善应用程序的用户体验。</p>
-<h2 id="2-和其他动画库的区别"><a href="#2-和其他动画库的区别" class="headerlink" title="2. 和其他动画库的区别"></a>2. 和其他动画库的区别</h2><p>之前的动画库基本都是开发者要在哪里加上动画，需要我们自己决定或者配置才行，而 AutoAnimate 可以帮助我们自动在整个应用添加合适的动画。<br>AutoAnimate 使用一行代码即可实现添加合适的动画，我们不需要在编写时列表组件时考虑到 AutoAnimate。</p>
-<p>AutoAnimate 可以追溯应用到代码库中的任何标记，包括第 3 方代码 - 只需提供父 DOM 节点，然后让 AutoAnimate 完成剩下的工作。</p>
-<h2 id="3-使用指南"><a href="#3-使用指南" class="headerlink" title="3. 使用指南"></a>3. 使用指南</h2><h3 id="3-1-安装"><a href="#3-1-安装" class="headerlink" title="3.1 安装"></a>3.1 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yarn add @formkit/auto-animate </span><br><span class="line">or</span><br><span class="line">npm install @formkit/auto-animate</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-2-用法"><a href="#3-2-用法" class="headerlink" title="3.2 用法"></a>3.2 用法</h3><p>AutoAnimate 本质上是一个 autoAnimate 接受父元素的函数。自动动画将应用于父元素及其直接子元素。当发生以下三个事件之一时，会专门触发动画：</p>
-<ul>
-<li>一个子级被添加到 DOM 中。</li>
-<li>DOM 中的子级被删除。</li>
-<li>一个孩子在 DOM 中移动。</li>
-</ul>
-<h3 id="3-3-注意事项"><a href="#3-3-注意事项" class="headerlink" title="3.3 注意事项"></a>3.3 注意事项</h3><p>使用其他类型的过渡仍然可以。例如，如果您仅使用 CSS 进行样式更改（例如悬停效果），则可以使用标准 CSS 过渡来进行此类样式调整。</p>
-<ul>
-<li>autoAnimate仅当添加、删除或移动父元素（您传递给的元素）的直接子元素时，才会触发动画。</li>
-<li>position: relative如果父元素是静态定位的，它会自动接收。编写样式时请记住这一点。</li>
-<li>有时，Flexbox 布局不会立即调整其子布局的大小。具有属性的子级flex-grow: 1会在捕捉到其完整宽度之前等待周围的内容。AutoAnimate 在这些情况下效果不佳，但如果您为元素指定更明确的宽度，它应该会像魅力一样工作。</li>
-</ul>
-<h2 id="4-原理介绍"><a href="#4-原理介绍" class="headerlink" title="4. 原理介绍"></a>4. 原理介绍</h2><h3 id="4-1-IntersectionObserver"><a href="#4-1-IntersectionObserver" class="headerlink" title="4.1 IntersectionObserver"></a>4.1 IntersectionObserver</h3><p>异步观察目标元素与祖先元素或具有顶级文档的视口的相交的变化。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observePosition</span>(<span class="params">el: Element</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> oldObserver = intersections.get(el)</span><br><span class="line">  oldObserver?.disconnect()</span><br><span class="line">  <span class="keyword">let</span> rect = coords.get(el)</span><br><span class="line">  <span class="keyword">let</span> invocations = <span class="number">0</span></span><br><span class="line">  <span class="keyword">const</span> buffer = <span class="number">5</span></span><br><span class="line">  <span class="keyword">if</span> (!rect) &#123;</span><br><span class="line">    rect = getCoords(el)</span><br><span class="line">    coords.set(el, rect)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> &#123; offsetWidth, offsetHeight &#125; = root</span><br><span class="line">  <span class="keyword">const</span> rootMargins = [</span><br><span class="line">    rect.top - buffer,</span><br><span class="line">    offsetWidth - (rect.left + buffer + rect.width),</span><br><span class="line">    offsetHeight - (rect.top + buffer + rect.height),</span><br><span class="line">    rect.left - buffer,</span><br><span class="line">  ]</span><br><span class="line">  <span class="keyword">const</span> rootMargin = rootMargins</span><br><span class="line">    .map(<span class="function">(<span class="params">px</span>) =&gt;</span><span class="string">`<span class="subst">$&#123;<span class="number">-1</span> * <span class="built_in">Math</span>.floor(px)&#125;</span>px`</span>)</span><br><span class="line">    .join(<span class="string">" "</span>)</span><br><span class="line">  <span class="keyword">const</span> observer = <span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">    () =&gt; &#123;</span><br><span class="line">      ++invocations &gt; <span class="number">1</span> &amp;&amp; updatePos(el)</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      root,</span><br><span class="line">      threshold: <span class="number">1</span>,</span><br><span class="line">      rootMargin,</span><br><span class="line">    &#125;</span><br><span class="line">  )</span><br><span class="line">  observer.observe(el)</span><br><span class="line">  intersections.set(el, observer)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-2-MutationObserver"><a href="#4-2-MutationObserver" class="headerlink" title="4.2 MutationObserver"></a>4.2 MutationObserver</h3><p>监听DOM树的变化，比如增加、删除、移动等DOM操作。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getElements</span>(<span class="params">mutations: MutationRecord[]</span>): <span class="title">Set</span>&lt;<span class="title">Element</span>&gt; | <span class="title">false</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> observedNodes = mutations.reduce(<span class="function">(<span class="params">nodes: Node[], mutation</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">      ...nodes,</span><br><span class="line">      ...Array.from(mutation.addedNodes),</span><br><span class="line">      ...Array.from(mutation.removedNodes),</span><br><span class="line">    ]</span><br><span class="line">  &#125;, [])</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Short circuit if _only_ comment nodes are observed</span></span><br><span class="line">  <span class="keyword">const</span> onlyCommentNodesObserved = observedNodes.every(</span><br><span class="line">    (node) =&gt; node.nodeName === <span class="string">"#comment"</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (onlyCommentNodesObserved) returnfalse</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> mutations.reduce(<span class="function">(<span class="params">elements: <span class="built_in">Set</span>&lt;Element&gt; | <span class="literal">false</span>, mutation</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Short circuit if we find a purposefully deleted node.</span></span><br><span class="line">    <span class="keyword">if</span> (elements === <span class="literal">false</span>) returnfalse</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mutation.target <span class="keyword">instanceof</span> Element) &#123;</span><br><span class="line">      target(mutation.target)</span><br><span class="line">      <span class="keyword">if</span> (!elements.has(mutation.target)) &#123;</span><br><span class="line">        elements.add(mutation.target)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; mutation.target.children.length; i++) &#123;</span><br><span class="line">          <span class="keyword">const</span> child = mutation.target.children.item(i)</span><br><span class="line">          <span class="keyword">if</span> (!child) <span class="keyword">continue</span></span><br><span class="line">          <span class="keyword">if</span> (DEL <span class="keyword">in</span> child) returnfalse</span><br><span class="line">          target(mutation.target, child)</span><br><span class="line">          elements.add(child)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (mutation.removedNodes.length) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; mutation.removedNodes.length; i++) &#123;</span><br><span class="line">          <span class="keyword">const</span> child = mutation.removedNodes[i]</span><br><span class="line">          <span class="keyword">if</span> (DEL <span class="keyword">in</span> child) returnfalse</span><br><span class="line">          <span class="keyword">if</span> (child <span class="keyword">instanceof</span> Element) &#123;</span><br><span class="line">            elements.add(child)</span><br><span class="line">            target(mutation.target, child)</span><br><span class="line">            siblings.set(child, [</span><br><span class="line">              mutation.previousSibling,</span><br><span class="line">              mutation.nextSibling,</span><br><span class="line">            ])</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> elements</span><br><span class="line">  &#125;, newSet&lt;Element&gt;())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3-ResizeObserver"><a href="#4-3-ResizeObserver" class="headerlink" title="4.3 ResizeObserver"></a>4.3 ResizeObserver</h3><p>对 Element 的内容或边框或 SVGElement 的边框的尺寸的更改</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (typeofwindow !== <span class="string">"undefined"</span>) &#123;</span><br><span class="line">  root = <span class="built_in">document</span>.documentElement</span><br><span class="line">  mutations = <span class="keyword">new</span> MutationObserver(handleMutations)</span><br><span class="line">  resize = <span class="keyword">new</span> ResizeObserver(handleResizes)</span><br><span class="line">  resize.observe(root)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>感兴趣的同学可以点击左下角的“阅读原文”学习和使用。</p>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/post/2023/0903/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%89%E8%B6%A3%E7%9A%84%E5%8A%A8%E7%94%BB%E5%BA%93.html#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/post/2023/0905/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%A6%E7%AD%BE.html"
-                            aria-label=": 2023/0905/研效提升：如何高效管理浏览器书签"
-                        >
-                            2023/0905/研效提升：如何高效管理浏览器书签
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
-	
-		    9月 07, 2023
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h1 id="研效提升：如何高效管理浏览器书签"><a href="#研效提升：如何高效管理浏览器书签" class="headerlink" title="研效提升：如何高效管理浏览器书签"></a>研效提升：如何高效管理浏览器书签</h1><p>书签管理是提高在线工作效率和保持跟踪的重要方法。本文将为您提供一篇关于浏览器书签管理的指南，帮助您更好地管理您的书签。</p>
-<h2 id="1-什么是书签管理？"><a href="#1-什么是书签管理？" class="headerlink" title="1.什么是书签管理？"></a>1.什么是书签管理？</h2><p>书签管理是指通过在浏览器中添加、编辑、组织和删除书签，以便更方便地访问您喜欢的网站、文档和页面。书签可以是网页链接、文本片段、图片或其他内容。书签是我们上网的导航，收藏数量的多少体现我们对互联网的任职，书签算得上是我们浏览器里最重要的资产，这也就是很多浏览器支持灵活管理书签功能的原因。</p>
-<h2 id="2-为什么要进行书签管理？"><a href="#2-为什么要进行书签管理？" class="headerlink" title="2.为什么要进行书签管理？"></a>2.为什么要进行书签管理？</h2><p>进行书签管理有以下几点好处：</p>
-<ol>
-<li>提高效率：通过整理和分类书签，您可以更快速地找到所需的信息，提高工作效率。</li>
-<li>便于访问：将书签添加到特定的文件夹或标签中，可以方便地访问您经常访问的网站，避免在浏览器历史记录中苦苦寻找。</li>
-<li>保持跟踪：书签可以让您轻松地保存对特定主题或项目的关注，方便日后查看和跟进。</li>
-</ol>
-<h2 id="如何更好地管理书签？"><a href="#如何更好地管理书签？" class="headerlink" title="如何更好地管理书签？"></a>如何更好地管理书签？</h2><h3 id="书签的筛选"><a href="#书签的筛选" class="headerlink" title="书签的筛选"></a>书签的筛选</h3><p>首先，我们需要有一个基本的判断，什么类型的网页是有价值的，是值得我们保存的。从日常访问看，值得加入书签的网页一般有两个特性：</p>
-<ol>
-<li>打开频率高，即被经常访问的</li>
-<li>失效价值大，即有长期价值的</li>
-</ol>
-<p>根据这两个特性，我们可以用“四象限法则”来分析判断：</p>
-<ol>
-<li>象限一：经常打开 + 长期有用</li>
-</ol>
-<p>经常打开和长期有用的标签，通常是网站的主页（尤其是基础工具或官方站点）或者专题活动页，这种类型的网页数量可控、标签的有效性可以保证，管理此种类型的标签压力会小很多。</p>
-<ol start="2">
-<li>象限二：经常打开 + 短期有用</li>
-</ol>
-<p>经常打开和短期有用的标签，我们通常会点击地址栏旁边的 <strong>星星</strong> ICON 或者使用 「<strong>Ctrl+D</strong>」快速保存网页至书签管理器，以便后续阅读和使用比较方便快捷。</p>
-<ol start="3">
-<li>象限三：偶尔打开 + 短期有用</li>
-</ol>
-<p>对于偶尔打开、短期有用的网页，我们可以利用浏览器的历史记录和模糊查询来查找，这种足够满足需求了。</p>
-<p>配图历史记录</p>
-<ol start="4">
-<li>象限四：偶尔打开 + 长期有用</li>
-</ol>
-<p>如何一个项目需要很长时间才能完成，需要我们把相关网页、文档地址收藏起来。我们需要在书签管理器中建立一个文件夹，保存该项目的相关网页。这种方式对数量少的网页还好，如果网页多，收藏和维护也会很麻烦。</p>
-<h3 id="书签的管理"><a href="#书签的管理" class="headerlink" title="书签的管理"></a>书签的管理</h3><ol>
-<li>书签管理的常用方式：</li>
-</ol>
-<ul>
-<li>使用文件夹：将书签进行分类，将不同主题的书签放入不同的文件夹中。例如，你可以创建一个名为“工作”的文件夹，用于存放与工作相关的书签。</li>
-<li>给书签加注释：在添加书签时，输入一个简短的注释，描述该书签的重要性。这有助于你记住上次访问该页面的原因。</li>
-<li>使用标签：对于经常访问的页面，可以使用标签来代替文件夹。例如，你可以创建一个名为“工作”的标签，用于存放与工作相关的书签。</li>
-<li>利用收藏夹：将重要且经常访问的页面添加到收藏夹中。在收藏夹中，你可以对页面进行分类，将其与不同的标签或文件夹关联。</li>
-<li>利用搜索功能：使用浏览器的搜索功能，通过关键词搜索书签。</li>
-<li>定期清理：定期检查你的书签，删除不再需要或已过期的书签。</li>
-<li>使用扩展程序：使用浏览器扩展程序，如“书签管理”或“书签+”等，帮助管理你的书签。这些扩展程序可以改善书签的显示方式，提供更好的组织方式以及更高级的标签和文件夹功能。</li>
-</ul>
-<ol start="2">
-<li>书签管理之MECE原则</li>
-</ol>
-<p>MECE，是“Mutually Exclusive, Collectively Exhaustive” 英文首字母的缩写。中文的意思是“相互独立，完全穷尽”，它是《金字塔原理》一书提出的一个很重要的结构分类原则。当我们要将一个问题化整为零时，使用MECE原则意味着将问题细分为更明确的、没有重叠的子问题，同时确保所有相关问题都已经考虑在内。通俗的理解，就是MECE原则是保证在结构划分时不重复、不遗漏，从而让结构划分更加清晰。</p>
-<p>不知道大家平时都是怎么整理自己浏览器书签的，因为最近AI比较火爆，各种工具和网站层出不穷，收藏的越来越多，于是下定决心要好好整理一下书签，以便提高检索和工作效率。我结合自身使用浏览器的习惯，将书签分为两个层级，层级太多也是累赘，造成记忆和查找困难。</p>
-<p>第一层级我从场景出发，将网页按照使用场景进行分类，比如“学习”、“工作”、“生活”等大类，通过对场景的分类，可以更好地、下意识的检索。</p>
-<p>配图</p>
-<p>第二层级继续对场景进行细分，比如”生活“里面可以细分出旅行、观影、购物、社交等功能场景，这样只要有明确的需求一般都能在细分场景中找到对应的网页。</p>
-<p>配图</p>
-<ol start="3">
-<li>书签管理的最佳实践</li>
-</ol>
-<ul>
-<li>使用有意义的标题：为书签添加一个简洁、明确的标题，以便快速识别其内容。</li>
-<li>分类和分组：将相似类型的书签分组到文件夹或标签中，以便更有效地管理和查找。</li>
-<li>定期更新：定期检查您的书签，删除过时或不再需要的链接，以保持书签栏的整洁。</li>
-<li>备份书签：在添加书签时，考虑将其备份到其他设备或云端，以防数据丢失。</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>书签管理是一项简单但重要的任务，可以帮助您更快速地访问所需的信息，提高工作效率。通过遵循以上指南，您可以更好地管理您的浏览器书签，提高在线工作效率，并享受更愉快的浏览体验。</p>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/post/2023/0905/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%A6%E7%AD%BE.html#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/post/2023/0902/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9ACSS%E5%8A%A8%E7%94%BB%E5%9C%A8%E7%BA%BF%E8%B0%83%E8%AF%95%E9%A2%84%E8%A7%88.html"
-                            aria-label=": 2023/0902/研效提升：CSS动画在线调试预览"
-                        >
-                            2023/0902/研效提升：CSS动画在线调试预览
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
-	
-		    9月 07, 2023
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h2 id="1-基本介绍"><a href="#1-基本介绍" class="headerlink" title="1.基本介绍"></a>1.基本介绍</h2><p>EpicEasing是一款做得挺精致的 Easing 动画生成调试预览工具，通过预设效果或自定义动画曲线，支持 Ease、Spring、Bounce 各类动画效果，完成后可以导出 CSS、SCSS、Objective-C 和 Swift 代码直接使用。</p>
-<h2 id="2-具体实例"><a href="#2-具体实例" class="headerlink" title="2.具体实例"></a>2.具体实例</h2><p>生成一个宽度变化的贝塞尔曲线动画，动画类型为Ease，BIZER类型为IN OUT，样式为Quart。导出的CSS/SCSS代码如下：</p>
-<h3 id="2-1-CSS代码"><a href="#2-1-CSS代码" class="headerlink" title="2.1.CSS代码"></a>2.1.CSS代码</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">-webkit-transition-timing-function</span>: <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"><span class="selector-tag">-moz-transition-timing-function</span>: <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"><span class="selector-tag">-o-transition-timing-function</span>: <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"><span class="selector-tag">transition-timing-function</span>: <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">-webkit-transition</span>: <span class="selector-tag">all</span> 500<span class="selector-tag">ms</span> <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"><span class="selector-tag">-moz-transition</span>: <span class="selector-tag">all</span> 500<span class="selector-tag">ms</span> <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"><span class="selector-tag">-o-transition</span>: <span class="selector-tag">all</span> 500<span class="selector-tag">ms</span> <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br><span class="line"><span class="selector-tag">transition</span>: <span class="selector-tag">all</span> 500<span class="selector-tag">ms</span> <span class="selector-tag">cubic-bezier</span>(0<span class="selector-class">.770</span>, 0<span class="selector-class">.000</span>, 0<span class="selector-class">.175</span>, 1<span class="selector-class">.000</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-SCSS代码"><a href="#2-2-SCSS代码" class="headerlink" title="2.2.SCSS代码"></a>2.2.SCSS代码</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ease-in-out-quart</span>: cubic-bezier(<span class="number">0.770</span>, <span class="number">0.000</span>, <span class="number">0.175</span>, <span class="number">1.000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">@mixin</span> trans-easing(<span class="variable">$easing</span>: <span class="variable">$ease-in-out-quart</span>) &#123;</span><br><span class="line">  <span class="attribute">transition-timing-function</span>: <span class="variable">$easing</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@mixin</span> anim-easing(<span class="variable">$easing</span>: <span class="variable">$ease-in-out-quart</span>) &#123;</span><br><span class="line">  <span class="attribute">animation-timing-function</span>: <span class="variable">$easing</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-Swift代码"><a href="#2-3-Swift代码" class="headerlink" title="2.3.Swift代码"></a>2.3.Swift代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Customize Your Values Here:</span><br><span class="line">let keypath &#x3D; &quot;transform.translation.x&quot;</span><br><span class="line">let fromValue &#x3D; 0</span><br><span class="line">let toValue &#x3D; 150</span><br><span class="line">let duration &#x3D; 1.5</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Animation - In Out Quart Easing (made with epiceasing.com)</span><br><span class="line">let timingFunction &#x3D; CAMediaTimingFunction(controlPoints: 0.770, 0.000, 0.175, 1.000)</span><br><span class="line">let animation &#x3D; CABasicAnimation(keyPath: keypath)</span><br><span class="line">animation.duration &#x3D; duration</span><br><span class="line">animation.timingFunction &#x3D; timingFunction</span><br><span class="line">animation.fromValue &#x3D; fromValue</span><br><span class="line">animation.toValue &#x3D; toValue</span><br><span class="line">myLayer.add(animation, forKey: &quot;myEpicEasingAnimation&quot;)</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-4-Object-C代码"><a href="#2-4-Object-C代码" class="headerlink" title="2.4.Object-C代码"></a>2.4.Object-C代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CAMediaTimingFunction *timing &#x3D; [[CAMediaTimingFunction alloc] initWithControlPoints:0.770 :0.000 :0.175 :1.000];</span><br><span class="line">      CABasicAnimation *animation &#x3D; [CABasicAnimation animationWithKeyPath:@&quot;transform.translation.y&quot;];</span><br><span class="line">      animation.timingFunction &#x3D; timing;</span><br><span class="line">      animation.duration &#x3D; 1.5;</span><br><span class="line">      animation.toValue &#x3D; [NSNumber numberWithFloat:100];</span><br><span class="line">      [epicView.layer addAnimation:animation forKey:@&quot;epic-easing-ease-quart&quot;];</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/post/2023/0902/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9ACSS%E5%8A%A8%E7%94%BB%E5%9C%A8%E7%BA%BF%E8%B0%83%E8%AF%95%E9%A2%84%E8%A7%88.html#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
     <div class="pagination-bar">
     <ul class="pagination">
         
         
-        <li class="pagination-number">第 1 页 共 1 页</li>
+          <li class="pagination-next">
+            <a
+                class="btn btn--default btn--small"
+                href="/archives/2023/09/page/2/"
+                aria-label="下一页"
+            >
+              <span>下一页</span>
+              <i class="fa fa-angle-right text-base icon-ml"></i>
+            </a>
+          </li>
+        
+        <li class="pagination-number">第 1 页 共 2 页</li>
     </ul>
 </div>
 
@@ -1048,7 +1542,7 @@ console.log(NODE_ENV, SERVER_NAME);
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ah8fu2oihbm9frbz1pxa0jkqer1zb0klgkgmuaenrh4k2naxqcwf4av0zlc2.min.js"></script>
+<script src="/assets/js/script-l4ckxdv6tbjuxqwojpoduttbowmwffe9xttrtxbjaohwrzhqzj3ocb4fmrwh.min.js"></script>
 
 <!--SCRIPTS END-->
 

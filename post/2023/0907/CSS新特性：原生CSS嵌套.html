@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"CSS新特性：原生CSS嵌套随着Firefox 117版本的发布，原生 CSS 嵌套（Native CSS nesting）已经被所有现代桌面浏览器所支持！🎉，但是请注意，移动端浏览器支持的还很有限。\n配caniuse图\n1.原生 CSS 嵌套原生 CSS 嵌套可以像 SASS、LESS 预处理器一样，将相关的选择器组合在一起，从而减少需要编写的规则数量，它可以节省打字时间，并使语法更易于阅读和维护。您可以将选择器嵌套到任意深度，但要小心不要超过两层或三层。嵌套深度没有技术限制，但它会使代码更难以阅读，并且生成的 CSS 可能会变得不必要的冗长。\n123456789101112.button &#123;   background-color: red;   &amp;.warning &#123;     background-color: blue;   &#125;   &amp; .icon &#123;      width: 1rem;      height: 1rem;   &#125;&#125;\n\n虽然原生 CSS 嵌套语法在过去几年中不断发展，使大多数 Web 开发人员感到满意，但不要指望所有 SCSS 代码都能像您期望的那样直接工作。\n2.原生 CSS 嵌套规则您可以将任何选择器嵌套在另一个选择器中，但它必须以符号开头，例如 &amp;, .（类选择器）、#（ID选择器）、@（对于媒体查询）、:、::、+、 ~、 &gt; 或 [。换句话说，它不能是对 HTML 元素的直接引用。下面的代码是无效的，不会对 input 元素选择器进行解析：\n12345678.parent &#123;  color: red;  input &#123;    margin: 1em;  &#125;&#125;/* Invalid, because \"input\" is an identifier. */\n\n解决此问题的最简单方法是使用与号 ( &amp;)，它以与 Sass 相同的方式引用当前选择器。\n2.1.&amp; 符号的使用123456789101112131415.parent &#123;  color: red;  &amp; input &#123;    margin: 1em;  &#125;  /* use pseudo-elements and pseudo-classes */  &amp;::after &#123;&#125;  &amp;:hover &#123;&#125;  &amp;:target &#123;&#125;&#125;/* valid, no longer starts with an identifier */\n\n或者，您可以使用其中之一：\n\n&gt; input：只对子元素生效\n\n:is(input)： 将选择器列表作为参数，并选择该列表中任意一个选择器可以选择的元素\n\n:where(input)：优先级总是为 0\n\n\n它们都可以在这个简单的示例中工作，但是稍后您可能会遇到更复杂的样式表的特异性问题。\n它还&amp;允许您在父选择器上定位伪元素和伪类。例如：\n12345678p.my-element &#123;  &amp;::after &#123;&#125;  &amp;:hover &#123;&#125;  &amp;:target &#123;&#125;&#125;\n\n请注意，&amp; 可以在选择器中的任何位置使用。例如：\n12345.child1 &#123;  .parent3 &amp; &#123;    color: red;  &#125;&#125;\n\n这将转换为以下非嵌套语法：\n1.parent3 .child1 &#123; color: red; &#125;\n\n您甚至可以在选择器中使用多个 &amp; 符号：\n12345ul &#123;  &amp; li &amp; &#123;    color: blue;  &#125;&#125;\n\n这将以嵌套 &lt;ul&gt; 元素 ( ul li ul) 为目标，但如果您想保持理智，我建议不要使用它！\n2.2.@ 符号的使用嵌套媒体查询示例：\n123456p &#123;  color: cyan;  @media (min-width: 800px) &#123;    color: purple;  &#125;&#125;\n\n3.原生 CSS 嵌套陷阱3.1.场景一：父选择器包装在 :is() 中原生 CSS 嵌套将父选择器包装在 :is() 中，这可能会导致与 Sass 输出的差异，比如以下嵌套代码：\n12345.parent1, #parent2 &#123;  .child1 &#123;  &#125;&#125;\n\n当它在浏览器中解析时，它实际上变成以下内容：\n123:is(.parent1, #parent2) .child1 &#123;&#125;\n\nSass 将相同的代码编译为：\n1234.parent1 .child1,#parent2 .child1 &#123;&#125;\n\n3.2.场景二：&amp; 符号后置您可能还会遇到一个更微妙的问题。考虑一下：\n123.parent .child &#123;  .grandparent &amp; &#123;&#125;&#125;\n\n原生 CSS 等效项是：\n1.grandparent :is(.parent .child) &#123;&#125;\n\n这与以下错误排序的 HTML 元素匹配：\n12345&lt;div class=\"parent\"&gt;  &lt;div class=\"grandparent\"&gt;    &lt;div class=\"child\"&gt;MATCH&lt;/div&gt;  &lt;/div&gt;&lt;/div&gt;\n\nMATCH变得有样式是因为 CSS 解析器执行以下操作：\n它会查找所有元素，其所属类的child祖先也parent为DOM 层次结构中的任何点。\n找到包含MATCH的元素后，解析器会grandparent在 DOM 层次结构中的任何位置再次检查它是否具有 — 的祖先。它找到一个并相应地设置该元素的样式。\nSass 中的情况并非如此，它编译为：\n.grandparent .parent .child {}上面的 HTML 没有样式化，因为元素类不遵循严格的grandparent、parent、 和child顺序。\n3.3.场景三：字符串替换Sass 使用字符串替换，因此如下所示的声明是有效的，并且与类的任何元素相匹配 .btn-primary：\n12345.btn &#123;  &amp;-primary &#123;    color: blue;  &#125;&#125;\n\n但是原生 CSS 嵌套会忽略&amp;-space选择器。\n4.CSS 预处理器还需要吗？从短期来看，现有的 CSS 预处理器仍然至关重要。Sass 开发团队宣布，他们将支持 .css 文件中的原生 CSS 嵌套，并按原样输出代码。他们将一如既往地编译嵌套 SCSS 代码，以避免破坏现有代码库，但当全球浏览器支持率达到 98% 时，他们将开始输出 :is() 选择器。\n我猜想，PostCSS 插件等预处理器目前会扩展嵌套代码，但随着浏览器支持的普及，就会取消这一功能。当然，使用预处理器还有其他很好的理由，比如将部分代码捆绑到一个文件中，以及对代码进行精简。但如果嵌套是你唯一需要的功能，你当然可以考虑在较小的项目中使用原生 CSS。\n总结CSS 嵌套是最有用、最实用的预处理器功能之一。浏览器供应商努力创造了一个与 CSS 非常相似的原生 CSS 版本，以满足网络开发人员的需求。虽然两者之间存在细微差别，而且在使用（过于）复杂的选择器时可能会遇到不寻常的特殊性问题，但很少有代码库需要进行彻底修改。\n原生嵌套可能会让你重新考虑是否需要 CSS 预处理器，但它们仍能提供其他好处。Sass 和类似工具仍然是大多数开发者工具包的重要组成部分。\n要深入了解原生 CSS 嵌套，请点击左下角的“阅读原文”查看 W3C CSS 嵌套规范。\n原文链接","dateCreated":"2023-09-07T23:13:18+08:00","dateModified":"2023-09-07T23:13:18+08:00","datePublished":"2023-09-07T23:13:18+08:00","description":"","headline":"2023/0907/CSS新特性：原生CSS嵌套","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0907/CSS%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9A%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0907/CSS%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9A%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97.html"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"CSS新特性：原生CSS嵌套随着Firefox 117版本的发布，原生 CSS 嵌套（Native CSS nesting）已经被所有现代桌面浏览器所支持！🎉，但是请注意，移动端浏览器支持的还很有限。\n配caniuse图\n1.原生 CSS 嵌套原生 CSS 嵌套可以像 SASS、LESS 预处理器一样，将相关的选择器组合在一起，从而减少需要编写的规则数量，它可以节省打字时间，并使语法更易于阅读和维护。您可以将选择器嵌套到任意深度，但要小心不要超过两层或三层。嵌套深度没有技术限制，但它会使代码更难以阅读，并且生成的 CSS 可能会变得不必要的冗长。\n123456789101112.button &#123;   background-color: red;   &amp;.warning &#123;     background-color: blue;   &#125;   &amp; .icon &#123;      width: 1rem;      height: 1rem;   &#125;&#125;\n\n虽然原生 CSS 嵌套语法在过去几年中不断发展，使大多数 Web 开发人员感到满意，但不要指望所有 SCSS 代码都能像您期望的那样直接工作。\n2.原生 CSS 嵌套规则您可以将任何选择器嵌套在另一个选择器中，但它必须以符号开头，例如 &amp;, .（类选择器）、#（ID选择器）、@（对于媒体查询）、:、::、+、 ~、 &gt; 或 [。换句话说，它不能是对 HTML 元素的直接引用。下面的代码是无效的，不会对 input 元素选择器进行解析：\n12345678.parent &#123;  color: red;  input &#123;    margin: 1em;  &#125;&#125;/* Invalid, because \"input\" is an identifier. */\n\n解决此问题的最简单方法是使用与号 ( &amp;)，它以与 Sass 相同的方式引用当前选择器。\n2.1.&amp; 符号的使用123456789101112131415.parent &#123;  color: red;  &amp; input &#123;    margin: 1em;  &#125;  /* use pseudo-elements and pseudo-classes */  &amp;::after &#123;&#125;  &amp;:hover &#123;&#125;  &amp;:target &#123;&#125;&#125;/* valid, no longer starts with an identifier */\n\n或者，您可以使用其中之一：\n\n&gt; input：只对子元素生效\n\n:is(input)： 将选择器列表作为参数，并选择该列表中任意一个选择器可以选择的元素\n\n:where(input)：优先级总是为 0\n\n\n它们都可以在这个简单的示例中工作，但是稍后您可能会遇到更复杂的样式表的特异性问题。\n它还&amp;允许您在父选择器上定位伪元素和伪类。例如：\n12345678p.my-element &#123;  &amp;::after &#123;&#125;  &amp;:hover &#123;&#125;  &amp;:target &#123;&#125;&#125;\n\n请注意，&amp; 可以在选择器中的任何位置使用。例如：\n12345.child1 &#123;  .parent3 &amp; &#123;    color: red;  &#125;&#125;\n\n这将转换为以下非嵌套语法：\n1.parent3 .child1 &#123; color: red; &#125;\n\n您甚至可以在选择器中使用多个 &amp; 符号：\n12345ul &#123;  &amp; li &amp; &#123;    color: blue;  &#125;&#125;\n\n这将以嵌套 &lt;ul&gt; 元素 ( ul li ul) 为目标，但如果您想保持理智，我建议不要使用它！\n2.2.@ 符号的使用嵌套媒体查询示例：\n123456p &#123;  color: cyan;  @media (min-width: 800px) &#123;    color: purple;  &#125;&#125;\n\n3.原生 CSS 嵌套陷阱3.1.场景一：父选择器包装在 :is() 中原生 CSS 嵌套将父选择器包装在 :is() 中，这可能会导致与 Sass 输出的差异，比如以下嵌套代码：\n12345.parent1, #parent2 &#123;  .child1 &#123;  &#125;&#125;\n\n当它在浏览器中解析时，它实际上变成以下内容：\n123:is(.parent1, #parent2) .child1 &#123;&#125;\n\nSass 将相同的代码编译为：\n1234.parent1 .child1,#parent2 .child1 &#123;&#125;\n\n3.2.场景二：&amp; 符号后置您可能还会遇到一个更微妙的问题。考虑一下：\n123.parent .child &#123;  .grandparent &amp; &#123;&#125;&#125;\n\n原生 CSS 等效项是：\n1.grandparent :is(.parent .child) &#123;&#125;\n\n这与以下错误排序的 HTML 元素匹配：\n12345&lt;div class=\"parent\"&gt;  &lt;div class=\"grandparent\"&gt;    &lt;div class=\"child\"&gt;MATCH&lt;/div&gt;  &lt;/div&gt;&lt;/div&gt;\n\nMATCH变得有样式是因为 CSS 解析器执行以下操作：\n它会查找所有元素，其所属类的child祖先也parent为DOM 层次结构中的任何点。\n找到包含MATCH的元素后，解析器会grandparent在 DOM 层次结构中的任何位置再次检查它是否具有 — 的祖先。它找到一个并相应地设置该元素的样式。\nSass 中的情况并非如此，它编译为：\n.grandparent .parent .child {}上面的 HTML 没有样式化，因为元素类不遵循严格的grandparent、parent、 和child顺序。\n3.3.场景三：字符串替换Sass 使用字符串替换，因此如下所示的声明是有效的，并且与类的任何元素相匹配 .btn-primary：\n12345.btn &#123;  &amp;-primary &#123;    color: blue;  &#125;&#125;\n\n但是原生 CSS 嵌套会忽略&amp;-space选择器。\n4.CSS 预处理器还需要吗？从短期来看，现有的 CSS 预处理器仍然至关重要。Sass 开发团队宣布，他们将支持 .css 文件中的原生 CSS 嵌套，并按原样输出代码。他们将一如既往地编译嵌套 SCSS 代码，以避免破坏现有代码库，但当全球浏览器支持率达到 98% 时，他们将开始输出 :is() 选择器。\n我猜想，PostCSS 插件等预处理器目前会扩展嵌套代码，但随着浏览器支持的普及，就会取消这一功能。当然，使用预处理器还有其他很好的理由，比如将部分代码捆绑到一个文件中，以及对代码进行精简。但如果嵌套是你唯一需要的功能，你当然可以考虑在较小的项目中使用原生 CSS。\n总结CSS 嵌套是最有用、最实用的预处理器功能之一。浏览器供应商努力创造了一个与 CSS 非常相似的原生 CSS 版本，以满足网络开发人员的需求。虽然两者之间存在细微差别，而且在使用（过于）复杂的选择器时可能会遇到不寻常的特殊性问题，但很少有代码库需要进行彻底修改。\n原生嵌套可能会让你重新考虑是否需要 CSS 预处理器，但它们仍能提供其他好处。Sass 和类似工具仍然是大多数开发者工具包的重要组成部分。\n要深入了解原生 CSS 嵌套，请点击左下角的“阅读原文”查看 W3C CSS 嵌套规范。\n原文链接","dateCreated":"2023-09-08T10:27:29+08:00","dateModified":"2023-09-08T10:27:29+08:00","datePublished":"2023-09-08T10:27:29+08:00","description":"","headline":"2023/0907/CSS新特性：原生CSS嵌套","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/2023/0907/CSS%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9A%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/2023/0907/CSS%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9A%E5%8E%9F%E7%94%9FCSS%E5%B5%8C%E5%A5%97.html"}</script>
     <meta name="description" content="CSS新特性：原生CSS嵌套随着Firefox 117版本的发布，原生 CSS 嵌套（Native CSS nesting）已经被所有现代桌面浏览器所支持！🎉，但是请注意，移动端浏览器支持的还很有限。 配caniuse图 1.原生 CSS 嵌套原生 CSS 嵌套可以像 SASS、LESS 预处理器一样，将相关的选择器组合在一起，从而减少需要编写的规则数量，它可以节省打字时间，并使语法更易于阅读和">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="2023&#x2F;0907&#x2F;CSS新特性：原生CSS嵌套">
@@ -23,8 +23,8 @@
 <meta property="og:site_name" content="煦涵驛">
 <meta property="og:description" content="CSS新特性：原生CSS嵌套随着Firefox 117版本的发布，原生 CSS 嵌套（Native CSS nesting）已经被所有现代桌面浏览器所支持！🎉，但是请注意，移动端浏览器支持的还很有限。 配caniuse图 1.原生 CSS 嵌套原生 CSS 嵌套可以像 SASS、LESS 预处理器一样，将相关的选择器组合在一起，从而减少需要编写的规则数量，它可以节省打字时间，并使语法更易于阅读和">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-07T15:13:18.589Z">
-<meta property="article:modified_time" content="2023-09-07T15:13:18.589Z">
+<meta property="article:published_time" content="2023-09-08T02:27:29.198Z">
+<meta property="article:modified_time" content="2023-09-08T02:27:29.198Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="WEB开发">
 <meta property="article:tag" content="前端开发">
@@ -43,7 +43,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-athhlbkl2h9o0tjyweq8ul0h4utvjcbpwygudrdazywyt94bvtc6uxmypt2m.min.css">
+<link rel="stylesheet" href="/assets/css/style-s3qttgqrtgd57gnemxc89qfxwz8jaeotbs4numpbnmrx9z1rsgnwsd3dkbua.min.css">
 
     <!--STYLES END-->
     
@@ -260,9 +260,9 @@
     
     
         <div class="post-meta">
-    <time datetime="2023-09-07T23:13:18+08:00">
+    <time datetime="2023-09-08T10:27:29+08:00">
 	
-		    9月 07, 2023
+		    9月 08, 2023
     	
     </time>
     
@@ -377,9 +377,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0904/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B8%B8%E7%94%A8%E7%9A%84VSCode%E6%8F%92%E4%BB%B6%E9%9B%86%E9%94%A6.html"
-                    data-tooltip="2023/0904/研效提升：前端开发常用的VSCode插件集锦"
-                    aria-label="下一篇: 2023/0904/研效提升：前端开发常用的VSCode插件集锦"
+                    href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%961.html"
+                    data-tooltip="2023/0908/模块化1"
+                    aria-label="下一篇: 2023/0908/模块化1"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -518,9 +518,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/post/2023/0904/%E7%A0%94%E6%95%88%E6%8F%90%E5%8D%87%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B8%B8%E7%94%A8%E7%9A%84VSCode%E6%8F%92%E4%BB%B6%E9%9B%86%E9%94%A6.html"
-                    data-tooltip="2023/0904/研效提升：前端开发常用的VSCode插件集锦"
-                    aria-label="下一篇: 2023/0904/研效提升：前端开发常用的VSCode插件集锦"
+                    href="/post/2023/0908/%E6%A8%A1%E5%9D%97%E5%8C%961.html"
+                    data-tooltip="2023/0908/模块化1"
+                    aria-label="下一篇: 2023/0908/模块化1"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -723,7 +723,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ah8fu2oihbm9frbz1pxa0jkqer1zb0klgkgmuaenrh4k2naxqcwf4av0zlc2.min.js"></script>
+<script src="/assets/js/script-l4ckxdv6tbjuxqwojpoduttbowmwffe9xttrtxbjaohwrzhqzj3ocb4fmrwh.min.js"></script>
 
 <!--SCRIPTS END-->
 
