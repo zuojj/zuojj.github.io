@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"今天在微博上看到一些人在讨论:before 和::before的区别，有些细节问题自己也有些模糊，工作之余翻了下W3C规范，总结如下：\n1. W3C CSS 2.1 Selectors\n\n对伪类和伪元素没有做出区分，都是使用一个冒号，详细请戳这里比如伪类:first-child，伪元素:first-line\nPS：在该规范中明确提到了a链接的几种伪类的书写顺序：\nNote that the A:hover must be placed after the A:link and A:visited rules, since otherwise the cascading rules will hide the 'color' property of the A:hover rule. Similarly, because A:active is placed after A:hover, the active color (lime) will apply when the user both activates and hovers over the A element.\n\n\n2. CSS Selectors Level 3\n\n该规范中为伪类和伪元素做了区分，伪类使用单冒号，伪元素开始使用双冒号。比如伪类:first-child伪元素::first-line、::first-letter、::before、::after\nCSS 3在CSS2.1的基础上增加了不少伪类:target、UI元素状态的伪类:checked等、结构性伪类:nth-child()等，具体可以看规范，详细请戳这里。\n3. CSS Selectors Level 4草案\n\n该草案中又增加了很多新的伪类，比如与input控制状态、值状态、值校验相关的伪类，树形结构的伪类，网格结构的伪类等。更多可以查看该草案。详细请戳这里。\n4.  CSS Pseudo-Elements Module Level 4——W3C First Public Working Draft, 15 January 2015\n增加了一些伪元素，如：\nSelecting Highlighted Content: the ::selection, ::spelling-error, and ::grammar-error pseudo-elements，\nPlaceholder Input: the ::placeholder pseudo-element，详细请戳这里。\n\n5. 常见应用\n伪类：\n1) a链接样式\n2) 隔行变色\n\n伪元素：\n1) 最常见的使用伪元素after清除浮动，.fix{*zoom:1;}.fix:after,.fix::after{display: block; content: “clear”; height: 0; clear: both; overflow: hidden; visibility: hidden;}    \n2) letter-spacing+first-letter实现按钮文字隐藏\n3) 首行、首字母样式\n6. 正确使用伪类和伪元素\n\n关于这些伪类和为元素的使用，浏览器兼容性方面需要注意，新增的一些伪类在某些浏览器中不能有好的支持。可以使用Can I use这个网站查询。\n","dateCreated":"2015-01-20T17:25:01+08:00","dateModified":"2023-09-28T22:14:48+08:00","datePublished":"2015-01-20T17:25:01+08:00","description":"讨论:before 和::before的区别","headline":"CSS伪类和伪元素的异同","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/css-pseudo-classes-and-pseudo-elements.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/css-pseudo-classes-and-pseudo-elements.html","keywords":"web"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"今天在微博上看到一些人在讨论:before 和::before的区别，有些细节问题自己也有些模糊，工作之余翻了下W3C规范，总结如下：\n1. W3C CSS 2.1 Selectors\n\n对伪类和伪元素没有做出区分，都是使用一个冒号，详细请戳这里比如伪类:first-child，伪元素:first-line\nPS：在该规范中明确提到了a链接的几种伪类的书写顺序：\nNote that the A:hover must be placed after the A:link and A:visited rules, since otherwise the cascading rules will hide the 'color' property of the A:hover rule. Similarly, because A:active is placed after A:hover, the active color (lime) will apply when the user both activates and hovers over the A element.\n\n\n2. CSS Selectors Level 3\n\n该规范中为伪类和伪元素做了区分，伪类使用单冒号，伪元素开始使用双冒号。比如伪类:first-child伪元素::first-line、::first-letter、::before、::after\nCSS 3在CSS2.1的基础上增加了不少伪类:target、UI元素状态的伪类:checked等、结构性伪类:nth-child()等，具体可以看规范，详细请戳这里。\n3. CSS Selectors Level 4草案\n\n该草案中又增加了很多新的伪类，比如与input控制状态、值状态、值校验相关的伪类，树形结构的伪类，网格结构的伪类等。更多可以查看该草案。详细请戳这里。\n4.  CSS Pseudo-Elements Module Level 4——W3C First Public Working Draft, 15 January 2015\n增加了一些伪元素，如：\nSelecting Highlighted Content: the ::selection, ::spelling-error, and ::grammar-error pseudo-elements，\nPlaceholder Input: the ::placeholder pseudo-element，详细请戳这里。\n\n5. 常见应用\n伪类：\n1) a链接样式\n2) 隔行变色\n\n伪元素：\n1) 最常见的使用伪元素after清除浮动，.fix{*zoom:1;}.fix:after,.fix::after{display: block; content: “clear”; height: 0; clear: both; overflow: hidden; visibility: hidden;}    \n2) letter-spacing+first-letter实现按钮文字隐藏\n3) 首行、首字母样式\n6. 正确使用伪类和伪元素\n\n关于这些伪类和为元素的使用，浏览器兼容性方面需要注意，新增的一些伪类在某些浏览器中不能有好的支持。可以使用Can I use这个网站查询。\n","dateCreated":"2015-01-20T17:25:01+08:00","dateModified":"2023-09-28T22:15:37+08:00","datePublished":"2015-01-20T17:25:01+08:00","description":"讨论:before 和::before的区别","headline":"CSS伪类和伪元素的异同","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/css-pseudo-classes-and-pseudo-elements.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/css-pseudo-classes-and-pseudo-elements.html","keywords":"web"}</script>
     <meta name="description" content="讨论:before 和::before的区别">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="CSS伪类和伪元素的异同">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="讨论:before 和::before的区别">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2015-01-20T09:25:01.000Z">
-<meta property="article:modified_time" content="2023-09-28T14:14:48.122Z">
+<meta property="article:modified_time" content="2023-09-28T14:15:37.452Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-aavqba655m2naypg1j3ma5tm1ismzpbvrz7xtjizgfjoqv2j7z1tj0djt8es.min.css">
+<link rel="stylesheet" href="/assets/css/style-nskexts0ttpexmdnmjzarzvjjqswglrrx6dlk38dsfnsuxpaqhvk8v1lfx5m.min.css">
 
     <!--STYLES END-->
     
@@ -696,7 +696,7 @@ Placeholder Input: the<code> ::placeholder</code> pseudo-element，详细请戳<
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-7zqymhhonvha9englwtrfpd4g5yctz2o3i6btkznpxxih4pwgmnl3ggygsuq.min.js"></script>
+<script src="/assets/js/script-vcylxfaxijvzbbi6v9hgenbinugg0fxxacf762eyfzugrlhlqzp8rnkkny0z.min.js"></script>
 
 <!--SCRIPTS END-->
 
