@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"说到这个两个属性::placeholder大家可能都很熟悉,在移动端以及高端浏览器中都有使用,但是:placeholder-shown可能了解的比较少,本篇文章将和大家一起探讨两者的不同及基本应用. placeholder 即”占位符”,在form表单input/ textarea上可以应用placeholder属性,如果你对伪类和伪元素的异同不甚了解,可以参考“CSS伪类和伪元素的异同”.下面就来讲讲二者的不同:\n一. 伪类与伪元素:placeholder-shown 伪类, Selectors Level 4 草案新增 ::placeholder 伪元素,CSS Pseudo-Elements Module Level 4 新增\n\n:placeholder-shown, being a pseudo-class, has to select an existing element - it selects the input whenever you’re in the placeholder-showing state. The ::placeholder pseudo-element wraps the actual placeholder text.\n\n二. 兼容性:placeholder-shown Chrome/Safari/Opera浏览器支持较好,移动端浏览器支持较差,参考链接: CanIUse ::placeholder 现代浏览器基本都支持, 但是需要添加不同浏览器厂商前缀,IE10 以下浏览器不支持, 参考链接:CanIUse\n三. 开发中使用:placeholder-shown, 常用来设置input 没有输入时的提示,如下:\n12345678910111213&lt;style type=”text/css”&gt;.text &#123;    width: 400px;    height: 22px;    line-height: 22px;    border: 1px solid #ccc;&#125;.demo:placeholder-shown &#123;    border-color: #00f; // 无输入时,边框显示蓝色    color: #f00; // 只对无输入时的光标颜色有效&#125;&lt;/style&gt;&lt;input type=”text” class=”demo” placeholder=”请输入用户名称”&gt;\n\n::placeholder ,常用来设置placeholder text文本的颜色,根据不同浏览器支持情况设置前缀:\n123456789101112131415161718192021&lt;style type=”text/css”&gt;.text &#123;    width: 400px;    height: 22px;    line-height: 22px;    border: 1px solid #ccc;&#125;::-webkit-input-placeholder &#123; / Chrome/Opera/Safari /    color: #f00;&#125;::-moz-placeholder &#123; / Firefox 19+ /    color: #f00;&#125;:-ms-input-placeholder &#123; / IE 10+ /    color: #f00;&#125;:-moz-placeholder &#123; / Firefox 18- /    color: #f00;&#125;&lt;/style&gt;&lt;input type=”text” class=”demo” placeholder=”请输入用户名称”&gt;\n\n那么你可能会问,如果我想兼容IE10以下浏览器该怎么办呢,那只能用js来实现了，有个开源的placeholder.js可以参考.\n四. 支持的Styles::placeholder 支持下面这些属性:(注意:不支持text-align属性) All properties that apply to the ::first-line pseudo-element also apply to the ::placeholder pseudo-element, eg: font properties  color  background properties  word-spacing  letter-spacing  text-decoration  vertical-align  text-transform  line-height  text-indent  opacity ::placeholder-shown ,支持的属性较多,使用起来也比较灵活,(支持text-align属性).\n五. 补充如何实现select 元素placeholder123456789101112131415161718192021&lt;style type=”text/css”&gt;.sel-placeholder &#123;    color: #999; / 和input::placeholder 默认颜色一致 /&#125;.sel-placeholder option &#123;    color: #333;&#125;.sel-placeholder option:first-child &#123;    color: #999; / 第一个选项的颜色 /&#125;&lt;/style&gt;&lt;form action=”http://user/submit\" method=”post”&gt;    &lt;select name=”children”&gt;        &lt;option disabled selected&gt;请选择子女个数&lt;/option&gt;        &lt;option value=”1”&gt;1&lt;/option&gt;        &lt;option value=”2”&gt;2&lt;/option&gt;        &lt;option value=”3”&gt;3&lt;/option&gt;        &lt;option value=”4”&gt;4&lt;/option&gt;    &lt;/select&gt;    &lt;input type=”submit” value=”Submit”&gt;&lt;/form&gt;\n\n可以通过js 增加和删除类来改变选中是的select字体颜色. 当然,还有的像如下这样用的:\n12345678910&lt;form action=”http://user/submit\" method=”post”&gt;    &lt;select name=”children”&gt;        &lt;option selected hidden&gt;select one&lt;/option&gt;        &lt;option value=”1”&gt;1&lt;/option&gt;        &lt;option value=”2”&gt;2&lt;/option&gt;        &lt;option value=”3”&gt;3&lt;/option&gt;        &lt;option value=”4”&gt;4&lt;/option&gt;    &lt;/select&gt;    &lt;input type=”submit” value=”Submit”&gt;&lt;/form&gt;\n\n如果你想知道有什么不同,可以写个实例运行下.\n","dateCreated":"2016-03-04T00:26:30+08:00","dateModified":"2023-09-29T17:25:33+08:00","datePublished":"2016-03-04T00:26:30+08:00","description":"说到这个两个属性::placeholder大家可能都很熟悉,在移动端以及高端浏览器中都有使用","headline":"::placeholder VS :placeholder-shown","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/placeholder_vs_placeholder-shown.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/placeholder_vs_placeholder-shown.html","keywords":"web"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"说到这个两个属性::placeholder大家可能都很熟悉,在移动端以及高端浏览器中都有使用,但是:placeholder-shown可能了解的比较少,本篇文章将和大家一起探讨两者的不同及基本应用. placeholder 即”占位符”,在form表单input/ textarea上可以应用placeholder属性,如果你对伪类和伪元素的异同不甚了解,可以参考“CSS伪类和伪元素的异同”.下面就来讲讲二者的不同:\n一. 伪类与伪元素:placeholder-shown 伪类, Selectors Level 4 草案新增 ::placeholder 伪元素,CSS Pseudo-Elements Module Level 4 新增\n\n:placeholder-shown, being a pseudo-class, has to select an existing element - it selects the input whenever you’re in the placeholder-showing state. The ::placeholder pseudo-element wraps the actual placeholder text.\n\n二. 兼容性:placeholder-shown Chrome/Safari/Opera浏览器支持较好,移动端浏览器支持较差,参考链接: CanIUse ::placeholder 现代浏览器基本都支持, 但是需要添加不同浏览器厂商前缀,IE10 以下浏览器不支持, 参考链接:CanIUse\n三. 开发中使用:placeholder-shown, 常用来设置input 没有输入时的提示,如下:\n12345678910111213&lt;style type=”text/css”&gt;.text &#123;    width: 400px;    height: 22px;    line-height: 22px;    border: 1px solid #ccc;&#125;.demo:placeholder-shown &#123;    border-color: #00f; // 无输入时,边框显示蓝色    color: #f00; // 只对无输入时的光标颜色有效&#125;&lt;/style&gt;&lt;input type=”text” class=”demo” placeholder=”请输入用户名称”&gt;\n\n::placeholder ,常用来设置placeholder text文本的颜色,根据不同浏览器支持情况设置前缀:\n123456789101112131415161718192021&lt;style type=”text/css”&gt;.text &#123;    width: 400px;    height: 22px;    line-height: 22px;    border: 1px solid #ccc;&#125;::-webkit-input-placeholder &#123; / Chrome/Opera/Safari /    color: #f00;&#125;::-moz-placeholder &#123; / Firefox 19+ /    color: #f00;&#125;:-ms-input-placeholder &#123; / IE 10+ /    color: #f00;&#125;:-moz-placeholder &#123; / Firefox 18- /    color: #f00;&#125;&lt;/style&gt;&lt;input type=”text” class=”demo” placeholder=”请输入用户名称”&gt;\n\n那么你可能会问,如果我想兼容IE10以下浏览器该怎么办呢,那只能用js来实现了，有个开源的placeholder.js可以参考.\n四. 支持的Styles::placeholder 支持下面这些属性:(注意:不支持text-align属性) All properties that apply to the ::first-line pseudo-element also apply to the ::placeholder pseudo-element, eg: font properties  color  background properties  word-spacing  letter-spacing  text-decoration  vertical-align  text-transform  line-height  text-indent  opacity ::placeholder-shown ,支持的属性较多,使用起来也比较灵活,(支持text-align属性).\n五. 补充如何实现select 元素placeholder123456789101112131415161718192021&lt;style type=”text/css”&gt;.sel-placeholder &#123;    color: #999; / 和input::placeholder 默认颜色一致 /&#125;.sel-placeholder option &#123;    color: #333;&#125;.sel-placeholder option:first-child &#123;    color: #999; / 第一个选项的颜色 /&#125;&lt;/style&gt;&lt;form action=”http://user/submit\" method=”post”&gt;    &lt;select name=”children”&gt;        &lt;option disabled selected&gt;请选择子女个数&lt;/option&gt;        &lt;option value=”1”&gt;1&lt;/option&gt;        &lt;option value=”2”&gt;2&lt;/option&gt;        &lt;option value=”3”&gt;3&lt;/option&gt;        &lt;option value=”4”&gt;4&lt;/option&gt;    &lt;/select&gt;    &lt;input type=”submit” value=”Submit”&gt;&lt;/form&gt;\n\n可以通过js 增加和删除类来改变选中是的select字体颜色. 当然,还有的像如下这样用的:\n12345678910&lt;form action=”http://user/submit\" method=”post”&gt;    &lt;select name=”children”&gt;        &lt;option selected hidden&gt;select one&lt;/option&gt;        &lt;option value=”1”&gt;1&lt;/option&gt;        &lt;option value=”2”&gt;2&lt;/option&gt;        &lt;option value=”3”&gt;3&lt;/option&gt;        &lt;option value=”4”&gt;4&lt;/option&gt;    &lt;/select&gt;    &lt;input type=”submit” value=”Submit”&gt;&lt;/form&gt;\n\n如果你想知道有什么不同,可以写个实例运行下.\n","dateCreated":"2016-03-04T00:26:30+08:00","dateModified":"2023-09-29T23:40:38+08:00","datePublished":"2016-03-04T00:26:30+08:00","description":"说到这个两个属性::placeholder大家可能都很熟悉,在移动端以及高端浏览器中都有使用","headline":"::placeholder VS :placeholder-shown","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/placeholder_vs_placeholder-shown.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/placeholder_vs_placeholder-shown.html","keywords":"web"}</script>
     <meta name="description" content="说到这个两个属性::placeholder大家可能都很熟悉,在移动端以及高端浏览器中都有使用">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="::placeholder VS :placeholder-shown">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="说到这个两个属性::placeholder大家可能都很熟悉,在移动端以及高端浏览器中都有使用">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2016-03-03T16:26:30.000Z">
-<meta property="article:modified_time" content="2023-09-29T09:25:33.667Z">
+<meta property="article:modified_time" content="2023-09-29T15:40:38.947Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-rhltm1oc7rpana6q8dky4opiotpbao7bgj3dd7gspwrer1egbvwmgen2frwz.min.css">
+<link rel="stylesheet" href="/assets/css/style-seknq5g7xgi0qei7rndqiq3okcyawvp6ivxozez4hy8icyzci3ibrcq3cw1g.min.css">
 
     <!--STYLES END-->
     
@@ -354,7 +354,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -418,7 +418,7 @@
                     <a
                         class="post-action-btn btn btn--default"
                         href="#gitalk"
-                        aria-label="Kommentieren"
+                        aria-label="Leave a comment"
                     >
                         <i class="fa fa-comment"></i>
                     </a>
@@ -427,7 +427,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -495,7 +495,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -559,7 +559,7 @@
                     <a
                         class="post-action-btn btn btn--default"
                         href="#gitalk"
-                        aria-label="Kommentieren"
+                        aria-label="Leave a comment"
                     >
                         <i class="fa fa-comment"></i>
                     </a>
@@ -568,7 +568,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -684,7 +684,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-fqkaj1j0fmyzuqof2h6vqbgtgkrf4h7jypvuqwdfccm8pypxrmpuv0pcmdhp.min.js"></script>
+<script src="/assets/js/script-bki72vyhasixvahlhmludpw7c3rxkmcopnwcmrimdccwgahsyfuvwwfwtmja.min.js"></script>
 
 <!--SCRIPTS END-->
 
