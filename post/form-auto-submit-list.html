@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Form表单中按回车键会自动提交表单的几种情况1.表单里只有一个input[type=’text’]，不管按钮是什么type，当input中有输入值后，回车自动提交。\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_name\"&gt;    &lt;span&gt;提交&lt;/span&gt;&lt;/form&gt;\n\n2.表单里有一个input[type=’submit’]，当input中有输入值后，回车自动提交\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;input type=\"submit\" value=\"提交\"&gt;&lt;/form&gt;\n\n3.如果button[notype]，IE下默认为button[type=’button’]，FF、Chrome默认为button[type=’submit’]\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n4.input[type=’image’]效果等同于input[type=’submit’]\n5.textarea、select不影响，radio/checkbox在FF/Chrome下选中后会响应回车键，在IE下不响应\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"radio\" name=\"rio_a\" checked&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n二、禁用回车自动提交的几种方式：1.同步提交：利用keydown事件屏蔽回车键2.异步提交：禁用表单的submit事件\n123form.addEventListener('submit', function(e) &#123;    e.preventDefault();&#125;);\n","dateCreated":"2014-07-30T21:09:16+08:00","dateModified":"2023-10-02T10:03:54+08:00","datePublished":"2014-07-30T21:09:16+08:00","description":"Form表单中按回车键会自动提交表单的几种情况","headline":"回车自动提交表单几种情况总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/form-auto-submit-list.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/form-auto-submit-list.html","keywords":"html"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Form表单中按回车键会自动提交表单的几种情况1.表单里只有一个input[type=’text’]，不管按钮是什么type，当input中有输入值后，回车自动提交。\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_name\"&gt;    &lt;span&gt;提交&lt;/span&gt;&lt;/form&gt;\n\n2.表单里有一个input[type=’submit’]，当input中有输入值后，回车自动提交\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;input type=\"submit\" value=\"提交\"&gt;&lt;/form&gt;\n\n3.如果button[notype]，IE下默认为button[type=’button’]，FF、Chrome默认为button[type=’submit’]\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n4.input[type=’image’]效果等同于input[type=’submit’]\n5.textarea、select不影响，radio/checkbox在FF/Chrome下选中后会响应回车键，在IE下不响应\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"radio\" name=\"rio_a\" checked&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n二、禁用回车自动提交的几种方式：1.同步提交：利用keydown事件屏蔽回车键2.异步提交：禁用表单的submit事件\n123form.addEventListener('submit', function(e) &#123;    e.preventDefault();&#125;);\n","dateCreated":"2014-07-30T21:09:16+08:00","dateModified":"2023-10-02T22:32:36+08:00","datePublished":"2014-07-30T21:09:16+08:00","description":"Form表单中按回车键会自动提交表单的几种情况","headline":"回车自动提交表单几种情况总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/form-auto-submit-list.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/form-auto-submit-list.html","keywords":"html"}</script>
     <meta name="description" content="Form表单中按回车键会自动提交表单的几种情况">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="回车自动提交表单几种情况总结">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="Form表单中按回车键会自动提交表单的几种情况">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-07-30T13:09:16.000Z">
-<meta property="article:modified_time" content="2023-10-02T02:03:54.938Z">
+<meta property="article:modified_time" content="2023-10-02T14:32:36.015Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="html">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-eekrgup0srybuy5raavhlufiekvhqg44t5cvpmgehvnmnvts5cao6c8nh4iz.min.css">
+<link rel="stylesheet" href="/assets/css/style-i97h7klpzk0vzqmfruwxfgqhh3rus2ok3wfycrk2t47qdevfpehbsnshdddz.min.css">
 
     <!--STYLES END-->
     
@@ -679,7 +679,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-myvujoyghwjpaudtx1iqxswwkaikcbbmzdxnjrfyp7hopmrft3jnspnvqdcv.min.js"></script>
+<script src="/assets/js/script-qsh5n4xwzyxeixqnvvyu7jd1tvglip45wxrxzlgmlmbnsd3tppqtowds9w1v.min.js"></script>
 
 <!--SCRIPTS END-->
 
