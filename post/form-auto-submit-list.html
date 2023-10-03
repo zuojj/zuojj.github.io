@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Form表单中按回车键会自动提交表单的几种情况1.表单里只有一个input[type=’text’]，不管按钮是什么type，当input中有输入值后，回车自动提交。\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_name\"&gt;    &lt;span&gt;提交&lt;/span&gt;&lt;/form&gt;\n\n2.表单里有一个input[type=’submit’]，当input中有输入值后，回车自动提交\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;input type=\"submit\" value=\"提交\"&gt;&lt;/form&gt;\n\n3.如果button[notype]，IE下默认为button[type=’button’]，FF、Chrome默认为button[type=’submit’]\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n4.input[type=’image’]效果等同于input[type=’submit’]\n5.textarea、select不影响，radio/checkbox在FF/Chrome下选中后会响应回车键，在IE下不响应\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"radio\" name=\"rio_a\" checked&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n二、禁用回车自动提交的几种方式：1.同步提交：利用keydown事件屏蔽回车键2.异步提交：禁用表单的submit事件\n123form.addEventListener('submit', function(e) &#123;    e.preventDefault();&#125;);\n","dateCreated":"2014-07-30T21:09:16+08:00","dateModified":"2023-10-03T14:28:48+08:00","datePublished":"2014-07-30T21:09:16+08:00","description":"Form表单中按回车键会自动提交表单的几种情况","headline":"回车自动提交表单几种情况总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/form-auto-submit-list.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/form-auto-submit-list.html","keywords":"html"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Form表单中按回车键会自动提交表单的几种情况1.表单里只有一个input[type=’text’]，不管按钮是什么type，当input中有输入值后，回车自动提交。\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_name\"&gt;    &lt;span&gt;提交&lt;/span&gt;&lt;/form&gt;\n\n2.表单里有一个input[type=’submit’]，当input中有输入值后，回车自动提交\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;input type=\"submit\" value=\"提交\"&gt;&lt;/form&gt;\n\n3.如果button[notype]，IE下默认为button[type=’button’]，FF、Chrome默认为button[type=’submit’]\n12345&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"text\" name=\"txt_01\"&gt;    &lt;input type=\"text\" name=\"txt_02\"&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n4.input[type=’image’]效果等同于input[type=’submit’]\n5.textarea、select不影响，radio/checkbox在FF/Chrome下选中后会响应回车键，在IE下不响应\n1234&lt;form name=\"form_a\" action=\"/weiui.php\"&gt;    &lt;input type=\"radio\" name=\"rio_a\" checked&gt;    &lt;button&gt;提交&lt;/button&gt;&lt;/form&gt;\n\n二、禁用回车自动提交的几种方式：1.同步提交：利用keydown事件屏蔽回车键2.异步提交：禁用表单的submit事件\n123form.addEventListener('submit', function(e) &#123;    e.preventDefault();&#125;);\n","dateCreated":"2014-07-30T21:09:16+08:00","dateModified":"2023-10-03T20:38:12+08:00","datePublished":"2014-07-30T21:09:16+08:00","description":"Form表单中按回车键会自动提交表单的几种情况","headline":"回车自动提交表单几种情况总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/form-auto-submit-list.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/form-auto-submit-list.html","keywords":"html"}</script>
     <meta name="description" content="Form表单中按回车键会自动提交表单的几种情况">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="回车自动提交表单几种情况总结">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="Form表单中按回车键会自动提交表单的几种情况">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-07-30T13:09:16.000Z">
-<meta property="article:modified_time" content="2023-10-03T06:28:48.124Z">
+<meta property="article:modified_time" content="2023-10-03T12:38:12.985Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="html">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-wlem4axosmjfrb1gj8au7ggfbd8inut1ymsmkl9tmgq5r38tbglq9pkeasja.min.css">
+<link rel="stylesheet" href="/assets/css/style-7glezkdzgzruodzvsae3vulkewom6a0toutkik6hrtamtr02bnsag6crxo2g.min.css">
 
     <!--STYLES END-->
     
@@ -349,7 +349,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -413,7 +413,7 @@
                     <a
                         class="post-action-btn btn btn--default"
                         href="#gitalk"
-                        aria-label="Kommentieren"
+                        aria-label="Leave a comment"
                     >
                         <i class="fa fa-comment"></i>
                     </a>
@@ -422,7 +422,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -490,7 +490,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -554,7 +554,7 @@
                     <a
                         class="post-action-btn btn btn--default"
                         href="#gitalk"
-                        aria-label="Kommentieren"
+                        aria-label="Leave a comment"
                     >
                         <i class="fa fa-comment"></i>
                     </a>
@@ -563,7 +563,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -679,7 +679,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-lfrwagw7l6lqvuggy0dsmus9rgbdvjvfbrwxfxe3me5fileophqh83airea6.min.js"></script>
+<script src="/assets/js/script-yqiryqr8nrj1coxreaycqoorro9tvfxaveffit53cpamdm8uoll2agdu8oyx.min.js"></script>
 
 <!--SCRIPTS END-->
 
