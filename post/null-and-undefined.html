@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。\n基本含义undefined:”未定义”null:”空对象指针”\n是否保留字undefined:”否”,可以作为标识符，可覆盖null:”是”\n定义ECMAScipt中的变量是松散类型的，即可以用来保存任何类型的数据。\n1234567var Benjamin;var Benjamin02 = null;console.log(Benjamin);//undefinedconsole.log(Ben);//报错：Ben is not definedconsole.log(typeof Benjamin);//undefinedconsole.log(typeof Ben); //undefinedconsole.log(typeof Benjamin02);//object\n\n因null是空对象，所以一般定义存放对象的标识符时，会指定null值\nin操作符1234console.log(undefined in window);//trueconsole.log(undefined in &#123;&#125;);//falseconsole.log(null instanceof Object);//falseundefined 是window下的一个特殊属性\n\n返回值\n返回undefined值的情形：1)访问未修改的全局变量 undefined。2)由于没有定义 return 表达式的函数隐式返回。3)return 表达式没有显式的返回任何内容。4)访问不存在的属性。5)函数参数没有被显式的传递值。6)任何被设置为 undefined 值的变量。\n\n返回null值的情形：1)任何被设置为 undefined 值的变量2)它在JavaScript内部有一些使用场景(如声明原型链的终结 Foo.prototype = null)但是大多数情况下都可以使用undefined来代替。\n\n\n计算123console.log(333+undefined);//NaNconsole.log(333+null);//333null 与数值运算时转换为0\n\n性能1)由于window对象的属性值是非常多的，在每一次与undefined的比较中，搜索window对象的undefined属性都会花费时间。在需要频繁与undefined进行比较的函数中，这可能会是一个性能问题点。2)为了避免可能对undefined值的改变，一个常用的技巧是使用一个传递到匿名包装器的额外参数。 在调用时，这个参数不会获取任何值。\n123(function(win, doc, undefined) &#123;    //这样undefined就成了局部变量&#125;)(window,document);\n","dateCreated":"2014-03-03T12:49:16+08:00","dateModified":"2023-10-04T17:02:08+08:00","datePublished":"2014-03-03T12:49:16+08:00","description":"Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。","headline":"null 与 undefined","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/null-and-undefined.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/null-and-undefined.html","keywords":"js"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。\n基本含义undefined:”未定义”null:”空对象指针”\n是否保留字undefined:”否”,可以作为标识符，可覆盖null:”是”\n定义ECMAScipt中的变量是松散类型的，即可以用来保存任何类型的数据。\n1234567var Benjamin;var Benjamin02 = null;console.log(Benjamin);//undefinedconsole.log(Ben);//报错：Ben is not definedconsole.log(typeof Benjamin);//undefinedconsole.log(typeof Ben); //undefinedconsole.log(typeof Benjamin02);//object\n\n因null是空对象，所以一般定义存放对象的标识符时，会指定null值\nin操作符1234console.log(undefined in window);//trueconsole.log(undefined in &#123;&#125;);//falseconsole.log(null instanceof Object);//falseundefined 是window下的一个特殊属性\n\n返回值\n返回undefined值的情形：1)访问未修改的全局变量 undefined。2)由于没有定义 return 表达式的函数隐式返回。3)return 表达式没有显式的返回任何内容。4)访问不存在的属性。5)函数参数没有被显式的传递值。6)任何被设置为 undefined 值的变量。\n\n返回null值的情形：1)任何被设置为 undefined 值的变量2)它在JavaScript内部有一些使用场景(如声明原型链的终结 Foo.prototype = null)但是大多数情况下都可以使用undefined来代替。\n\n\n计算123console.log(333+undefined);//NaNconsole.log(333+null);//333null 与数值运算时转换为0\n\n性能1)由于window对象的属性值是非常多的，在每一次与undefined的比较中，搜索window对象的undefined属性都会花费时间。在需要频繁与undefined进行比较的函数中，这可能会是一个性能问题点。2)为了避免可能对undefined值的改变，一个常用的技巧是使用一个传递到匿名包装器的额外参数。 在调用时，这个参数不会获取任何值。\n123(function(win, doc, undefined) &#123;    //这样undefined就成了局部变量&#125;)(window,document);\n","dateCreated":"2014-03-03T12:49:16+08:00","dateModified":"2023-10-04T21:18:08+08:00","datePublished":"2014-03-03T12:49:16+08:00","description":"Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。","headline":"null 与 undefined","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/null-and-undefined.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/null-and-undefined.html","keywords":"js"}</script>
     <meta name="description" content="Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="null 与 undefined">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="Null类型与Undefined类型是javascript五大基本数据类型中的两种，他们的使用有诸多相似，下面来看看它们的区别于联系。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-03-03T04:49:16.000Z">
-<meta property="article:modified_time" content="2023-10-04T09:02:08.764Z">
+<meta property="article:modified_time" content="2023-10-04T13:18:08.804Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-3qtxftepgzwhranfgsotngoayuzizkcq1j26yvvu4fgkfi4demuz3hprseis.min.css">
+<link rel="stylesheet" href="/assets/css/style-05gckhkrbdtcre93nkfxcs29cf2rmqigijj3vhrupjxqnmiaoiox0or6tzv2.min.css">
 
     <!--STYLES END-->
     
@@ -683,7 +683,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-taj9fcyzu2bqns1yqlq4of62scxtlrj5a7mmkpwgdovdenrxz1ljuqekr25e.min.js"></script>
+<script src="/assets/js/script-gwfqebbqc9krftbamqfuhvkxglywshh2adal9dhfxhahqwhdkr7rxxisgld3.min.js"></script>
 
 <!--SCRIPTS END-->
 
