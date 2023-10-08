@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"方式一：文字缩进123.div &#123;    text-indent:-9999px;&#125;\n\n方式二：字体大小123.div &#123;    font-size: 0;&#125;\n\n此方式在没有给容器设置height 或者行高的情况下，设置font-size:0,则容器将无高度\n方式三：设置padding撑开容器123456789101112131415161718&lt;div class=\"btn\"&gt;    &lt;a class=\"btn_download\" href=\"#\" title=\"下载\"&gt;下载&lt;/a&gt;&lt;/div&gt;&lt;style type=\"text/css\"&gt;    .btn &#123;         width: 55px;        height: 22px;        overflow: hidden;    &#125;    .btn_download &#123;        display: inline-block;        width: 55px;        height: 22px;        padding-top: 22px;        background: url(btn_download.gif) no-repeat;        text-align: center;    &#125;&lt;/style&gt;\n\nletter-spacing+first-letter\n此方法兼容IE6+, 适用于inline-block水平元素，且适用于button元素，不过，需要是下面这种写法\n\n123&lt;button type=\"button/submit\"&gt;按钮&lt;/button&gt;而不能是这样子：&lt;input type=\"button/submit\" value=\"按钮\" /&gt;\n\n\n此方法受text-align属性影响\n\ntext-align:left;letter-spacing+first-letter的margin使用负值，text-align:right;letter-spacing+first-letter的margin需要使用正值。值的大小其实没有定值。一般，letter-spacing绝对值大于2em可以，首字符margin可以大一些，demo中是-20em.\n\n多个:first-letter伪元素不要使用逗号分隔，貌似会全部失效，应分开写使用逗号分隔的时候逗号前面一定要留一个空格。否则，IE6浏览器会忽略这条声明：\n\n123456789.btn:first-letter,.img:first-letter &#123;    margin-left: -20em;&#125;.btn:first-letter ,    /* 逗号前需有1个空格 */.img:first-letter &#123;    margin-left: -20em;&#125;\n\n\n可放到公共样式中，单独调用\n\n12345678.notext &#123;    text-align: left;    letter-spacing: -3em;    overflow: hidden;&#125;.notext:first-letter &#123;    margin-left: -20em;&#125;","dateCreated":"2014-03-31T18:02:16+08:00","dateModified":"2023-10-08T16:28:26+08:00","datePublished":"2014-03-31T18:02:16+08:00","description":"汇总css隐藏文字的几种常见方式","headline":"CSS隐藏文本的几种方式","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/css-hide-text.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/css-hide-text.html","keywords":"css"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"方式一：文字缩进123.div &#123;    text-indent:-9999px;&#125;\n\n方式二：字体大小123.div &#123;    font-size: 0;&#125;\n\n此方式在没有给容器设置height 或者行高的情况下，设置font-size:0,则容器将无高度\n方式三：设置padding撑开容器123456789101112131415161718&lt;div class=\"btn\"&gt;    &lt;a class=\"btn_download\" href=\"#\" title=\"下载\"&gt;下载&lt;/a&gt;&lt;/div&gt;&lt;style type=\"text/css\"&gt;    .btn &#123;         width: 55px;        height: 22px;        overflow: hidden;    &#125;    .btn_download &#123;        display: inline-block;        width: 55px;        height: 22px;        padding-top: 22px;        background: url(btn_download.gif) no-repeat;        text-align: center;    &#125;&lt;/style&gt;\n\nletter-spacing+first-letter\n此方法兼容IE6+, 适用于inline-block水平元素，且适用于button元素，不过，需要是下面这种写法\n\n123&lt;button type=\"button/submit\"&gt;按钮&lt;/button&gt;而不能是这样子：&lt;input type=\"button/submit\" value=\"按钮\" /&gt;\n\n\n此方法受text-align属性影响\n\ntext-align:left;letter-spacing+first-letter的margin使用负值，text-align:right;letter-spacing+first-letter的margin需要使用正值。值的大小其实没有定值。一般，letter-spacing绝对值大于2em可以，首字符margin可以大一些，demo中是-20em.\n\n多个:first-letter伪元素不要使用逗号分隔，貌似会全部失效，应分开写使用逗号分隔的时候逗号前面一定要留一个空格。否则，IE6浏览器会忽略这条声明：\n\n123456789.btn:first-letter,.img:first-letter &#123;    margin-left: -20em;&#125;.btn:first-letter ,    /* 逗号前需有1个空格 */.img:first-letter &#123;    margin-left: -20em;&#125;\n\n\n可放到公共样式中，单独调用\n\n12345678.notext &#123;    text-align: left;    letter-spacing: -3em;    overflow: hidden;&#125;.notext:first-letter &#123;    margin-left: -20em;&#125;","dateCreated":"2014-03-31T18:02:16+08:00","dateModified":"2023-10-08T20:15:13+08:00","datePublished":"2014-03-31T18:02:16+08:00","description":"汇总css隐藏文字的几种常见方式","headline":"CSS隐藏文本的几种方式","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/css-hide-text.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/css-hide-text.html","keywords":"css"}</script>
     <meta name="description" content="汇总css隐藏文字的几种常见方式">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="CSS隐藏文本的几种方式">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="汇总css隐藏文字的几种常见方式">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-03-31T10:02:16.000Z">
-<meta property="article:modified_time" content="2023-10-08T08:28:26.362Z">
+<meta property="article:modified_time" content="2023-10-08T12:15:13.951Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="css">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-fvqnx8pgwf6bf13wikcblnnvvhnutntnpyn277ngon8dlqnxwrmezxgavubv.min.css">
+<link rel="stylesheet" href="/assets/css/style-3jt6q036wfdfbiyqovgdg4dwylycovmvyb6tklgpsou5spytdhjb2kxwndqu.min.css">
 
     <!--STYLES END-->
     
@@ -688,7 +688,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-ewhbp9u54mzjbzzcolh9s4ymac2gixsp41jkyvvaiytrqncjj4nws0aa6wgf.min.js"></script>
+<script src="/assets/js/script-fpsfzt0uso4yyni4pe2cbmd3ipqkroyxx7hug166h70dqqjjwt1qkk8bujts.min.js"></script>
 
 <!--SCRIPTS END-->
 
