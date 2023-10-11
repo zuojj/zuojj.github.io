@@ -15,7 +15,7 @@
         <link rel="icon" href="https://zuojj.com/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"RPM 构建环境安装1.rpm-build 安装首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build，执行 rpm-build --version，如果返回结果表示已经安装，如果返回 rpmbuild: command not found 说明没有安装，需要我们手动安装\n1$ sudo yum install rpm-build\n\n安装完成后使用 repm-build --version 验证\n2.redhat-rpm-config 安装\n在 CentOS 上构建时，可能需要包含 rpmbuild 构建脚本 redhat-rpm-config 。通过 rpm -q redhat-rpm-config 来 check 是否被安装，如果正确输出，表示已安装。\n3.创建 RPM build 目录\n1$ mkdir -p ~/rpmbuild/&#123;BUILD,RPMS,SOURCES,SPECS,SRPMS&#125;\n\n下面这个命令会覆盖现有的 .rpmacros 文件，操作之前应该 check 是否有该文件\n1$ echo '%_topdir %(echo $HOME)/rpmbuild' &gt; ~/.rpmmacros\n\n4.可能需要的其他工具\n12$ sudo yum install make$ sudo yum install gcc\n到此 RPM Build 环境已经安装完成，可以 cd 到对应目录查看\nRPM 包创建1.下载最新的 node.js 包\n1$ curl -sR -o ~/rpmbuild/SOURCES/node-v8.10.0.tar.gz http://nodejs.org/dist/v8.10.0/node-v8.10.0.tar.gz\n\n2.下载 RPM 包规范文件\n1$ curl -sR -o ~/rpmbuild/SPECS/node-v8.10.0.spec https://raw.githubusercontent.com/kazuhisya/nodejs-rpm/master/nodejs.spec\n​3.修改包规范文件\n更新 version 字段为8.10.0 版本，如果 build 过程中相关文件不存在，可以在 https://github.com/kazuhisya/nodejs-rpm 仓库下载\n4.开始构建\n1$ rpmbuild -ba ~/rpmbuild/SPECS/node-v8.10.0.spec\n\n构建过程需要nodejs进行编译，构建速度依赖当前机器配置。\n5.构建完成后，可以在下面目录下查看构建的 RPM 包\n1$ cd ~&#x2F;rpmbuild&#x2F;RPMS&#x2F;\n\nrpm 方式安装验证12345# install node$ rpm -ivh ~/rpmbuild/RPMS/x86_64/nodejs-0.8.14-1.el7.x86_64.rpm# view versionnode --version\n\n参考资料：\nHow to build the latest node.js RPM and install it on CentOS / RedHat / Fedora\nrpm 常用命令\nRPM Documentation\n\n","dateCreated":"2018-03-21T15:32:30+08:00","dateModified":"2023-10-10T21:58:04+08:00","datePublished":"2018-03-21T15:32:30+08:00","description":"首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build","headline":"如何构建最新的 Nodejs RPM 包","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/how_to_build_nodejs_rpm_package.html","keywords":"web"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png"},"articleBody":"RPM 构建环境安装1.rpm-build 安装首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build，执行 rpm-build --version，如果返回结果表示已经安装，如果返回 rpmbuild: command not found 说明没有安装，需要我们手动安装\n1$ sudo yum install rpm-build\n\n安装完成后使用 repm-build --version 验证\n2.redhat-rpm-config 安装\n在 CentOS 上构建时，可能需要包含 rpmbuild 构建脚本 redhat-rpm-config 。通过 rpm -q redhat-rpm-config 来 check 是否被安装，如果正确输出，表示已安装。\n3.创建 RPM build 目录\n1$ mkdir -p ~/rpmbuild/&#123;BUILD,RPMS,SOURCES,SPECS,SRPMS&#125;\n\n下面这个命令会覆盖现有的 .rpmacros 文件，操作之前应该 check 是否有该文件\n1$ echo '%_topdir %(echo $HOME)/rpmbuild' &gt; ~/.rpmmacros\n\n4.可能需要的其他工具\n12$ sudo yum install make$ sudo yum install gcc\n到此 RPM Build 环境已经安装完成，可以 cd 到对应目录查看\nRPM 包创建1.下载最新的 node.js 包\n1$ curl -sR -o ~/rpmbuild/SOURCES/node-v8.10.0.tar.gz http://nodejs.org/dist/v8.10.0/node-v8.10.0.tar.gz\n\n2.下载 RPM 包规范文件\n1$ curl -sR -o ~/rpmbuild/SPECS/node-v8.10.0.spec https://raw.githubusercontent.com/kazuhisya/nodejs-rpm/master/nodejs.spec\n​3.修改包规范文件\n更新 version 字段为8.10.0 版本，如果 build 过程中相关文件不存在，可以在 https://github.com/kazuhisya/nodejs-rpm 仓库下载\n4.开始构建\n1$ rpmbuild -ba ~/rpmbuild/SPECS/node-v8.10.0.spec\n\n构建过程需要nodejs进行编译，构建速度依赖当前机器配置。\n5.构建完成后，可以在下面目录下查看构建的 RPM 包\n1$ cd ~&#x2F;rpmbuild&#x2F;RPMS&#x2F;\n\nrpm 方式安装验证12345# install node$ rpm -ivh ~/rpmbuild/RPMS/x86_64/nodejs-0.8.14-1.el7.x86_64.rpm# view versionnode --version\n\n参考资料：\nHow to build the latest node.js RPM and install it on CentOS / RedHat / Fedora\nrpm 常用命令\nRPM Documentation\n\n","dateCreated":"2018-03-21T15:32:30+08:00","dateModified":"2023-10-11T11:10:42+08:00","datePublished":"2018-03-21T15:32:30+08:00","description":"首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build","headline":"如何构建最新的 Nodejs RPM 包","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://zuojj.com/post/how_to_build_nodejs_rpm_package.html"},"publisher":{"@type":"Organization","name":"煦涵","sameAs":["https://github.com/zuojj","mailto:zuojj.com@gmail.com"],"image":"android-icon-192x192.png","logo":{"@type":"ImageObject","url":"android-icon-192x192.png"}},"url":"https://zuojj.com/post/how_to_build_nodejs_rpm_package.html","keywords":"web"}</script>
     <meta name="description" content="首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="如何构建最新的 Nodejs RPM 包">
@@ -24,7 +24,7 @@
 <meta property="og:description" content="首先需要确认自己的 Linux 机器上是否已经安装了 rpm-build">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-03-21T07:32:30.000Z">
-<meta property="article:modified_time" content="2023-10-10T13:58:04.497Z">
+<meta property="article:modified_time" content="2023-10-11T03:10:42.333Z">
 <meta property="article:author" content="煦涵">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
@@ -41,7 +41,7 @@
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-00ljnlbdt0kjihxwsh1zfbokoxkgn3qdjjwutkrmvi4tmd3lldcng4tsppfa.min.css">
+<link rel="stylesheet" href="/assets/css/style-whlt1je03s5d1ltxvxwy5kykfonzbxkxidevz1xriqfvrwhmgzh4fsnwzmyp.min.css">
 
     <!--STYLES END-->
     
@@ -700,7 +700,7 @@
 <div id="cover" style="background-image:url('/assets/images/cover01.jpeg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-t0no1reeacmxru43mhnexyz4zue9wbky6fgvuvtxkjbfgvihrgar2qu7xztr.min.js"></script>
+<script src="/assets/js/script-0vrqv6oj6hjevrhdgpmua5qyfkti9pugvuvqu3ogh3jl7dzuqdvdkduveetj.min.js"></script>
 
 <!--SCRIPTS END-->
 
